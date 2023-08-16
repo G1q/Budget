@@ -18,10 +18,10 @@ mongoose
 	.catch((error) => console.error('MongoDB connection error:', error))
 
 // Routes
-// const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes')
 // const expenseRoutes = require('./routes/expenseRoutes');
 
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes)
 // app.use('/api/expenses', expenseRoutes);
 
 // Start the server
