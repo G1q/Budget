@@ -87,6 +87,8 @@ const editProfile = async (req, res) => {
 		const user = await User.findById(userId)
 		if (existingEmail && user.email !== req.body.email) return res.status(400).json({ error: 'Email is already used by another user!' })
 
+		// TODO: verify username
+
 		const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true })
 
 		if (!updatedUser) {
@@ -99,4 +101,16 @@ const editProfile = async (req, res) => {
 	}
 }
 
-module.exports = { register, login, getProfile, editProfile }
+const deleteAccount = async (req, res) => {
+	try {
+		const userId = req.params.id
+
+		await User.findByIdAndDelete(userId)
+
+		res.status(200).json({ message: 'User deleted successfully!' })
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
+module.exports = { register, login, getProfile, editProfile, deleteAccount }
