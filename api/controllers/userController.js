@@ -80,14 +80,20 @@ const getProfile = async (req, res) => {
 const editProfile = async (req, res) => {
 	try {
 		const userId = req.params.id
+		const updatedData = req.body
 
-		// Fetch user profile
+		// Check if it's another user with the same email, but continue if the new email is same with user email
+		const existingEmail = await User.findOne({ email: req.body.email })
 		const user = await User.findById(userId)
-		if (!user) {
+		if (existingEmail && user.email !== req.body.email) return res.status(400).json({ error: 'Email is already used by another user!' })
+
+		const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true })
+
+		if (!updatedUser) {
 			return res.status(404).json({ error: 'User not found' })
 		}
 
-		res.status(200).json(user)
+		res.status(200).json(updatedUser)
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}

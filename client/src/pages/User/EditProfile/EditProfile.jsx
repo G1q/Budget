@@ -2,10 +2,14 @@ import './EditProfile.css'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const EditProfile = () => {
 	const { getUserId } = useAuth()
 	const [profile, setProfile] = useState({ username: '', email: '' })
+	const [error, setError] = useState(null)
+
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const getProfile = async () => {
@@ -30,9 +34,13 @@ const EditProfile = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.put(`http://localhost:3002/api/users/profile/${getUserId()}`)
+			const response = await axios.put(`http://localhost:3002/api/users/edit/${getUserId()}`, profile)
+			if (response.status !== 200) {
+				throw new Error(response.data.error)
+			}
+			navigate('/user/profile')
 		} catch (err) {
-			console.log(err)
+			setError(err.error)
 		}
 	}
 
@@ -64,6 +72,7 @@ const EditProfile = () => {
 				</div>
 
 				<button onClick={handleSubmit}>Save changes</button>
+				{error && <p className="error-msg">{error}</p>}
 			</form>
 		</main>
 	)
