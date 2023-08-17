@@ -7,6 +7,7 @@ import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute'
 import Homepage from './pages/Homepage/Homepage'
 import UserProfile from './pages/User/UserProfile/UserProfile'
 import EditProfile from './pages/User/EditProfile/EditProfile'
+import Users from './pages/Admin/Users/Users'
 
 const App = () => {
 	return (
@@ -46,6 +47,18 @@ const App = () => {
 						<Route
 							path="/user/edit"
 							element={<EditProfile />}
+						/>
+					</Route>
+				</Route>
+
+				<Route path="/admin">
+					<Route
+						path="/admin/users"
+						element={<ProtectedRoleRoute requiredRole={['admin']} />}
+					>
+						<Route
+							path="/admin/users"
+							element={<Users />}
 						/>
 					</Route>
 				</Route>
