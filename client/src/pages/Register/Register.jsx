@@ -1,10 +1,12 @@
 import './Register.css'
 
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Register = () => {
+	const { isLoggedIn } = useAuth()
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -26,7 +28,7 @@ const Register = () => {
 		}
 	}
 
-	return (
+	return !isLoggedIn() ? (
 		<div className="register-container">
 			<h2>Register</h2>
 			{error && <p className="error-message">{error}</p>}
@@ -64,6 +66,8 @@ const Register = () => {
 				Do you have an account? <Link to="/login">Login</Link>
 			</p>
 		</div>
+	) : (
+		<Navigate to="/" />
 	)
 }
 

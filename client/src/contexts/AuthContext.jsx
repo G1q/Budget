@@ -1,26 +1,41 @@
 import { createContext, useContext, useState } from 'react'
-import jwt_decode from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null)
+	const [authToken, setAuthToken] = useState(localStorage.getItem('token') || null)
 
-	const login = async (token) => {
-		try {
-			const decodedToken = jwt_decode(token)
-			const userData = { token, ...decodedToken }
-			setUser(userData)
-		} catch (error) {
-			console.error('Error decoding token:', error)
+	const isLoggedIn = () => {
+		if (!authToken) {
+			return false
 		}
+
+		const decodedToken = jwtDecode(authToken)
+		const currentTime = Date.now() / 1000
+
+		return decodedToken.exp > currentTime
 	}
 
-	const logout = () => {
-		setUser(null)
+	const getUserRole = () => {
+		if (!authToken) {
+			return null
+		}
+
+		const decodedToken = jwtDecode(authToken)
+		return decodedToken.userRole
 	}
 
-	return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
+	const getUserId = () => {
+		if (!authToken) {
+			return null
+		}
+
+		const decodedToken = jwtDecode(authToken)
+		return decodedToken.userId
+	}
+
+	return <AuthContext.Provider value={{ authToken, setAuthToken, isLoggedIn, getUserRole, getUserId }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {

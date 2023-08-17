@@ -4,6 +4,7 @@ import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute'
+import Homepage from './pages/Homepage/Homepage'
 
 const App = () => {
 	return (
@@ -12,19 +13,13 @@ const App = () => {
 				<Route
 					path="/"
 					exact
-					element={<h1>Homepage</h1>}
+					element={<Homepage />}
 				/>
 
 				<Route
 					path="/register"
-					element={<ProtectedRoleRoute />}
-					requiredRole="admin"
-				>
-					<Route
-						path="/register"
-						element={<Register />}
-					/>
-				</Route>
+					element={<Register />}
+				/>
 
 				<Route
 					path="/login"
@@ -36,3 +31,16 @@ const App = () => {
 }
 
 export default App
+
+{
+	// Ex: protected route
+	/* <Route
+					path="/register"
+					element={<ProtectedRoleRoute requiredRole={['user', 'admin']} />}
+				>
+					<Route
+						path="/register"
+						element={<Register />}
+					/>
+				</Route> */
+}
