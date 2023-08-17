@@ -63,8 +63,7 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
 	try {
-		// Fetch user data from authentication middleware
-		const userId = req.user.userId
+		const userId = req.params.id
 
 		// Fetch user profile
 		const user = await User.findById(userId).select('-password')
@@ -78,4 +77,20 @@ const getProfile = async (req, res) => {
 	}
 }
 
-module.exports = { register, login, getProfile }
+const editProfile = async (req, res) => {
+	try {
+		const userId = req.params.id
+
+		// Fetch user profile
+		const user = await User.findById(userId)
+		if (!user) {
+			return res.status(404).json({ error: 'User not found' })
+		}
+
+		res.status(200).json(user)
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
+module.exports = { register, login, getProfile, editProfile }

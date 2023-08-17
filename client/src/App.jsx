@@ -5,6 +5,8 @@ import Login from './pages/Login/Login'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute'
 import Homepage from './pages/Homepage/Homepage'
+import UserProfile from './pages/User/UserProfile/UserProfile'
+import EditProfile from './pages/User/EditProfile/EditProfile'
 
 const App = () => {
 	return (
@@ -25,6 +27,28 @@ const App = () => {
 					path="/login"
 					element={<Login />}
 				/>
+
+				<Route path="/user">
+					<Route
+						path="/user/profile"
+						element={<ProtectedRoleRoute requiredRole={['user', 'admin']} />}
+					>
+						<Route
+							path="/user/profile"
+							element={<UserProfile />}
+						/>
+					</Route>
+
+					<Route
+						path="/user/edit"
+						element={<ProtectedRoleRoute requiredRole={['user', 'admin']} />}
+					>
+						<Route
+							path="/user/edit"
+							element={<EditProfile />}
+						/>
+					</Route>
+				</Route>
 			</Routes>
 		</AuthProvider>
 	)

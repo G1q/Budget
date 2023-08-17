@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { register, login, getProfile } = require('../controllers/userController')
+const { register, login, getProfile, editProfile } = require('../controllers/userController')
 
 // Route for user registration
 router.post('/register', register)
@@ -9,8 +9,9 @@ router.post('/register', register)
 router.post('/login', login)
 
 // Route for fetching user profile
-router.get('/profile', getProfile)
+router.get('/profile/:id', getProfile)
 
-// Add more routes as needed (e.g., updating profile, changing password)
+// Route for edit user profile
+router.put('/edit/:id', editProfile)
 
 module.exports = router
