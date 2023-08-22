@@ -17,7 +17,7 @@ const createBudget = async (req, res) => {
 			title,
 			startAmount,
 			currentAmount: startAmount,
-			targetAmount,
+			targetAmount: targetAmount || 0,
 			currency,
 			description,
 			user,

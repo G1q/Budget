@@ -61,7 +61,7 @@ const Budgets = () => {
 								<td>{budget.title}</td>
 								<td>{`${budget.startAmount} ${budget.currency}`}</td>
 								<td>{`${budget.currentAmount} ${budget.currency}`}</td>
-								<td>{`${budget.targetAmount} ${budget.currency}`}</td>
+								<td>{budget.targetAmount ? `${budget.targetAmount} ${budget.currency}` : '-'}</td>
 								<td>
 									<Link
 										className="edit-btn"
