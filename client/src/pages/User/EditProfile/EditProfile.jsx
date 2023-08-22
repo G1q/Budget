@@ -71,6 +71,16 @@ const EditProfile = () => {
 					/>
 				</div>
 
+				<div className="edit-profile__form-group">
+					<label htmlFor="password">Password:</label>
+					<input
+						type="password"
+						name="password"
+						id="password"
+						onChange={handleChange}
+					/>
+				</div>
+
 				<button onClick={handleSubmit}>Save changes</button>
 				{error && <p className="error-msg">{error}</p>}
 			</form>
