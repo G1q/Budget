@@ -9,6 +9,7 @@ import UserProfile from './pages/User/UserProfile/UserProfile'
 import EditProfile from './pages/User/EditProfile/EditProfile'
 import Users from './pages/Admin/Users/Users'
 import CreateUser from './pages/Admin/Users/CreateUser/CreateUser'
+import EditUser from './pages/Admin/Users/EditUser/EditUser'
 
 const App = () => {
 	return (
@@ -70,6 +71,16 @@ const App = () => {
 						<Route
 							path="/admin/users/create"
 							element={<CreateUser />}
+						/>
+					</Route>
+
+					<Route
+						path="/admin/users/edit/:id"
+						element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}
+					>
+						<Route
+							path="/admin/users/edit/:id"
+							element={<EditUser />}
 						/>
 					</Route>
 				</Route>
