@@ -8,6 +8,7 @@ import Homepage from './pages/Homepage/Homepage'
 import UserProfile from './pages/User/UserProfile/UserProfile'
 import EditProfile from './pages/User/EditProfile/EditProfile'
 import Users from './pages/Admin/Users/Users'
+import CreateUser from './pages/Admin/Users/CreateUser/CreateUser'
 
 const App = () => {
 	return (
@@ -32,7 +33,7 @@ const App = () => {
 				<Route path="/user">
 					<Route
 						path="/user/profile"
-						element={<ProtectedRoleRoute requiredRole={['user', 'admin']} />}
+						element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}
 					>
 						<Route
 							path="/user/profile"
@@ -42,7 +43,7 @@ const App = () => {
 
 					<Route
 						path="/user/edit"
-						element={<ProtectedRoleRoute requiredRole={['user', 'admin']} />}
+						element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}
 					>
 						<Route
 							path="/user/edit"
@@ -54,11 +55,21 @@ const App = () => {
 				<Route path="/admin">
 					<Route
 						path="/admin/users"
-						element={<ProtectedRoleRoute requiredRole={['admin']} />}
+						element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}
 					>
 						<Route
 							path="/admin/users"
 							element={<Users />}
+						/>
+					</Route>
+
+					<Route
+						path="/admin/users/create"
+						element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}
+					>
+						<Route
+							path="/admin/users/create"
+							element={<CreateUser />}
 						/>
 					</Route>
 				</Route>
