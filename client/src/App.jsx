@@ -14,6 +14,7 @@ import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard'
 import NotFound from './pages/NotFound/NotFound'
 import Budgets from './pages/Budgets/Budgets'
 import CreateBudget from './pages/Budgets/CreateBudget/CreateBudget'
+import EditBudget from './pages/Budgets/EditBudget/EditBudget'
 
 const App = () => {
 	return (
@@ -93,6 +94,13 @@ const App = () => {
 						<Route
 							path="/budgets/create"
 							element={<CreateBudget />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/budgets/edit/:id"
+							element={<EditBudget />}
 						/>
 					</Route>
 				</Route>

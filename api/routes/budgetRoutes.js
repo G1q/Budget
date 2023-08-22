@@ -9,10 +9,10 @@ router.post('/', createBudget)
 router.get('/view/:id', getBudget)
 
 // Route for edit budget
-router.put('/edit/:id', editBudget)
+router.put('/:id', editBudget)
 
 // Route for delete budget
-router.delete('/delete/:id', deleteBudget)
+router.delete('/:id', deleteBudget)
 
 // Get all budgets by user
 router.get('/:id', getBudgets)

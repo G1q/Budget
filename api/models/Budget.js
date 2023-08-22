@@ -7,9 +7,15 @@ const budgetSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
-		amount: {
+		startAmount: {
 			type: Number,
 			required: true,
+		},
+		currentAmount: {
+			type: Number,
+		},
+		targetAmount: {
+			type: Number,
 		},
 		title: {
 			type: String,
