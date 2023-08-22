@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import './Users.css'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../../contexts/AuthContext'
+import axiosInstance from '../../../utilities/axiosconfig'
 
 const Users = () => {
 	const { getUserRole } = useAuth()
@@ -11,7 +11,7 @@ const Users = () => {
 	const userRole = getUserRole()
 
 	const getUsers = async () => {
-		const response = await axios.get('http://localhost:3002/api/admin/users')
+		const response = await axiosInstance.get('admin/users')
 		setUsers(response.data)
 	}
 
@@ -24,7 +24,7 @@ const Users = () => {
 
 		if (confirmDelete) {
 			try {
-				const response = await axios.delete(`http://localhost:3002/api/admin/users/${id}`)
+				const response = await axiosInstance.delete(`admin/users/${id}`)
 				getUsers()
 			} catch (error) {
 				console.log(error)

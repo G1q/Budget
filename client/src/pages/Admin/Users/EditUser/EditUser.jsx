@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import './EditUser.css'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import axiosInstance from '../../../../utilities/axiosconfig'
 
 const EditUser = () => {
 	const { id } = useParams()
@@ -13,7 +13,7 @@ const EditUser = () => {
 
 	const getUser = async () => {
 		try {
-			const response = await axios.get(`http://localhost:3002/api/admin/users/${id}`)
+			const response = await axiosInstance.get(`admin/users/${id}`)
 			setUser(response.data)
 			setUsername(response.data.username)
 		} catch (err) {
@@ -35,7 +35,7 @@ const EditUser = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.put(`http://localhost:3002/api/admin/users/edit/${id}`, user)
+			const response = await axiosInstance.put(`admin/users/edit/${id}`, user)
 			if (response.status === 200) {
 				navigate('/admin/users/')
 			} else {

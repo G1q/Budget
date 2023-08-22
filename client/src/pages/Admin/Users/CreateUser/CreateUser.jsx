@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import axios from 'axios'
+import axiosInstance from '../../../../utilities/axiosconfig'
 
 // Import style
 import './CreateUser.css'
@@ -17,7 +17,7 @@ const CreateUser = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post('http://localhost:3002/api/admin/users/register', { username, email, password, role })
+			const response = await axiosInstance.post('admin/users/register', { username, email, password, role })
 			if (response.status === 201) {
 				navigate('/admin/users')
 			} else {

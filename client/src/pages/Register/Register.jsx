@@ -2,8 +2,8 @@ import './Register.css'
 
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { useAuth } from '../../contexts/AuthContext'
+import axiosInstance from '../../utilities/axiosconfig'
 
 const Register = () => {
 	const { isLoggedIn } = useAuth()
@@ -17,7 +17,7 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post('http://localhost:3002/api/users/register', { username, email, password })
+			const response = await axiosInstance.post('users/register', { username, email, password })
 			if (response.status === 201) {
 				navigate('/login')
 			} else {

@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import './UserProfile.css'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import axiosInstance from '../../../utilities/axiosconfig'
 
 const UserProfile = () => {
 	const { getUserId, setAuthToken } = useAuth()
@@ -13,7 +13,7 @@ const UserProfile = () => {
 	useEffect(() => {
 		const getProfile = async () => {
 			try {
-				const response = await axios.get(`http://localhost:3002/api/users/profile/${getUserId()}`)
+				const response = await axiosInstance.get(`users/profile/${getUserId()}`)
 				setProfile(response.data)
 			} catch (err) {
 				console.log(err)
@@ -28,7 +28,7 @@ const UserProfile = () => {
 
 		if (confirmDelete) {
 			try {
-				await axios.delete(`http://localhost:3002/api/users/delete/${getUserId()}`)
+				await axiosInstance.delete(`users/delete/${getUserId()}`)
 				setAuthToken(null)
 				localStorage.removeItem('token')
 				navigate('/login')

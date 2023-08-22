@@ -3,7 +3,7 @@ import './Login.css'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axiosInstance from '../../utilities/axiosconfig'
 
 const Login = () => {
 	const { isLoggedIn } = useAuth()
@@ -16,7 +16,7 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post('http://localhost:3002/api/users/login', { email, password })
+			const response = await axiosInstance.post('users/login', { email, password })
 			if (response.status === 200) {
 				localStorage.setItem('token', response.data.token)
 				navigate('/')
