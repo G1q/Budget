@@ -15,6 +15,13 @@ const budgetSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		description: {
+			type: String,
+		},
+		currency: {
+			type: String,
+			default: 'RON',
+		},
 	},
 	{
 		timestamps: true,

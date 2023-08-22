@@ -20,10 +20,12 @@ mongoose
 // Routes
 const userRoutes = require('./routes/userRoutes')
 const adminRoutes = require('./routes/adminRoutes')
+const budgetRoutes = require('./routes/budgetRoutes')
 // const expenseRoutes = require('./routes/expenseRoutes');
 
 app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/budgets', budgetRoutes)
 // app.use('/api/expenses', expenseRoutes);
 
 // Start the server

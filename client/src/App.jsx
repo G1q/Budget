@@ -12,6 +12,8 @@ import CreateUser from './pages/Admin/Users/CreateUser/CreateUser'
 import EditUser from './pages/Admin/Users/EditUser/EditUser'
 import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard'
 import NotFound from './pages/NotFound/NotFound'
+import Budgets from './pages/Budgets/Budgets'
+import CreateBudget from './pages/Budgets/CreateBudget/CreateBudget'
 
 const App = () => {
 	return (
@@ -75,6 +77,22 @@ const App = () => {
 						<Route
 							path="/admin/users/edit/:id"
 							element={<EditUser />}
+						/>
+					</Route>
+				</Route>
+
+				<Route path="/budgets">
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							index
+							element={<Budgets />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/budgets/create"
+							element={<CreateBudget />}
 						/>
 					</Route>
 				</Route>

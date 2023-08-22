@@ -1,0 +1,41 @@
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid #ccc;
+}
+
+table :is(th, td) {
+	border: 1px solid #ccc;
+	padding: 0.5em 1em;
+	text-align: center;
+}
+
+.delete-btn {
+	border: none;
+	background-color: transparent;
+	color: hsl(0, 100%, 50%);
+	font-size: 1rem;
+	font-weight: 700;
+	padding: 0;
+}
+
+.delete-btn:is(:focus-visible, :hover) {
+	background-color: transparent;
+	color: hsl(0, 100%, 30%);
+}
+
+.create-btn {
+	padding: 0.5em 1em;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 0.25em;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+	margin-block: 1rem;
+}
+
+.create-btn:is(:hover, :focus-visible) {
+	background-color: #0056b3;
+}
