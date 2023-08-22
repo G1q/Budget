@@ -10,6 +10,8 @@ import EditProfile from './pages/User/EditProfile/EditProfile'
 import Users from './pages/Admin/Users/Users'
 import CreateUser from './pages/Admin/Users/CreateUser/CreateUser'
 import EditUser from './pages/Admin/Users/EditUser/EditUser'
+import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard'
+import NotFound from './pages/NotFound/NotFound'
 
 const App = () => {
 	return (
@@ -32,20 +34,14 @@ const App = () => {
 				/>
 
 				<Route path="/user">
-					<Route
-						path="/user/profile"
-						element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}
-					>
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 						<Route
 							path="/user/profile"
 							element={<UserProfile />}
 						/>
 					</Route>
 
-					<Route
-						path="/user/edit"
-						element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}
-					>
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 						<Route
 							path="/user/edit"
 							element={<EditProfile />}
@@ -54,36 +50,39 @@ const App = () => {
 				</Route>
 
 				<Route path="/admin">
-					<Route
-						path="/admin/users"
-						element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}
-					>
+					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
+						<Route
+							path="/admin/"
+							element={<AdminDashboard />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
 						<Route
 							path="/admin/users"
 							element={<Users />}
 						/>
 					</Route>
 
-					<Route
-						path="/admin/users/create"
-						element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}
-					>
+					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
 						<Route
 							path="/admin/users/create"
 							element={<CreateUser />}
 						/>
 					</Route>
 
-					<Route
-						path="/admin/users/edit/:id"
-						element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}
-					>
+					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
 						<Route
 							path="/admin/users/edit/:id"
 							element={<EditUser />}
 						/>
 					</Route>
 				</Route>
+
+				<Route
+					path="*"
+					element={<NotFound />}
+				/>
 			</Routes>
 		</AuthProvider>
 	)

@@ -4,8 +4,7 @@ const bcrypt = require('bcrypt')
 
 const getUsers = async (req, res) => {
 	try {
-		// const users = await User.find({}).select('-password')
-		const users = await User.find({})
+		const users = await User.find({}).select('-password')
 		if (!users) {
 			return res.status(404).json({ error: 'Users not found' })
 		}
