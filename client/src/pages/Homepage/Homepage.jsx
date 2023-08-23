@@ -20,6 +20,13 @@ const Homepage = () => {
 				>
 					Incomes
 				</Link>
+
+				<Link
+					to="/categories"
+					className="homepage-link"
+				>
+					Categories
+				</Link>
 			</div>
 			{/* TODO: include button in header, now it's just for test */}
 			<LogoutButton />

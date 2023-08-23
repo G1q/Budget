@@ -18,6 +18,7 @@ import EditBudget from './pages/Budgets/EditBudget/EditBudget'
 import Incomes from './pages/Incomes/Incomes'
 import EditIncome from './pages/Incomes/EditIncome/EditIncome'
 import CreateIncome from './pages/Incomes/CreateIncome/CreateIncome'
+import Categories from './pages/Categories/Categories'
 
 const App = () => {
 	return (
@@ -127,6 +128,15 @@ const App = () => {
 						<Route
 							path="/incomes/edit/:id"
 							element={<EditIncome />}
+						/>
+					</Route>
+				</Route>
+
+				<Route path="/categories">
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							index
+							element={<Categories />}
 						/>
 					</Route>
 				</Route>

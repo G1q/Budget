@@ -26,6 +26,11 @@ const expenseSchema = new mongoose.Schema(
 		notes: {
 			type: String,
 		},
+		budget: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Budget',
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

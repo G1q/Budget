@@ -1,0 +1,37 @@
+.popup-dialog::backdrop {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.popup-dialog {
+	border: none;
+	padding: 1rem;
+	position: relative;
+}
+
+.popup-dialog__title {
+	text-align: center;
+	font-size: 1.25rem;
+	color: #333;
+}
+
+.popup-close-btn {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	background-color: transparent;
+	padding: 0;
+	margin: 0;
+	color: crimson;
+	font-weight: 700;
+	font-size: 1.5rem;
+}
+
+.popup-close-btn:is(:hover, :focus-visible) {
+	background-color: transparent;
+	color: hsl(348, 83%, 27%);
+}
+
+select {
+	width: 100%;
+	padding: 0.25em 1em;
+}

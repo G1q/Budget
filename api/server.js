@@ -23,6 +23,7 @@ const adminRoutes = require('./routes/adminRoutes')
 const budgetRoutes = require('./routes/budgetRoutes')
 const incomeSourceRoutes = require('./routes/incomeSourceRoutes')
 const incomeRoutes = require('./routes/incomeRoutes')
+const categoryRoutes = require('./routes/categoryRoutes')
 // const expenseRoutes = require('./routes/expenseRoutes');
 
 // Middlewares
@@ -31,6 +32,7 @@ app.use('/api/admin', adminRoutes)
 app.use('/api/budgets', budgetRoutes)
 app.use('/api/incomes/source', incomeSourceRoutes)
 app.use('/api/incomes', incomeRoutes)
+app.use('/api/categories', categoryRoutes)
 // app.use('/api/expenses', expenseRoutes);
 
 // Start the server

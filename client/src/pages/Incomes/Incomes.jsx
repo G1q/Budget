@@ -46,7 +46,6 @@ const Incomes = () => {
 				user: getUserId(),
 			}
 			const response = await axiosInstance.post('incomes/source', source)
-			console.log(response)
 			if (response.status === 201) {
 				setSourceError('')
 				clearForm()
