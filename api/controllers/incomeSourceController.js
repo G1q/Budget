@@ -54,4 +54,13 @@ const deleteSource = async (req, res) => {
 	}
 }
 
-module.exports = { createSource, deleteSource, getSources }
+const getSource = async (req, res) => {
+	try {
+		const incomeSource = await IncomeSource.findById(req.params.id)
+		res.status(200).json(incomeSource)
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
+module.exports = { createSource, deleteSource, getSources, getSource }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import { formatDate } from '../../utilities/formatDates'
 
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -119,9 +120,9 @@ const Incomes = () => {
 					<tbody>
 						{incomes.map((income) => (
 							<tr key={income._id}>
-								<td>{income.date}</td>
-								<td>{income.source}</td>
-								<td>{income.budget}</td>
+								<td>{formatDate(new Date(income.date))}</td>
+								<td>{income.source.title}</td>
+								<td>{income.budget.title}</td>
 								<td>{income.amount}</td>
 								<td>
 									<Link

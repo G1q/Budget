@@ -47,7 +47,6 @@ const CreateIncome = () => {
 		e.preventDefault()
 		try {
 			const response = await axiosInstance.post('incomes', inputs)
-			console.log(response)
 			if (response.status === 201) {
 				navigate('/incomes')
 			} else {
@@ -83,6 +82,12 @@ const CreateIncome = () => {
 							onChange={handleChange}
 							required
 						>
+							<option
+								value=""
+								hidden
+							>
+								Select source..
+							</option>
 							{sources.map((source) => (
 								<option
 									key={source._id}
@@ -106,6 +111,12 @@ const CreateIncome = () => {
 							onChange={handleChange}
 							required
 						>
+							<option
+								value=""
+								hidden
+							>
+								Select budget..
+							</option>
 							{budgets.map((budget) => (
 								<option
 									key={budget._id}
