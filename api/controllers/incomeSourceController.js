@@ -17,7 +17,7 @@ const createSource = async (req, res) => {
 			return res.status(403).json({ error: 'This source was register for this user!' })
 		}
 
-		// Create a new user
+		// Create a new income source
 		const newIncomeSource = new IncomeSource({
 			title,
 			user,
@@ -35,7 +35,7 @@ const getSources = async (req, res) => {
 	try {
 		const incomeSources = await IncomeSource.find({ user: req.params.id })
 		if (!incomeSources) {
-			return res.status(404).json({ error: 'Budgets not found' })
+			return res.status(404).json({ error: 'Income source not found' })
 		}
 
 		res.status(200).json(incomeSources)

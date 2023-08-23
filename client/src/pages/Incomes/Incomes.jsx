@@ -7,25 +7,21 @@ import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
 
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
-	const [budgets, setBudgets] = useState([])
 	const [incomes, setIncomes] = useState([])
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [sourceError, setSourceError] = useState('')
 
-	const getBudgets = async () => {
+	const getIncomes = async () => {
 		try {
-			const response = await axiosInstance(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-			// const response = await axiosInstance(`/incomes/${getUserId()}`)
-			// setIncomes(response.data)
+			const response = await axiosInstance(`incomes/${getUserId()}`)
+			setIncomes(response.data)
 		} catch (error) {
 			console.log(error)
 		}
 	}
 
 	useEffect(() => {
-		getBudgets()
-		// getIncomes()
+		getIncomes()
 	}, [])
 
 	const handleDelete = async (id) => {
@@ -33,10 +29,8 @@ const Incomes = () => {
 
 		if (confirmDelete) {
 			try {
-				const response = await axiosInstance.delete(`budgets/${id}`)
-				getBudgets()
-				// const response = await axiosInstance.delete(`incomes/${id}`)
-				// getIncomes()
+				const response = await axiosInstance.delete(`incomes/${id}`)
+				getIncomes()
 			} catch (error) {
 				console.log(error)
 			}
@@ -110,29 +104,29 @@ const Incomes = () => {
 				</form>
 			</dialog>
 
-			{budgets.length > 0 ? (
+			{incomes.length > 0 ? (
 				<table>
 					<thead>
 						<tr>
 							<th>Date</th>
 							<th>Source</th>
-							<th>to Budget</th>
+							<th>Budget</th>
 							<th>Amount</th>
 							<th>Edit income</th>
 							<th>Delete income</th>
 						</tr>
 					</thead>
 					<tbody>
-						{budgets.map((budget) => (
-							<tr key={budget._id}>
-								<td>{budget.title}</td>
-								<td>{`${budget.startAmount} ${budget.currency}`}</td>
-								<td>{`${budget.currentAmount} ${budget.currency}`}</td>
-								<td>{budget.targetAmount ? `${budget.targetAmount} ${budget.currency}` : '-'}</td>
+						{incomes.map((income) => (
+							<tr key={income._id}>
+								<td>{income.date}</td>
+								<td>{income.source}</td>
+								<td>{income.budget}</td>
+								<td>{income.amount}</td>
 								<td>
 									<Link
 										className="edit-btn"
-										to={`/budgets/edit/${budget._id}`}
+										to={`/incomes/edit/${income._id}`}
 									>
 										Edit
 									</Link>
@@ -140,7 +134,7 @@ const Incomes = () => {
 								<td>
 									<button
 										className="delete-btn"
-										onClick={() => handleDelete(budget._id)}
+										onClick={() => handleDelete(income._id)}
 									>
 										&times;
 									</button>
@@ -150,7 +144,7 @@ const Incomes = () => {
 					</tbody>
 				</table>
 			) : (
-				<p>Please create your first budget to start!</p>
+				<p>You don't have any incomes!</p>
 			)}
 		</main>
 	) : (

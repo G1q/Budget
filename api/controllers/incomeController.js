@@ -1,31 +1,33 @@
-const IncomeSource = require('../models/IncomeSource')
 const User = require('../models/User')
+const Budget = require('../models/Budget')
+const Income = require('../models/Income')
 
 const createIncome = async (req, res) => {
-	const { title, user } = req.body
+	const { date, source, budget, amount, description, user } = req.body
 	try {
 		// Check if the username exist
 		const existingUsername = await User.findOne({ _id: user })
-
 		if (!existingUsername) {
 			return res.status(400).json({ error: 'No user with this id!' })
 		}
 
-		// Check if is another source with same title for same user
-		const existingSameSourceForSameUser = await IncomeSource.findOne({ title, user: existingUsername._id })
-		if (existingSameSourceForSameUser) {
-			return res.status(403).json({ error: 'This source was register for this user!' })
-		}
+		// Check if the budget exist
+		const existingBudget = await Budget.findOne({ _id: budget })
+		if (!existingBudget) return res.status(400).json({ error: 'No budget with this id!' })
 
-		// Create a new user
-		const newIncomeSource = new IncomeSource({
-			title,
+		// Create a new income
+		const newIncome = new Income({
+			date,
+			source,
+			budget,
+			amount,
+			description,
 			user,
 		})
 
-		await newIncomeSource.save()
+		await newIncome.save()
 
-		res.status(201).json({ message: 'Source registered successfully' })
+		res.status(201).json({ message: 'Income registered successfully' })
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}
@@ -33,22 +35,22 @@ const createIncome = async (req, res) => {
 
 const getIncomes = async (req, res) => {
 	try {
-		const incomeSources = await IncomeSource.find({ user: req.params.id })
-		if (!incomeSources) {
-			return res.status(404).json({ error: 'Budgets not found' })
+		const incomes = await Income.find({ user: req.params.id })
+		if (!incomes) {
+			return res.status(404).json({ error: 'Incomes not found' })
 		}
 
-		res.status(200).json(incomeSources)
+		res.status(200).json(incomes)
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}
 }
 
 const deleteIncome = async (req, res) => {
-	const incomeSourceId = req.params.id
+	const incomeId = req.params.id
 	try {
-		const deletedIncomeSource = await IncomeSource.findByIdAndDelete(incomeSourceId)
-		res.status(200).json({ message: 'Income source deleted successfully!' })
+		const deletedIncome = await Income.findByIdAndDelete(incomeId)
+		res.status(200).json({ message: 'Income deleted successfully!' })
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}
