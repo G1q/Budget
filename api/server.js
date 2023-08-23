@@ -21,11 +21,16 @@ mongoose
 const userRoutes = require('./routes/userRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const budgetRoutes = require('./routes/budgetRoutes')
+const incomeSourceRoutes = require('./routes/incomeSourceRoutes')
+const incomeRoutes = require('./routes/incomeRoutes')
 // const expenseRoutes = require('./routes/expenseRoutes');
 
+// Middlewares
 app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/budgets', budgetRoutes)
+app.use('/api/incomes/source', incomeSourceRoutes)
+app.use('/api/incomes', incomeRoutes)
 // app.use('/api/expenses', expenseRoutes);
 
 // Start the server

@@ -1,7 +1,7 @@
 const IncomeSource = require('../models/IncomeSource')
 const User = require('../models/User')
 
-const createIncome = async (req, res) => {
+const createSource = async (req, res) => {
 	const { title, user } = req.body
 	try {
 		// Check if the username exist
@@ -31,7 +31,7 @@ const createIncome = async (req, res) => {
 	}
 }
 
-const getIncomes = async (req, res) => {
+const getSources = async (req, res) => {
 	try {
 		const incomeSources = await IncomeSource.find({ user: req.params.id })
 		if (!incomeSources) {
@@ -44,7 +44,7 @@ const getIncomes = async (req, res) => {
 	}
 }
 
-const deleteIncome = async (req, res) => {
+const deleteSource = async (req, res) => {
 	const incomeSourceId = req.params.id
 	try {
 		const deletedIncomeSource = await IncomeSource.findByIdAndDelete(incomeSourceId)
@@ -54,14 +54,4 @@ const deleteIncome = async (req, res) => {
 	}
 }
 
-const editIncome = async (req, res) => {
-	try {
-	} catch (err) {}
-}
-
-const getIncome = async (req, res) => {
-	try {
-	} catch (err) {}
-}
-
-module.exports = { createIncome, deleteIncome, editIncome, getIncome, getIncomes }
+module.exports = { createSource, deleteSource, getSources }

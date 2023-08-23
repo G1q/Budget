@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 
 const incomeSchema = new mongoose.Schema(
 	{
-		name: {
+		description: {
 			type: String,
-			required: true,
 		},
 		amount: {
 			type: Number,
@@ -13,14 +12,21 @@ const incomeSchema = new mongoose.Schema(
 		date: {
 			type: Date,
 			required: true,
+			default: Date.now(),
 		},
-		category: {
-			type: String,
+		source: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'IncomeSource',
 			required: true,
 		},
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
+			required: true,
+		},
+		budget: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Budget',
 			required: true,
 		},
 	},

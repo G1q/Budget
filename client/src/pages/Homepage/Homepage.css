@@ -1,0 +1,7 @@
+.homepage-link {
+	display: inline-block;
+	margin: 1rem;
+	outline: 1px solid crimson;
+	padding: 0.25rem 1rem;
+	text-decoration: none;
+}

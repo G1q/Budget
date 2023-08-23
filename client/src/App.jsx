@@ -15,6 +15,9 @@ import NotFound from './pages/NotFound/NotFound'
 import Budgets from './pages/Budgets/Budgets'
 import CreateBudget from './pages/Budgets/CreateBudget/CreateBudget'
 import EditBudget from './pages/Budgets/EditBudget/EditBudget'
+import Incomes from './pages/Incomes/Incomes'
+import EditIncome from './pages/Incomes/EditIncome/EditIncome'
+import CreateIncome from './pages/Incomes/CreateIncome/CreateIncome'
 
 const App = () => {
 	return (
@@ -101,6 +104,29 @@ const App = () => {
 						<Route
 							path="/budgets/edit/:id"
 							element={<EditBudget />}
+						/>
+					</Route>
+				</Route>
+
+				<Route path="/incomes">
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							index
+							element={<Incomes />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/incomes/create"
+							element={<CreateIncome />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/incomes/edit/:id"
+							element={<EditIncome />}
 						/>
 					</Route>
 				</Route>
