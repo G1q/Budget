@@ -27,6 +27,13 @@ const Homepage = () => {
 				>
 					Categories
 				</Link>
+
+				<Link
+					to="/expenses"
+					className="homepage-link"
+				>
+					Expenses
+				</Link>
 			</div>
 			{/* TODO: include button in header, now it's just for test */}
 			<LogoutButton />

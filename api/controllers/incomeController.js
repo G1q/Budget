@@ -3,6 +3,7 @@ const Budget = require('../models/Budget')
 const Income = require('../models/Income')
 
 const createIncome = async (req, res) => {
+	// TODO: add to budget
 	const { date, source, budget, amount, description, user } = req.body
 	try {
 		// Check if the username exist

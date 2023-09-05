@@ -9,6 +9,7 @@ const expenseSchema = new mongoose.Schema(
 		date: {
 			type: Date,
 			required: true,
+			default: Date.now(),
 		},
 		category: {
 			type: String,
@@ -23,7 +24,7 @@ const expenseSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
-		notes: {
+		description: {
 			type: String,
 		},
 		budget: {

@@ -20,6 +20,9 @@ import EditIncome from './pages/Incomes/EditIncome/EditIncome'
 import CreateIncome from './pages/Incomes/CreateIncome/CreateIncome'
 import Categories from './pages/Categories/Categories'
 import EditCategory from './pages/Categories/EditCategory/EditCategory'
+import EditExpense from './pages/Expenses/EditExpense/EditExpense'
+import CreateExpense from './pages/Expenses/CreateExpense/CreateExpense'
+import Expenses from './pages/Expenses/Expenses'
 
 const App = () => {
 	return (
@@ -145,6 +148,29 @@ const App = () => {
 						<Route
 							path="/categories/edit/:id"
 							element={<EditCategory />}
+						/>
+					</Route>
+				</Route>
+
+				<Route path="/expenses">
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							index
+							element={<Expenses />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/expenses/create"
+							element={<CreateExpense />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/expenses/edit/:id"
+							element={<EditExpense />}
 						/>
 					</Route>
 				</Route>
