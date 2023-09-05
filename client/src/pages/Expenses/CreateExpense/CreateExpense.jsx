@@ -58,7 +58,18 @@ const CreateExpense = () => {
 		try {
 			const response = await axiosInstance.post('expenses', inputs)
 			if (response.status === 201) {
-				navigate('/expenses')
+				try {
+					// Change budget to new amount
+					const budgetId = inputs.budget
+					const amount = inputs.amount
+					const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
+					const res = await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) - Number(amount) })
+
+					// Redirect
+					navigate('/expenses')
+				} catch (error) {
+					setError(response.data.error || 'Registration failed')
+				}
 			} else {
 				setError(response.data.error || 'Registration failed')
 			}

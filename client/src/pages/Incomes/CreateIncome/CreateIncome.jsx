@@ -48,7 +48,18 @@ const CreateIncome = () => {
 		try {
 			const response = await axiosInstance.post('incomes', inputs)
 			if (response.status === 201) {
-				navigate('/incomes')
+				try {
+					// Change budget to new amount
+					const budgetId = inputs.budget
+					const amount = inputs.amount
+					const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
+					const res = await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) + Number(amount) })
+
+					// Redirect
+					navigate('/incomes')
+				} catch (error) {
+					setError(response.data.error || 'Registration failed')
+				}
 			} else {
 				setError(response.data.error || 'Registration failed')
 			}
