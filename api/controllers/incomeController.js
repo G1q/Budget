@@ -35,7 +35,7 @@ const createIncome = async (req, res) => {
 
 const getIncomes = async (req, res) => {
 	try {
-		const incomes = await Income.find({ user: req.params.id }).populate('source', 'title').populate('budget', 'title').sort({ date: -1 })
+		const incomes = await Income.find({ user: req.params.id }).populate('source', 'title').populate('budget', 'title').sort({ date: -1, createdAt: -1 })
 		if (!incomes) {
 			return res.status(404).json({ error: 'Incomes not found' })
 		}

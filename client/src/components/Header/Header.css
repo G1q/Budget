@@ -1,0 +1,76 @@
+header {
+	position: sticky;
+	top: 0;
+	z-index: 999999;
+	background-color: #fff;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.primary__navigation {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin-inline: auto;
+	padding: 0.25rem 1rem;
+}
+
+.logo {
+	font-size: 2rem;
+	font-weight: 600;
+	cursor: pointer;
+	user-select: none;
+}
+
+.logo a {
+	text-decoration: none;
+	color: royalblue;
+}
+
+.primary__navigation-list {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	list-style-type: none;
+}
+
+.primary__navigation-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.primary__navigation-link {
+	text-decoration: none;
+	color: royalblue;
+	position: relative;
+}
+
+.primary__navigation-link::after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background-color: hsl(225, 73%, 47%);
+	position: absolute;
+	bottom: -3px;
+	left: 0;
+	display: block;
+	transform: scaleX(0);
+	transform-origin: right;
+	transition: transform 250ms ease-in-out;
+}
+
+.primary__navigation-link:is(:hover, :focus-visible)::after {
+	transform: scaleX(1);
+	transform-origin: left;
+}
+
+.primary__navigation-btn {
+}
+
+.primary__navigation-group {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+}

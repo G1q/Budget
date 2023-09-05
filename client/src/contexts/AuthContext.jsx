@@ -35,7 +35,14 @@ export const AuthProvider = ({ children }) => {
 		return decodedToken.userId
 	}
 
-	return <AuthContext.Provider value={{ authToken, setAuthToken, isLoggedIn, getUserRole, getUserId }}>{children}</AuthContext.Provider>
+	const getUserName = () => {
+		if (!authToken) return null
+
+		const decodedToken = jwtDecode(authToken)
+		return decodedToken.username
+	}
+
+	return <AuthContext.Provider value={{ authToken, setAuthToken, isLoggedIn, getUserRole, getUserId, getUserName }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {

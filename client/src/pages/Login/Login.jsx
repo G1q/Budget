@@ -19,7 +19,7 @@ const Login = () => {
 			const response = await axiosInstance.post('users/login', { email, password })
 			if (response.status === 200) {
 				localStorage.setItem('token', response.data.token)
-				navigate('/')
+				navigate(0)
 			} else {
 				setError(response.data.error || 'Login failed')
 			}

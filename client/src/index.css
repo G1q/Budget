@@ -1,3 +1,25 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: system-ui, sans-serif;
+}
+
+img {
+	max-width: 100%;
+	display: block;
+}
+
+main {
+	max-width: 1200px;
+	margin-inline: auto;
+	padding-inline: 1rem;
+}
+
 .popup-dialog::backdrop {
 	background-color: rgba(0, 0, 0, 0.8);
 }
@@ -34,4 +56,9 @@
 select {
 	width: 100%;
 	padding: 0.25em 1em;
+}
+
+textarea {
+	width: 100%;
+	resize: none;
 }

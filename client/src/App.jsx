@@ -23,6 +23,7 @@ import EditCategory from './pages/Categories/EditCategory/EditCategory'
 import EditExpense from './pages/Expenses/EditExpense/EditExpense'
 import CreateExpense from './pages/Expenses/CreateExpense/CreateExpense'
 import Expenses from './pages/Expenses/Expenses'
+import MainLayout from './layouts/MainLayout'
 
 const App = () => {
 	return (
@@ -30,10 +31,149 @@ const App = () => {
 			<Routes>
 				<Route
 					path="/"
-					exact
-					element={<Homepage />}
-				/>
+					element={<MainLayout />}
+				>
+					<Route
+						index
+						element={<Homepage />}
+					/>
 
+					<Route path="/user">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/user/profile"
+								element={<UserProfile />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/user/edit"
+								element={<EditProfile />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/admin">
+						<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
+							<Route
+								path="/admin/"
+								element={<AdminDashboard />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
+							<Route
+								path="/admin/users"
+								element={<Users />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
+							<Route
+								path="/admin/users/create"
+								element={<CreateUser />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
+							<Route
+								path="/admin/users/edit/:id"
+								element={<EditUser />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/budgets">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Budgets />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/budgets/create"
+								element={<CreateBudget />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/budgets/edit/:id"
+								element={<EditBudget />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/incomes">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Incomes />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/incomes/create"
+								element={<CreateIncome />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/incomes/edit/:id"
+								element={<EditIncome />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/categories">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Categories />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/categories/edit/:id"
+								element={<EditCategory />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/expenses">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Expenses />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/expenses/create"
+								element={<CreateExpense />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/expenses/edit/:id"
+								element={<EditExpense />}
+							/>
+						</Route>
+					</Route>
+
+					<Route
+						path="*"
+						element={<NotFound />}
+					/>
+				</Route>
 				<Route
 					path="/register"
 					element={<Register />}
@@ -42,142 +182,6 @@ const App = () => {
 				<Route
 					path="/login"
 					element={<Login />}
-				/>
-
-				<Route path="/user">
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/user/profile"
-							element={<UserProfile />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/user/edit"
-							element={<EditProfile />}
-						/>
-					</Route>
-				</Route>
-
-				<Route path="/admin">
-					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
-						<Route
-							path="/admin/"
-							element={<AdminDashboard />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
-						<Route
-							path="/admin/users"
-							element={<Users />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
-						<Route
-							path="/admin/users/create"
-							element={<CreateUser />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
-						<Route
-							path="/admin/users/edit/:id"
-							element={<EditUser />}
-						/>
-					</Route>
-				</Route>
-
-				<Route path="/budgets">
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							index
-							element={<Budgets />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/budgets/create"
-							element={<CreateBudget />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/budgets/edit/:id"
-							element={<EditBudget />}
-						/>
-					</Route>
-				</Route>
-
-				<Route path="/incomes">
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							index
-							element={<Incomes />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/incomes/create"
-							element={<CreateIncome />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/incomes/edit/:id"
-							element={<EditIncome />}
-						/>
-					</Route>
-				</Route>
-
-				<Route path="/categories">
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							index
-							element={<Categories />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/categories/edit/:id"
-							element={<EditCategory />}
-						/>
-					</Route>
-				</Route>
-
-				<Route path="/expenses">
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							index
-							element={<Expenses />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/expenses/create"
-							element={<CreateExpense />}
-						/>
-					</Route>
-
-					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-						<Route
-							path="/expenses/edit/:id"
-							element={<EditExpense />}
-						/>
-					</Route>
-				</Route>
-
-				<Route
-					path="*"
-					element={<NotFound />}
 				/>
 			</Routes>
 		</AuthProvider>
