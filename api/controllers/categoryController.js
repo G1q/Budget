@@ -2,7 +2,7 @@ const Category = require('../models/Category')
 const User = require('../models/User')
 
 const createCategory = async (req, res) => {
-	const { title, user, subcategories } = req.body
+	const { title, user, subcategory } = req.body
 	try {
 		// Check if the username exist
 		const existingUsername = await User.findOne({ _id: user })
@@ -11,16 +11,11 @@ const createCategory = async (req, res) => {
 			return res.status(400).json({ error: 'No user with this id!' })
 		}
 
-		// Check if is another category with same title for same user
-		const existingSameCategoryForSameUser = await Category.findOne({ title, user: existingUsername._id })
-		if (existingSameCategoryForSameUser) {
-			return res.status(403).json({ error: 'This category was register for this user!' })
-		}
-
 		// Create a new category
 		const newCategory = new Category({
 			title,
 			user,
+			subcategory,
 		})
 
 		await newCategory.save()
@@ -63,4 +58,20 @@ const getCategory = async (req, res) => {
 	}
 }
 
-module.exports = { createCategory, getCategories, getCategory, deleteCategory }
+const editCategory = async (req, res) => {
+	try {
+		const categoryId = req.params.id
+
+		const updatedCategory = await Category.findByIdAndUpdate(categoryId, req.body, { new: true })
+
+		if (!updatedCategory) {
+			return res.status(404).json({ error: 'Category not found' })
+		}
+
+		res.status(200).json(updatedCategory)
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
+module.exports = { createCategory, getCategories, getCategory, deleteCategory, editCategory }

@@ -19,6 +19,7 @@ import Incomes from './pages/Incomes/Incomes'
 import EditIncome from './pages/Incomes/EditIncome/EditIncome'
 import CreateIncome from './pages/Incomes/CreateIncome/CreateIncome'
 import Categories from './pages/Categories/Categories'
+import EditCategory from './pages/Categories/EditCategory/EditCategory'
 
 const App = () => {
 	return (
@@ -137,6 +138,13 @@ const App = () => {
 						<Route
 							index
 							element={<Categories />}
+						/>
+					</Route>
+
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/categories/edit/:id"
+							element={<EditCategory />}
 						/>
 					</Route>
 				</Route>

@@ -10,7 +10,7 @@ const Categories = () => {
 	const [categories, setCategories] = useState([])
 	const [error, setError] = useState('')
 	const [categoryTitle, setCategoryTitle] = useState('')
-	const [subcategories, setSubcategories] = useState([])
+	const [subcategoryTitle, setSubcategoryTitle] = useState('')
 
 	const navigate = useNavigate()
 
@@ -46,7 +46,7 @@ const Categories = () => {
 			const category = {
 				title: categoryTitle,
 				user: getUserId(),
-				subcategories: '',
+				subcategory: subcategoryTitle,
 			}
 			const response = await axiosInstance.post('categories', category)
 			console.log(response)
@@ -91,43 +91,19 @@ const Categories = () => {
 					onSubmit={handleCreateCategory}
 				>
 					<label htmlFor="title">Title</label>
-					{categories.length > 0 ? (
-						<select
-							name="title"
-							id="title"
-							onChange={(e) => setCategoryTitle(e.target.value)}
-						>
-							<option
-								value=""
-								hidden
-							>
-								Please select a category...
-							</option>
-
-							{categories.map((category) => (
-								<option
-									key={category._id}
-									value={category._id}
-								>
-									{category.title}
-								</option>
-							))}
-						</select>
-					) : (
-						<input
-							type="text"
-							name="title"
-							id="title"
-							onChange={(e) => setCategoryTitle(e.target.value)}
-						/>
-					)}
-
-					<label htmlFor="subcategories">Subcategories</label>
 					<input
 						type="text"
-						name="subcategories"
-						id="subcategories"
-						onChange={(e) => setSubcategories(e.target.value)}
+						name="title"
+						id="title"
+						onChange={(e) => setCategoryTitle(e.target.value)}
+					/>
+
+					<label htmlFor="subcategory">Subcategory title</label>
+					<input
+						type="text"
+						name="subcategory"
+						id="subcategory"
+						onChange={(e) => setSubcategoryTitle(e.target.value)}
 					/>
 					<button>Create category</button>
 					<p className="error-msg">{error}</p>
@@ -139,7 +115,8 @@ const Categories = () => {
 					<thead>
 						<tr>
 							<th>Category</th>
-							<th>Subcategories</th>
+							<th>Subcategory</th>
+							<th>Edit category</th>
 							<th>Delete category</th>
 						</tr>
 					</thead>
@@ -147,7 +124,15 @@ const Categories = () => {
 						{categories.map((category) => (
 							<tr key={category._id}>
 								<td>{category.title}</td>
-								<td>{category.subcategories}</td>
+								<td>{category.subcategory}</td>
+								<td>
+									<Link
+										className="edit-btn"
+										to={`/categories/edit/${category._id}`}
+									>
+										Edit
+									</Link>
+								</td>
 								<td>
 									<button
 										className="delete-btn"
