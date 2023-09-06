@@ -42,12 +42,21 @@ const Budgets = () => {
 	return isLoggedIn() ? (
 		<main>
 			<h1>Budgets</h1>
-			<Link
-				to="./create"
-				className="create-btn"
-			>
-				Create budget
-			</Link>
+
+			<div className="buttons-group">
+				<Link
+					to="./create"
+					className="create-btn"
+				>
+					Create budget
+				</Link>
+				<Link
+					to="/transfers/create"
+					className="create-btn"
+				>
+					Transfer between budgets
+				</Link>
+			</div>
 			{success && <p className="error-msg transaction__error-msg">{success}</p>}
 			{error && <p className="error-msg transaction__error-msg">{error}</p>}
 			{budgets.length > 0 ? (

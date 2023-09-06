@@ -18,50 +18,54 @@ const Header = () => {
 				</div>
 
 				<ul className="primary__navigation-list">
-					<li className="primary__navigation-item">
-						<Link
-							to="/budgets"
-							className="primary__navigation-link"
-						>
-							Budgets
-						</Link>
-					</li>
+					{isLoggedIn() && (
+						<>
+							<li className="primary__navigation-item">
+								<Link
+									to="/budgets"
+									className="primary__navigation-link"
+								>
+									Budgets
+								</Link>
+							</li>
 
-					<li className="primary__navigation-item">
-						<Link
-							to="/incomes"
-							className="primary__navigation-link"
-						>
-							Incomes
-						</Link>
-					</li>
+							<li className="primary__navigation-item">
+								<Link
+									to="/incomes"
+									className="primary__navigation-link"
+								>
+									Incomes
+								</Link>
+							</li>
 
-					<li className="primary__navigation-item">
-						<Link
-							to="/expenses"
-							className="primary__navigation-link"
-						>
-							Expenses
-						</Link>
-					</li>
+							<li className="primary__navigation-item">
+								<Link
+									to="/expenses"
+									className="primary__navigation-link"
+								>
+									Expenses
+								</Link>
+							</li>
 
-					<li className="primary__navigation-item">
-						<Link
-							to="/categories"
-							className="primary__navigation-link"
-						>
-							Categories
-						</Link>
-					</li>
+							<li className="primary__navigation-item">
+								<Link
+									to="/categories"
+									className="primary__navigation-link"
+								>
+									Categories
+								</Link>
+							</li>
 
-					<li className="primary__navigation-item">
-						<Link
-							to="/transfers"
-							className="primary__navigation-link"
-						>
-							Transfers
-						</Link>
-					</li>
+							<li className="primary__navigation-item">
+								<Link
+									to="/transfers"
+									className="primary__navigation-link"
+								>
+									Transfers
+								</Link>
+							</li>
+						</>
+					)}
 				</ul>
 				{isLoggedIn() ? (
 					<div className="primary__navigation-group">

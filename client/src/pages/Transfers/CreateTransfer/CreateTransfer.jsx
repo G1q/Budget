@@ -80,7 +80,7 @@ const CreateTransfer = () => {
 
 	return (
 		<main>
-			<h1>Create new expense</h1>
+			<h1>Create new transfer</h1>
 
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
