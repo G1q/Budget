@@ -26,6 +26,20 @@ const CreateTransfer = () => {
 	}, [])
 
 	const handleChange = (e) => {
+		if (e.target.id === 'sourceId') {
+			setInputs((prev) => ({
+				...prev,
+				[e.target.name]: e.target.value,
+				sourceTitle: e.target.selectedOptions[0].textContent,
+			}))
+		}
+		if (e.target.id === 'budgetId') {
+			setInputs((prev) => ({
+				...prev,
+				[e.target.name]: e.target.value,
+				budgetTitle: e.target.selectedOptions[0].textContent,
+			}))
+		}
 		setInputs((prev) => ({
 			...prev,
 			[e.target.name]: e.target.value,
@@ -36,34 +50,29 @@ const CreateTransfer = () => {
 		e.preventDefault()
 
 		try {
-			const sourceBudget = await axiosInstance.get(`/budgets/view/${inputs.sourceId}`)
-			const destinationBudget = await axiosInstance.get(`/budgets/view/${inputs.budgetId}`)
-
-			setInputs((prev) => ({
-				...prev,
-				sourceTitle: sourceBudget.data.title,
-				budgetTitle: destinationBudget.data.title,
-			}))
-
-			// Change new budgets
-			const amount = inputs.amount
-			const newSourceAmount = Number(sourceBudget.data.currentAmount) - Number(amount)
-			const newDestinationAmount = Number(destinationBudget.data.currentAmount) + Number(amount)
-
-			if (newSourceAmount < 0) {
-				throw new Error("You don't have this amount in source budget!")
+			// Check if they are different budgets
+			if (inputs.sourceId === inputs.budgetId) {
+				throw new Error("You can't transfer to same budget account!")
 			} else {
-				await axiosInstance.put(`/budgets/${inputs.sourceId}`, { currentAmount: newSourceAmount })
-				console.log('1')
-				await axiosInstance.put(`/budgets/${inputs.budgetId}`, { currentAmount: newDestinationAmount })
-				console.log('2')
-				console.log(inputs)
-				await axiosInstance.post('transfers', inputs)
-				console.log('3')
-			}
+				// Change new budgets
+				const sourceBudget = await axiosInstance.get(`/budgets/view/${inputs.sourceId}`)
+				const destinationBudget = await axiosInstance.get(`/budgets/view/${inputs.budgetId}`)
+				if (!sourceBudget || !destinationBudget) throw new Error('At least one budget does not exist!')
+				const amount = inputs.amount
+				const newSourceAmount = Number(sourceBudget.data.currentAmount) - Number(amount)
+				const newDestinationAmount = Number(destinationBudget.data.currentAmount) + Number(amount)
 
-			// Redirect
-			navigate('/transfers')
+				if (newSourceAmount < 0) {
+					throw new Error("You don't have this amount in source budget!")
+				} else {
+					await axiosInstance.put(`/budgets/${inputs.sourceId}`, { currentAmount: newSourceAmount })
+					await axiosInstance.put(`/budgets/${inputs.budgetId}`, { currentAmount: newDestinationAmount })
+					await axiosInstance.post('transfers', inputs)
+				}
+
+				// Redirect
+				navigate('/transfers')
+			}
 		} catch (error) {
 			setError(error.message)
 		}

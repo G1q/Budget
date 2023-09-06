@@ -6,16 +6,16 @@ const createTransfer = async (req, res) => {
 	const { user, date, amount, sourceId, sourceTitle, budgetId, budgetTitle, description } = req.body
 	try {
 		// Check if the username exist
-		const existingUsername = await User.findOne({ _id: user })
+		const existingUsername = await User.findById(user)
 
 		if (!existingUsername) {
 			return res.status(400).json({ error: 'No user with this id!' })
 		}
 
 		// Check if the source and destination budget exist
-		const existingSource = await Budget.findOne({ _id: sourceId })
-		const existingBudget = await Budget.findOne({ _id: budgetId })
-		if (!existingBudget || !existingSource) return res.status(400).json({ error: 'No budget with this id!' })
+		const existingSource = await Budget.findById(sourceId)
+		const existingBudget = await Budget.findById(budgetId)
+		if (!existingBudget || !existingSource) return res.status(400).json({ error: 'At least one budget does not exist!' })
 
 		// Create a new expense
 		const newTransfer = new Transfer({

@@ -8,7 +8,7 @@ const createBudget = async (req, res) => {
 		const { title, startAmount, targetAmount, currency, description, user } = req.body
 
 		// Check if the username exist
-		const existingUsername = await User.findOne({ _id: user })
+		const existingUsername = await User.findById(user)
 
 		if (!existingUsername) {
 			return res.status(400).json({ error: 'No user with this id!' })
@@ -69,7 +69,7 @@ const deleteBudget = async (req, res) => {
 	const budgetId = req.params.id
 
 	try {
-		const budget = await Budget.findOne({ _id: budgetId })
+		const budget = await Budget.findById(budgetId)
 		const referencedIncomes = await Income.countDocuments({ budget: budgetId })
 		const referencedExpenses = await Expense.countDocuments({ budget: budgetId })
 
