@@ -58,12 +58,34 @@ const deleteIncome = async (req, res) => {
 
 const editIncome = async (req, res) => {
 	try {
-	} catch (err) {}
+		const incomeId = req.params.id
+
+		const updatedIncome = await Income.findByIdAndUpdate(incomeId, req.body, { new: true })
+
+		if (!updatedIncome) {
+			return res.status(404).json({ error: 'Income not found' })
+		}
+
+		res.status(200).json(updatedIncome)
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
 }
 
 const getIncome = async (req, res) => {
 	try {
-	} catch (err) {}
+		const incomeId = req.params.id
+
+		// Fetch user profile
+		const income = await Income.findById(incomeId)
+		if (!income) {
+			return res.status(404).json({ error: 'Income not found' })
+		}
+
+		res.status(200).json(income)
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
 }
 
 module.exports = { createIncome, deleteIncome, editIncome, getIncome, getIncomes }

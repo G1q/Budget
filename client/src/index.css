@@ -62,3 +62,17 @@ textarea {
 	width: 100%;
 	resize: none;
 }
+
+.error-msg {
+	color: crimson;
+	font-weight: 500;
+}
+
+.error-msg.transatcion__error-msg {
+	text-align: center;
+	border: 2px solid crimson;
+	background-color: crimson;
+	color: #fff;
+	padding: 0.25em 1em;
+	font-size: 0.875rem;
+}

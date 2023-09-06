@@ -23,11 +23,22 @@ const Expenses = () => {
 	}, [])
 
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this expense?')
+		const confirmDelete = window.confirm('Are you sure do you want delete this expense? The source budget will credit with expense amount.')
 
 		if (confirmDelete) {
 			try {
-				const response = await axiosInstance.delete(`expenses/${id}`)
+				const expense = await axiosInstance.get(`expenses/view/${id}`)
+				const budgetId = expense.data.budget
+				const amount = expense.data.amount
+
+				// Change budget to initial amount
+				const budget = await axiosInstance.get(`budgets/view/${budgetId}`)
+				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: Number(budget.data.currentAmount) + Number(amount) })
+
+				// Delete expense
+				await axiosInstance.delete(`expenses/${id}`)
+
+				// Refresh expenses list
 				getExpenses()
 			} catch (error) {
 				console.log(error)

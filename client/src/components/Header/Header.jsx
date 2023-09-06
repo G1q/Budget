@@ -4,7 +4,7 @@ import './Header.css'
 import { useAuth } from '../../contexts/AuthContext'
 
 const Header = () => {
-	const { getUserName } = useAuth()
+	const { getUserName, isLoggedIn } = useAuth()
 
 	return (
 		<header>
@@ -54,10 +54,21 @@ const Header = () => {
 						</Link>
 					</li>
 				</ul>
-				<div className="primary__navigation-group">
-					<p>Hello, {getUserName()}</p>
-					<LogoutButton />
-				</div>
+				{isLoggedIn() ? (
+					<div className="primary__navigation-group">
+						<p>Hello, {getUserName()}</p>
+						<LogoutButton />
+					</div>
+				) : (
+					<div className="primary__navigation-group">
+						<Link
+							to="/login"
+							className="primary__navigation-link login-btn"
+						>
+							Login
+						</Link>
+					</div>
+				)}
 			</nav>
 		</header>
 	)

@@ -11,6 +11,7 @@ const Incomes = () => {
 	const [incomes, setIncomes] = useState([])
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [sourceError, setSourceError] = useState('')
+	const [budgetError, setBudgetError] = useState('')
 
 	const getIncomes = async () => {
 		try {
@@ -26,14 +27,30 @@ const Incomes = () => {
 	}, [])
 
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this income?')
+		const confirmDelete = window.confirm('Are you sure do you want delete this income? The source budget will debit with income amount.')
 
 		if (confirmDelete) {
 			try {
-				const response = await axiosInstance.delete(`incomes/${id}`)
+				const income = await axiosInstance.get(`incomes/view/${id}`)
+				const budgetId = income.data.budget
+				const amount = income.data.amount
+
+				// Change budget to initial amount
+				const budget = await axiosInstance.get(`budgets/view/${budgetId}`)
+				const newAmount = Number(budget.data.currentAmount) - Number(amount)
+
+				if (newAmount < 0) throw new Error('Budget will decrease under 0. Please check again!')
+
+				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newAmount })
+				setBudgetError('')
+
+				// Delete income
+				await axiosInstance.delete(`incomes/${id}`)
+
+				// Refresh incomes list
 				getIncomes()
 			} catch (error) {
-				console.log(error)
+				setBudgetError(error)
 			}
 		}
 	}
@@ -104,6 +121,7 @@ const Incomes = () => {
 				</form>
 			</dialog>
 
+			{budgetError && <p className="error-msg transatcion__error-msg">{budgetError.message}</p>}
 			{incomes.length > 0 ? (
 				<table>
 					<thead>

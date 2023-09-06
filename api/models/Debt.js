@@ -15,12 +15,7 @@ const debtSchema = new mongoose.Schema(
 		},
 		creditor: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
-			required: true,
-		},
-		debtor: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
+			ref: 'IncomeSource',
 			required: true,
 		},
 	},

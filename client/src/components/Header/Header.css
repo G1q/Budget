@@ -65,6 +65,22 @@ header {
 	transform-origin: left;
 }
 
+.primary__navigation-link.login-btn {
+	background-color: royalblue;
+	color: #fff;
+	padding: 0.25em 1em;
+	border-radius: 0.25em;
+	display: inline-block;
+}
+
+.primary__navigation-link.login-btn::after {
+	all: initial;
+}
+
+.primary__navigation-link.login-btn:is(:hover, :focus-visible) {
+	background-color: hsl(225, 73%, 47%);
+}
+
 .primary__navigation-btn {
 }
 
