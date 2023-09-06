@@ -24,6 +24,9 @@ import EditExpense from './pages/Expenses/EditExpense/EditExpense'
 import CreateExpense from './pages/Expenses/CreateExpense/CreateExpense'
 import Expenses from './pages/Expenses/Expenses'
 import MainLayout from './layouts/MainLayout'
+import Transfers from './pages/Transfers/Transfers'
+import CreateTransfer from './pages/Transfers/CreateTransfer/CreateTransfer'
+import EditTransfer from './pages/Transfers/EditTransfer/EditTransfer'
 
 const App = () => {
 	return (
@@ -165,6 +168,29 @@ const App = () => {
 							<Route
 								path="/expenses/edit/:id"
 								element={<EditExpense />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/transfers">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Transfers />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/transfers/create"
+								element={<CreateTransfer />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/transfers/edit/:id"
+								element={<EditTransfer />}
 							/>
 						</Route>
 					</Route>

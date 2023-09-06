@@ -16,15 +16,24 @@ const transferSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
-		source: {
+		sourceId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Budget',
+		},
+		sourceTitle: {
+			type: String,
 			required: true,
 		},
-		budget: {
+		budgetId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Budget',
+		},
+		budgetTitle: {
+			type: String,
 			required: true,
+		},
+		description: {
+			type: String,
 		},
 	},
 	{

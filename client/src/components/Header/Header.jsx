@@ -53,6 +53,15 @@ const Header = () => {
 							Categories
 						</Link>
 					</li>
+
+					<li className="primary__navigation-item">
+						<Link
+							to="/transfers"
+							className="primary__navigation-link"
+						>
+							Transfers
+						</Link>
+					</li>
 				</ul>
 				{isLoggedIn() ? (
 					<div className="primary__navigation-group">

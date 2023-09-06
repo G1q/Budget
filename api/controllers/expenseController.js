@@ -70,9 +70,7 @@ const editExpense = async (req, res) => {
 const deleteExpense = async (req, res) => {
 	const expenseId = req.params.id
 	try {
-		const expenseToDelete = Expense.findById({ _id: expenseId }) // TODO: put amount back in source budget
-
-		const deletedExpense = await Expense.findByIdAndDelete(expenseId)
+		await Expense.findByIdAndDelete(expenseId)
 		res.status(200).json({ message: 'Expense deleted successfully!' })
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
