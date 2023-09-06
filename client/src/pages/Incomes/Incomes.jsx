@@ -121,7 +121,7 @@ const Incomes = () => {
 				</form>
 			</dialog>
 
-			{budgetError && <p className="error-msg transatcion__error-msg">{budgetError.message}</p>}
+			{budgetError && <p className="error-msg transaction__error-msg">{budgetError.message}</p>}
 			{incomes.length > 0 ? (
 				<table>
 					<thead>

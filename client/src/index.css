@@ -68,7 +68,7 @@ textarea {
 	font-weight: 500;
 }
 
-.error-msg.transatcion__error-msg {
+.error-msg.transaction__error-msg {
 	text-align: center;
 	border: 2px solid crimson;
 	background-color: crimson;

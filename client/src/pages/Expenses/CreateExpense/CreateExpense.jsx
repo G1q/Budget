@@ -56,32 +56,31 @@ const CreateExpense = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axiosInstance.post('expenses', inputs)
-			if (response.status === 201) {
-				try {
-					// Change budget to new amount
-					const budgetId = inputs.budget
-					const amount = inputs.amount
-					const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
-					const res = await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) - Number(amount) })
+			// Change budget to new amount
+			const budgetId = inputs.budget
+			const amount = inputs.amount
+			const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
+			const newAmount = Number(response.data.currentAmount) - Number(amount)
 
-					// Redirect
-					navigate('/expenses')
-				} catch (error) {
-					setError(response.data.error || 'Registration failed')
-				}
+			// Check if expense is bigger than budget current amount
+			if (newAmount < 0) {
+				throw new Error("You don't have minimum amount in selected budget to complete this transaction!")
 			} else {
-				setError(response.data.error || 'Registration failed')
+				await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount })
+				await axiosInstance.post('expenses', inputs)
 			}
+
+			// Redirect
+			navigate('/expenses')
 		} catch (error) {
-			setError(error.response.data.error)
+			setError(error.message)
 		}
 	}
 
 	return (
 		<main>
 			<h1>Create new expense</h1>
-			{error && <p className="error-message">{error}</p>}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="date">Date</label>
@@ -207,6 +206,7 @@ const CreateExpense = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
+				{error && <p className="error-msg transaction__error-msg">{error}</p>}
 				<button type="submit">Create expense</button>
 			</form>
 		</main>

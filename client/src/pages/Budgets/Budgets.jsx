@@ -48,8 +48,8 @@ const Budgets = () => {
 			>
 				Create budget
 			</Link>
-			{success && <p className="error-msg transatcion__error-msg">{success}</p>}
-			{error && <p className="error-msg transatcion__error-msg">{error}</p>}
+			{success && <p className="error-msg transaction__error-msg">{success}</p>}
+			{error && <p className="error-msg transaction__error-msg">{error}</p>}
 			{budgets.length > 0 ? (
 				<table>
 					<thead>
