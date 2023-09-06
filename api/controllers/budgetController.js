@@ -1,5 +1,7 @@
 const Budget = require('../models/Budget')
 const User = require('../models/User')
+const Income = require('../models/Income')
+const Expense = require('../models/Expense')
 
 const createBudget = async (req, res) => {
 	try {
@@ -65,11 +67,23 @@ const editBudget = async (req, res) => {
 
 const deleteBudget = async (req, res) => {
 	const budgetId = req.params.id
-	try {
-		const budgetToDelete = Budget.findById({ _id: budgetId }) // TODO: put amount in general budget
 
-		const deletedBudget = await Budget.findByIdAndDelete(budgetId)
-		res.status(200).json({ message: 'Budget deleted successfully!' })
+	try {
+		const budget = await Budget.findOne({ _id: budgetId })
+		const referencedIncomes = await Income.countDocuments({ budget: budgetId })
+		const referencedExpenses = await Expense.countDocuments({ budget: budgetId })
+
+		if (referencedIncomes > 0 || referencedExpenses > 0) {
+			// Check if budget have transaction on it
+			res.status(403).json({ error: "You can't delete this budget because have transactions on it!" })
+		} else if (budget.currentAmount > 0) {
+			// Check if budget have amount bigger than 0
+			res.status(403).json({ error: "You can't delete this budget because have amount grater than 0. First, transfer all amounts to another budget!" })
+		} else {
+			// Delete budget if haven't any transactions
+			await Budget.findByIdAndDelete(budgetId)
+			res.status(200).json({ message: 'Budget deleted successfully!' })
+		}
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}

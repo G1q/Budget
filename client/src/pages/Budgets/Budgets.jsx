@@ -7,13 +7,16 @@ import axiosInstance from '../../utilities/axiosconfig'
 const Budgets = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [budgets, setBudgets] = useState([])
+	const [error, setError] = useState(null)
+	const [success, setSucces] = useState(null)
 
 	const getBudgets = async () => {
 		try {
 			const response = await axiosInstance(`/budgets/${getUserId()}`)
 			setBudgets(response.data)
+			setError(null)
 		} catch (error) {
-			console.log(error)
+			setError(error)
 		}
 	}
 
@@ -27,9 +30,11 @@ const Budgets = () => {
 		if (confirmDelete) {
 			try {
 				const response = await axiosInstance.delete(`budgets/${id}`)
+				setError(null)
+				setSucces(response.data.message)
 				getBudgets()
 			} catch (error) {
-				console.log(error)
+				setError(error.response.data.error)
 			}
 		}
 	}
@@ -43,6 +48,8 @@ const Budgets = () => {
 			>
 				Create budget
 			</Link>
+			{success && <p className="error-msg transatcion__error-msg">{success}</p>}
+			{error && <p className="error-msg transatcion__error-msg">{error}</p>}
 			{budgets.length > 0 ? (
 				<table>
 					<thead>

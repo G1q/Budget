@@ -30,7 +30,6 @@ const EditBudget = () => {
 			...prev,
 			[e.target.name]: e.target.value,
 		}))
-		console.log(budget)
 	}
 
 	const handleSubmit = async (e) => {
