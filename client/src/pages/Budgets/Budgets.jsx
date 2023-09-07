@@ -75,9 +75,9 @@ const Budgets = () => {
 						{budgets.map((budget) => (
 							<tr key={budget._id}>
 								<td>{budget.title}</td>
-								<td>{`${budget.startAmount} ${budget.currency}`}</td>
-								<td>{`${budget.currentAmount} ${budget.currency}`}</td>
-								<td>{budget.targetAmount ? `${budget.targetAmount} ${budget.currency}` : '-'}</td>
+								<td>{`${budget.startAmount.toFixed(2)} ${budget.currency}`}</td>
+								<td>{`${budget.currentAmount.toFixed(2)} ${budget.currency}`}</td>
+								<td>{budget.targetAmount ? `${budget.targetAmount.toFixed(2)} ${budget.currency}` : '-'}</td>
 								<td>
 									<Link
 										className="edit-btn"
