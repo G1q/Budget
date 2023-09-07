@@ -96,6 +96,7 @@ const CreateDebt = () => {
 						id="startAmount"
 						onChange={handleChange}
 						required
+						step={0.01}
 					/>
 				</div>
 

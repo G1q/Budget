@@ -2,9 +2,12 @@ import { Link } from 'react-router-dom'
 import LogoutButton from '../LogoutButton/LogoutButton'
 import './Header.css'
 import { useAuth } from '../../contexts/AuthContext'
+import { adminPermission } from '../../utilities/roles'
 
 const Header = () => {
-	const { getUserName, isLoggedIn } = useAuth()
+	const { getUserName, isLoggedIn, getUserRole } = useAuth()
+
+	const role = getUserRole()
 
 	return (
 		<header>
@@ -82,6 +85,17 @@ const Header = () => {
 									Debts
 								</Link>
 							</li>
+
+							{adminPermission(role) && (
+								<li className="primary__navigation-item">
+									<Link
+										to="/admin"
+										className="primary__navigation-link"
+									>
+										Admin dashboard
+									</Link>
+								</li>
+							)}
 						</>
 					)}
 				</ul>

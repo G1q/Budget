@@ -97,6 +97,7 @@ const EditDebt = () => {
 						onChange={handleChange}
 						required
 						value={debt.startAmount}
+						step={0.01}
 					/>
 				</div>
 
@@ -109,6 +110,7 @@ const EditDebt = () => {
 						onChange={handleChange}
 						required
 						value={debt.currentAmount}
+						step={0.01}
 					/>
 				</div>
 

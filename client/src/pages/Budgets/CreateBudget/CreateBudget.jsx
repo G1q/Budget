@@ -56,6 +56,7 @@ const CreateBudget = () => {
 						name="startAmount"
 						onChange={handleChange}
 						required
+						step={0.01}
 					/>
 				</div>
 
@@ -66,6 +67,7 @@ const CreateBudget = () => {
 						id="targetAmount"
 						name="targetAmount"
 						onChange={handleChange}
+						step={0.01}
 					/>
 				</div>
 

@@ -72,6 +72,7 @@ const EditBudget = () => {
 						value={budget.startAmount}
 						onChange={handleChange}
 						required
+						step={0.01}
 					/>
 				</div>
 
@@ -84,6 +85,7 @@ const EditBudget = () => {
 						value={budget.currentAmount}
 						onChange={handleChange}
 						required
+						step={0.01}
 					/>
 				</div>
 
@@ -96,6 +98,7 @@ const EditBudget = () => {
 						value={budget.targetAmount}
 						onChange={handleChange}
 						required
+						step={0.01}
 					/>
 				</div>
 

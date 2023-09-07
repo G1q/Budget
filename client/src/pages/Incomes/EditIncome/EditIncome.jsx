@@ -168,6 +168,7 @@ const EditIncome = () => {
 						onChange={handleChange}
 						required
 						value={income.amount}
+						step={0.01}
 					/>
 				</div>
 

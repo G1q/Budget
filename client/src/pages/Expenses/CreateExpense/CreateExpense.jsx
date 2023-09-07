@@ -130,6 +130,7 @@ const CreateExpense = () => {
 						id="amount"
 						onChange={handleChange}
 						required
+						step={0.01}
 					/>
 				</div>
 

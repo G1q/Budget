@@ -65,7 +65,7 @@ const App = () => {
 					<Route path="/admin">
 						<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
 							<Route
-								path="/admin/"
+								index
 								element={<AdminDashboard />}
 							/>
 						</Route>

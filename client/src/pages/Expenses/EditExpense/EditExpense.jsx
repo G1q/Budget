@@ -148,6 +148,7 @@ const EditExpense = () => {
 						onChange={handleChange}
 						required
 						value={expense.amount}
+						step={0.01}
 					/>
 				</div>
 
