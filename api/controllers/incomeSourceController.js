@@ -1,6 +1,7 @@
 const IncomeSource = require('../models/IncomeSource')
 const User = require('../models/User')
 const Income = require('../models/Income')
+const Debt = require('../models/Debt')
 
 const createSource = async (req, res) => {
 	const { title, user } = req.body
@@ -49,8 +50,9 @@ const deleteSource = async (req, res) => {
 	const incomeSourceId = req.params.id
 	try {
 		const referencedIncomes = await Income.countDocuments({ source: incomeSourceId })
+		const referencedDebts = await Debt.countDocuments({ creditor: incomeSourceId })
 
-		if (referencedIncomes > 0) {
+		if (referencedIncomes > 0 || referencedDebts > 0) {
 			// Check if source has been used to some incomes
 			res.status(403).json({ error: "You can't delete this source because have transactions on it!" })
 		} else {

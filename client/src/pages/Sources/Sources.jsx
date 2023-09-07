@@ -1,5 +1,5 @@
 import './Sources.css'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
@@ -10,6 +10,8 @@ const Sources = () => {
 	const [sources, setSources] = useState([])
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [error, setError] = useState(null)
+
+	const navigate = useNavigate()
 
 	const getSources = async () => {
 		try {
@@ -49,14 +51,12 @@ const Sources = () => {
 				title: sourceTitle,
 				user: getUserId(),
 			}
-			const response = await axiosInstance.post('incomes/source', source)
-			if (response.status === 201) {
-				setError(null)
-				clearForm()
-				navigate('/sources')
-			} else {
-				setError(response.data.error)
-			}
+
+			await axiosInstance.post('incomes/source', source)
+			getSources()
+			setError(null)
+			clearForm()
+			navigate('/sources')
 		} catch (error) {
 			setError(error.message)
 		}

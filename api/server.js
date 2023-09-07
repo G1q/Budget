@@ -26,6 +26,7 @@ const incomeRoutes = require('./routes/incomeRoutes')
 const categoryRoutes = require('./routes/categoryRoutes')
 const expenseRoutes = require('./routes/expenseRoutes')
 const transferRoutes = require('./routes/transferRoutes')
+const debtRoutes = require('./routes/debtRoutes')
 
 // Middlewares
 app.use('/api/users', userRoutes)
@@ -36,6 +37,7 @@ app.use('/api/incomes', incomeRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/expenses', expenseRoutes)
 app.use('/api/transfers', transferRoutes)
+app.use('/api/debts', debtRoutes)
 
 // Start the server
 app.listen(process.env.PORT, () => {

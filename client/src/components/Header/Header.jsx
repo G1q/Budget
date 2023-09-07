@@ -73,6 +73,15 @@ const Header = () => {
 									Sources
 								</Link>
 							</li>
+
+							<li className="primary__navigation-item">
+								<Link
+									to="/debts"
+									className="primary__navigation-link"
+								>
+									Debts
+								</Link>
+							</li>
 						</>
 					)}
 				</ul>

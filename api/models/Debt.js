@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 
 const debtSchema = new mongoose.Schema(
 	{
-		amount: {
+		currentAmount: {
+			type: Number,
+			required: true,
+		},
+		startAmount: {
 			type: Number,
 			required: true,
 		},
@@ -16,6 +20,11 @@ const debtSchema = new mongoose.Schema(
 		creditor: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'IncomeSource',
+			required: true,
+		},
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
 			required: true,
 		},
 	},

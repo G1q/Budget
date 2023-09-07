@@ -29,6 +29,9 @@ import CreateTransfer from './pages/Transfers/CreateTransfer/CreateTransfer'
 import EditTransfer from './pages/Transfers/EditTransfer/EditTransfer'
 import Sources from './pages/Sources/Sources'
 import EditSource from './pages/Sources/EditSource/EditSource'
+import Debts from './pages/Debts/Debts'
+import EditDebt from './pages/Debts/EditDebt/EditDebt'
+import CreateDebt from './pages/Debts/CreateDebt/CreateDebt'
 
 const App = () => {
 	return (
@@ -209,6 +212,29 @@ const App = () => {
 							<Route
 								path="/sources/edit/:id"
 								element={<EditSource />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/debts">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Debts />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/debts/create"
+								element={<CreateDebt />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/debts/edit/:id"
+								element={<EditDebt />}
 							/>
 						</Route>
 					</Route>

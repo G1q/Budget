@@ -5,7 +5,7 @@ import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
 
 const CreateBudget = () => {
-	const { getUserId, isLoggedIn } = useAuth()
+	const { getUserId } = useAuth()
 	const [error, setError] = useState('')
 	const [inputs, setInputs] = useState({ user: getUserId() })
 
