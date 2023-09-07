@@ -64,6 +64,15 @@ const Header = () => {
 									Transfers
 								</Link>
 							</li>
+
+							<li className="primary__navigation-item">
+								<Link
+									to="/sources"
+									className="primary__navigation-link"
+								>
+									Sources
+								</Link>
+							</li>
 						</>
 					)}
 				</ul>

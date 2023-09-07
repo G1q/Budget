@@ -1,5 +1,6 @@
 const IncomeSource = require('../models/IncomeSource')
 const User = require('../models/User')
+const Income = require('../models/Income')
 
 const createSource = async (req, res) => {
 	const { title, user } = req.body
@@ -47,8 +48,15 @@ const getSources = async (req, res) => {
 const deleteSource = async (req, res) => {
 	const incomeSourceId = req.params.id
 	try {
-		const deletedIncomeSource = await IncomeSource.findByIdAndDelete(incomeSourceId)
-		res.status(200).json({ message: 'Income source deleted successfully!' })
+		const referencedIncomes = await Income.countDocuments({ source: incomeSourceId })
+
+		if (referencedIncomes > 0) {
+			// Check if source has been used to some incomes
+			res.status(403).json({ error: "You can't delete this source because have transactions on it!" })
+		} else {
+			await IncomeSource.findByIdAndDelete(incomeSourceId)
+			res.status(200).json({ message: 'Income source deleted successfully!' })
+		}
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}
@@ -63,4 +71,20 @@ const getSource = async (req, res) => {
 	}
 }
 
-module.exports = { createSource, deleteSource, getSources, getSource }
+const editSource = async (req, res) => {
+	try {
+		const sourceId = req.params.id
+
+		const updatedSource = await IncomeSource.findByIdAndUpdate(sourceId, req.body, { new: true })
+
+		if (!updatedSource) {
+			return res.status(404).json({ error: 'Source not found' })
+		}
+
+		res.status(200).json(updatedSource)
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
+module.exports = { createSource, deleteSource, getSources, getSource, editSource }

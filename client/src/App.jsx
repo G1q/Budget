@@ -27,6 +27,8 @@ import MainLayout from './layouts/MainLayout'
 import Transfers from './pages/Transfers/Transfers'
 import CreateTransfer from './pages/Transfers/CreateTransfer/CreateTransfer'
 import EditTransfer from './pages/Transfers/EditTransfer/EditTransfer'
+import Sources from './pages/Sources/Sources'
+import EditSource from './pages/Sources/EditSource/EditSource'
 
 const App = () => {
 	return (
@@ -191,6 +193,22 @@ const App = () => {
 							<Route
 								path="/transfers/edit/:id"
 								element={<EditTransfer />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/sources">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Sources />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/sources/edit/:id"
+								element={<EditSource />}
 							/>
 						</Route>
 					</Route>
