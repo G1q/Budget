@@ -18,6 +18,7 @@ main {
 	max-width: 1200px;
 	margin-inline: auto;
 	padding-inline: 1rem;
+	flex: 1;
 }
 
 .popup-dialog::backdrop {
