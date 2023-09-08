@@ -25,6 +25,15 @@ const Header = () => {
 						<>
 							<li className="primary__navigation-item">
 								<Link
+									to="/transactions"
+									className="primary__navigation-link"
+								>
+									Transactions
+								</Link>
+							</li>
+
+							<li className="primary__navigation-item">
+								<Link
 									to="/budgets"
 									className="primary__navigation-link"
 								>

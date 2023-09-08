@@ -32,6 +32,7 @@ import EditSource from './pages/Sources/EditSource/EditSource'
 import Debts from './pages/Debts/Debts'
 import EditDebt from './pages/Debts/EditDebt/EditDebt'
 import CreateDebt from './pages/Debts/CreateDebt/CreateDebt'
+import Transactions from './pages/Transactions/Transactions'
 
 const App = () => {
 	return (
@@ -235,6 +236,15 @@ const App = () => {
 							<Route
 								path="/debts/edit/:id"
 								element={<EditDebt />}
+							/>
+						</Route>
+					</Route>
+
+					<Route path="/transactions">
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								index
+								element={<Transactions />}
 							/>
 						</Route>
 					</Route>
