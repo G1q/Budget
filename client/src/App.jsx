@@ -33,6 +33,7 @@ import Debts from './pages/Debts/Debts'
 import EditDebt from './pages/Debts/EditDebt/EditDebt'
 import CreateDebt from './pages/Debts/CreateDebt/CreateDebt'
 import Transactions from './pages/Transactions/Transactions'
+import PayDebt from './pages/Expenses/PayDebt/PayDebt'
 
 const App = () => {
 	return (
@@ -174,6 +175,13 @@ const App = () => {
 							<Route
 								path="/expenses/edit/:id"
 								element={<EditExpense />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/expenses/paydebt"
+								element={<PayDebt />}
 							/>
 						</Route>
 					</Route>

@@ -8,18 +8,30 @@ import { formatDate } from '../../utilities/formatDates'
 const Expenses = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [expenses, setExpenses] = useState([])
+	const [debts, setDebts] = useState([])
+	const [error, setError] = useState(null)
 
 	const getExpenses = async () => {
 		try {
 			const response = await axiosInstance(`expenses/${getUserId()}`)
 			setExpenses(response.data)
 		} catch (error) {
-			console.log(error)
+			setError(error.message)
+		}
+	}
+
+	const getDebts = async () => {
+		try {
+			const response = await axiosInstance.get(`/debts/${getUserId()}`)
+			setDebts(response.data)
+		} catch (error) {
+			setError(error.message)
 		}
 	}
 
 	useEffect(() => {
 		getExpenses()
+		getDebts()
 	}, [])
 
 	const handleDelete = async (id) => {
@@ -41,7 +53,7 @@ const Expenses = () => {
 				// Refresh expenses list
 				getExpenses()
 			} catch (error) {
-				console.log(error)
+				setError(error.message)
 			}
 		}
 	}
@@ -56,8 +68,18 @@ const Expenses = () => {
 				>
 					Create expense
 				</Link>
+
+				{debts.length > 0 && (
+					<Link
+						to="./paydebt"
+						className="create-btn"
+					>
+						Pay debt
+					</Link>
+				)}
 			</div>
 
+			{error && <p className="error-msg transaction__error-msg">{error}</p>}
 			{expenses.length > 0 ? (
 				<table>
 					<thead>
@@ -80,12 +102,16 @@ const Expenses = () => {
 								<td>{expense.category}</td>
 								<td>{expense.subcategory}</td>
 								<td>
-									<Link
-										className="edit-btn"
-										to={`/expenses/edit/${expense._id}`}
-									>
-										Edit
-									</Link>
+									{expense.category !== 'Debt' ? (
+										<Link
+											className="edit-btn"
+											to={`/expenses/edit/${expense._id}`}
+										>
+											Edit
+										</Link>
+									) : (
+										'-'
+									)}
 								</td>
 								<td>
 									<button
