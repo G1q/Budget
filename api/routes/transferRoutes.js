@@ -1,17 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const { createTransfer, getTransfers, deleteTransfer, getTransfer } = require('../controllers/transferController')
+const { createTransfer, getTransfers, deleteTransfer, getTransfer, editTransfer } = require('../controllers/transferController')
 
 // Create transfer
 router.post('/', createTransfer)
 
-// Route for fetching expense
+// Route for fetching transfer
 router.get('/view/:id', getTransfer)
 
-// // Route for edit expense
-// router.put('/:id', editExpense)
+// // Route for edit transfer
+router.put('/:id', editTransfer)
 
-// // Route for delete expense
+// // Route for delete transfer
 router.delete('/:id', deleteTransfer)
 
 // Get all transfers per user

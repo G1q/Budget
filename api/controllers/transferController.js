@@ -53,17 +53,17 @@ const getTransfer = async (req, res) => {
 	}
 }
 
-const editExpense = async (req, res) => {
+const editTransfer = async (req, res) => {
 	try {
-		const expenseId = req.params.id
+		const transferId = req.params.id
 
-		const updatedExpense = await Expense.findByIdAndUpdate(expenseId, req.body, { new: true })
+		const updatedTransfer = await Transfer.findByIdAndUpdate(transferId, req.body, { new: true })
 
-		if (!updatedExpense) {
-			return res.status(404).json({ error: 'Expense not found' })
+		if (!updatedTransfer) {
+			return res.status(404).json({ error: 'Transfer not found' })
 		}
 
-		res.status(200).json(updatedExpense)
+		res.status(200).json(updatedTransfer)
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })
 	}
@@ -92,4 +92,4 @@ const getTransfers = async (req, res) => {
 	}
 }
 
-module.exports = { createTransfer, getTransfers, deleteTransfer, getTransfer }
+module.exports = { createTransfer, getTransfers, deleteTransfer, getTransfer, editTransfer }

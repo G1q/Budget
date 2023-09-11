@@ -60,6 +60,7 @@ const Debts = () => {
 							<th>Creditor</th>
 							<th>Start amount</th>
 							<th>Current amount</th>
+							<th>Active</th>
 							<th>Edit debt</th>
 							<th>Delete debt</th>
 						</tr>
@@ -71,6 +72,7 @@ const Debts = () => {
 								<td>{debt.creditor.title}</td>
 								<td>{debt.startAmount > 0 ? `-${debt.startAmount}` : 0}</td>
 								<td>{debt.currentAmount > 0 ? `-${debt.currentAmount}` : 0}</td>
+								<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
 								<td>
 									<Link
 										className="edit-btn"

@@ -72,6 +72,7 @@ const Transfers = () => {
 							<th>Source</th>
 							<th>Budget</th>
 							<th>Amount</th>
+							<th>Edit transfer</th>
 							<th>Delete transfer</th>
 						</tr>
 					</thead>
@@ -82,6 +83,14 @@ const Transfers = () => {
 								<td>{transfer.sourceTitle}</td>
 								<td>{transfer.budgetTitle}</td>
 								<td>{transfer.amount}</td>
+								<td>
+									<Link
+										className="edit-btn"
+										to={`/transfers/edit/${transfer._id}`}
+									>
+										Edit
+									</Link>
+								</td>
 								<td>
 									<button
 										className="delete-btn"
