@@ -1,7 +1,22 @@
-.homepage-link {
-	display: inline-block;
-	margin: 1rem;
-	outline: 1px solid crimson;
-	padding: 0.25rem 1rem;
-	text-decoration: none;
+.summaries {
+}
+
+.summaries__wrapper {
+}
+
+.summaries__card {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid #333;
+	border-radius: 0.25em;
+	padding: 0.5rem;
+}
+
+.summaries__card p {
+	font-size: 1.25rem;
+}
+
+.summaries__card p span {
+	font-weight: 700;
+	color: royalblue;
 }

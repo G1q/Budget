@@ -102,4 +102,26 @@ const getBudgets = async (req, res) => {
 	}
 }
 
-module.exports = { createBudget, getBudget, editBudget, deleteBudget, getBudgets }
+const getTotal = async (req, res) => {
+	const userId = req.params.id
+	try {
+		const result = await Budget.aggregate([
+			{
+				$match: {
+					user: userId,
+				},
+			},
+			{
+				$group: {
+					_id: null,
+					total: { $sum: '$currentAmount' },
+				},
+			},
+		])
+		res.status(200).json({ total: result[2] })
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
+module.exports = { createBudget, getBudget, editBudget, deleteBudget, getBudgets, getTotal }
