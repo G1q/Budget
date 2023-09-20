@@ -29,6 +29,10 @@ const incomeSchema = new mongoose.Schema(
 			ref: 'Budget',
 			required: true,
 		},
+		currency: {
+			type: String,
+			default: 'RON',
+		},
 	},
 	{
 		timestamps: true,

@@ -3,7 +3,7 @@ const User = require('../models/User')
 const IncomeSource = require('../models/IncomeSource')
 
 const createDebt = async (req, res) => {
-	const { user, date, startAmount, currentAmount, creditor, description } = req.body
+	const { user, date, startAmount, currentAmount, creditor, description, currency } = req.body
 	try {
 		// Check if the username exist
 		const existingUsername = await User.findById(user)
@@ -27,6 +27,7 @@ const createDebt = async (req, res) => {
 			currentAmount: startAmount,
 			creditor,
 			description,
+			currency,
 		})
 
 		await newDebt.save()
