@@ -9,6 +9,12 @@ body {
 	font-family: system-ui, sans-serif;
 }
 
+#root {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
 img {
 	max-width: 100%;
 	display: block;
@@ -16,6 +22,7 @@ img {
 
 main {
 	max-width: 1200px;
+	width: 100%;
 	margin-inline: auto;
 	padding-inline: 1rem;
 	flex: 1;
