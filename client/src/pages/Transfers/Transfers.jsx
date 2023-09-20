@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { formatDate } from '../../utilities/formatDates'
+import { amountWithDecimals } from '../../utilities/format'
 
 const Transfers = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -82,7 +83,7 @@ const Transfers = () => {
 								<td>{formatDate(new Date(transfer.date))}</td>
 								<td>{transfer.sourceTitle}</td>
 								<td>{transfer.budgetTitle}</td>
-								<td>{transfer.amount}</td>
+								<td>{amountWithDecimals(transfer.amount, transfer.currency)}</td>
 								<td>
 									<Link
 										className="edit-btn"

@@ -35,6 +35,10 @@ const transferSchema = new mongoose.Schema(
 		description: {
 			type: String,
 		},
+		currency: {
+			type: String,
+			default: 'RON',
+		},
 	},
 	{
 		timestamps: true,

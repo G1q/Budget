@@ -27,6 +27,7 @@ const createTransfer = async (req, res) => {
 			budgetId,
 			budgetTitle,
 			description,
+			currency: existingSource.currency,
 		})
 
 		await newTransfer.save()

@@ -3,6 +3,8 @@ import './Budgets.css'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
+import TdMeter from '../../components/TdMeter/TdMeter'
+import { amountWithDecimals } from '../../utilities/format'
 
 const Budgets = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -75,9 +77,13 @@ const Budgets = () => {
 						{budgets.map((budget) => (
 							<tr key={budget._id}>
 								<td>{budget.title}</td>
-								<td>{`${budget.startAmount.toFixed(2)} ${budget.currency}`}</td>
-								<td>{`${budget.currentAmount.toFixed(2)} ${budget.currency}`}</td>
-								<td>{budget.targetAmount ? `${budget.targetAmount.toFixed(2)} ${budget.currency}` : '-'}</td>
+								<td>{amountWithDecimals(budget.startAmount, budget.currency)}</td>
+								<td>{amountWithDecimals(budget.currentAmount, budget.currency)}</td>
+								<TdMeter
+									amount={budget.currentAmount}
+									target={budget.targetAmount}
+									currency={budget.currency}
+								/>
 								<td>
 									<Link
 										className="edit-btn"
