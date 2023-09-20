@@ -23,7 +23,3 @@ const TdMeter = ({ amount, target, currency }) => {
 }
 
 export default TdMeter
-
-// <td>{budget.targetAmount ? `${budget.targetAmount.toFixed(2)} ${budget.currency}` : '-'}</td>
-
-// ${props => props.element}
