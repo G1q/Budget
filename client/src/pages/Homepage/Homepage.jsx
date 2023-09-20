@@ -2,6 +2,7 @@ import './Homepage.css'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
+import Test from '../../components/Test'
 
 const Homepage = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -35,6 +36,9 @@ const Homepage = () => {
 					</div>
 				</div>
 			</section>
+
+			{/* Teste */}
+			<Test />
 		</main>
 	)
 }

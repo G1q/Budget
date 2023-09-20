@@ -101,6 +101,19 @@ const CreateDebt = () => {
 				</div>
 
 				<div className="form-group">
+					<label htmlFor="currency">Currency</label>
+					<select
+						name="currency"
+						id="currency"
+					>
+						<option value="RON">RON</option>
+						<option value="EUR">EUR</option>
+						<option value="USD">USD</option>
+						<option value="GBP">GBP</option>
+					</select>
+				</div>
+
+				<div className="form-group">
 					<label htmlFor="description">Description</label>
 					<textarea
 						name="description"

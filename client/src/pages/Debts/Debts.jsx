@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { formatDate } from '../../utilities/formatDates'
+import { amountWithDecimals } from '../../utilities/format'
 
 const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -70,8 +71,8 @@ const Debts = () => {
 							<tr key={debt._id}>
 								<td>{formatDate(new Date(debt.date))}</td>
 								<td>{debt.creditor.title}</td>
-								<td>{debt.startAmount > 0 ? `-${debt.startAmount}` : 0}</td>
-								<td>{debt.currentAmount > 0 ? `-${debt.currentAmount}` : 0}</td>
+								<td>{debt.startAmount > 0 ? `-${amountWithDecimals(debt.startAmount, debt.currency)}` : 0}</td>
+								<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
 								<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
 								<td>
 									<Link

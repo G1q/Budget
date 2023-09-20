@@ -111,6 +111,18 @@ const EditBudget = () => {
 						onChange={handleChange}
 					>
 						<option value="RON">RON</option>
+						<option
+							value="EUR"
+							disabled
+						>
+							EUR
+						</option>
+						<option
+							value="USD"
+							disabled
+						>
+							USD
+						</option>
 					</select>
 				</div>
 

@@ -23,6 +23,7 @@ const createIncome = async (req, res) => {
 			amount,
 			description,
 			user,
+			currency: existingBudget.currency,
 		})
 
 		await newIncome.save()

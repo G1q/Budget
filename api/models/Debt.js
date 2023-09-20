@@ -27,6 +27,10 @@ const debtSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
+		currency: {
+			type: String,
+			default: 'RON',
+		},
 	},
 	{
 		timestamps: true,

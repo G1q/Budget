@@ -25,6 +25,7 @@ const createExpense = async (req, res) => {
 			subcategory,
 			budget,
 			description,
+			currency: existingBudget.currency,
 		})
 
 		await newExpense.save()
