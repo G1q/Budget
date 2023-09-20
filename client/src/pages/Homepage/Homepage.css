@@ -2,14 +2,17 @@
 }
 
 .summaries__wrapper {
+	display: flex;
+	gap: 1rem;
 }
 
 .summaries__card {
-	display: inline-flex;
-	align-items: center;
 	border: 1px solid #333;
 	border-radius: 0.25em;
 	padding: 0.5rem;
+	text-align: center;
+	display: grid;
+	align-items: center;
 }
 
 .summaries__card p {
@@ -19,4 +22,18 @@
 .summaries__card p span {
 	font-weight: 700;
 	color: royalblue;
+}
+
+.summaries__card-table {
+	font-size: 0.875rem;
+	text-align: center;
+}
+
+.summaries__card-table caption {
+	margin-bottom: 0.5rem;
+}
+
+.summaries__card-link {
+	font-size: 0.875rem;
+	margin-top: 1rem;
 }
