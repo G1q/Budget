@@ -34,6 +34,8 @@ import EditDebt from './pages/Debts/EditDebt/EditDebt'
 import CreateDebt from './pages/Debts/CreateDebt/CreateDebt'
 import Transactions from './pages/Transactions/Transactions'
 import PayDebt from './pages/Expenses/PayDebt/PayDebt'
+import UserDashboard from './pages/User/UserDashboard/UserDashboard'
+import UserLayout from './layouts/UserLayout'
 
 const App = () => {
 	return (
@@ -48,19 +50,80 @@ const App = () => {
 						element={<Homepage />}
 					/>
 
-					<Route path="/user">
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+					<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+						<Route
+							path="/user"
+							element={<UserLayout />}
+						>
 							<Route
-								path="/user/profile"
-								element={<UserProfile />}
+								index
+								element={<UserDashboard />}
 							/>
-						</Route>
+							<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+								<Route
+									path="/user/profile"
+									element={<UserProfile />}
+								/>
+							</Route>
+							<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+								<Route
+									path="/user/edit"
+									element={<EditProfile />}
+								/>
+							</Route>
+							<Route path="/user/categories">
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										index
+										element={<Categories />}
+									/>
+								</Route>
 
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								path="/user/edit"
-								element={<EditProfile />}
-							/>
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										path="/user/categories/edit/:id"
+										element={<EditCategory />}
+									/>
+								</Route>
+							</Route>
+							<Route path="/user/sources">
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										index
+										element={<Sources />}
+									/>
+								</Route>
+
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										path="/user/sources/edit/:id"
+										element={<EditSource />}
+									/>
+								</Route>
+							</Route>
+
+							<Route path="/user/transfers">
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										index
+										element={<Transfers />}
+									/>
+								</Route>
+
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										path="/user/transfers/create"
+										element={<CreateTransfer />}
+									/>
+								</Route>
+
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										path="/user/transfers/edit/:id"
+										element={<EditTransfer />}
+									/>
+								</Route>
+							</Route>
 						</Route>
 					</Route>
 
@@ -140,22 +203,6 @@ const App = () => {
 						</Route>
 					</Route>
 
-					<Route path="/categories">
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								index
-								element={<Categories />}
-							/>
-						</Route>
-
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								path="/categories/edit/:id"
-								element={<EditCategory />}
-							/>
-						</Route>
-					</Route>
-
 					<Route path="/expenses">
 						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 							<Route
@@ -182,45 +229,6 @@ const App = () => {
 							<Route
 								path="/expenses/paydebt"
 								element={<PayDebt />}
-							/>
-						</Route>
-					</Route>
-
-					<Route path="/transfers">
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								index
-								element={<Transfers />}
-							/>
-						</Route>
-
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								path="/transfers/create"
-								element={<CreateTransfer />}
-							/>
-						</Route>
-
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								path="/transfers/edit/:id"
-								element={<EditTransfer />}
-							/>
-						</Route>
-					</Route>
-
-					<Route path="/sources">
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								index
-								element={<Sources />}
-							/>
-						</Route>
-
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								path="/sources/edit/:id"
-								element={<EditSource />}
 							/>
 						</Route>
 					</Route>

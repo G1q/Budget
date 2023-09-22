@@ -84,3 +84,8 @@ textarea {
 	padding: 0.25em 1em;
 	font-size: 0.875rem;
 }
+
+.input__info {
+	margin: 0;
+	font-size: 0.875rem;
+}

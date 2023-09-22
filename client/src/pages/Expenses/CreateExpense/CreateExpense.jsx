@@ -165,8 +165,11 @@ const CreateExpense = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/categories/">Create your first category!</Link>
+						<Link to="/user/categories/">Create your first category!</Link>
 					)}
+					<p className="input__info">
+						If you want to create new categories in the future, you can do that from Profile &gt; <Link to="/user/categories">Categories</Link>
+					</p>
 				</div>
 
 				{subcategories.length > 0 ? (
