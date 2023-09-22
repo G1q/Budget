@@ -53,7 +53,7 @@ const Budgets = () => {
 					Create budget
 				</Link>
 				<Link
-					to="/transfers/create"
+					to="/user/transfers/create"
 					className="create-btn"
 				>
 					Transfer between budgets

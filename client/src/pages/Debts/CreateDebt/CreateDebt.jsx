@@ -86,6 +86,9 @@ const CreateDebt = () => {
 					) : (
 						<Link to="/incomes">Create your first source!</Link>
 					)}
+					<p className="input__info">
+						If you want to create new creditors in the future, you can do that from Profile &gt; <Link to="/user/sources">Sources</Link>
+					</p>
 				</div>
 
 				<div className="form-group">

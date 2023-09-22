@@ -70,6 +70,13 @@ const Expenses = () => {
 					Create expense
 				</Link>
 
+				<Link
+					to="/user/categories"
+					className="create-btn"
+				>
+					Create new category
+				</Link>
+
 				{debts.length > 0 && (
 					<Link
 						to="./paydebt"

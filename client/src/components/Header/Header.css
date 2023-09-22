@@ -81,9 +81,6 @@ header {
 	background-color: hsl(225, 73%, 47%);
 }
 
-.primary__navigation-btn {
-}
-
 .primary__navigation-group {
 	display: flex;
 	align-items: center;
