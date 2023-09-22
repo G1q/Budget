@@ -39,9 +39,8 @@ const UserProfile = () => {
 	}
 
 	return (
-		<main className="profile__page">
+		<section className="user__profile">
 			<h1>My profile</h1>
-
 			<div className="profile__info">
 				<p>
 					Username: <strong>{profile.username}</strong>
@@ -57,7 +56,7 @@ const UserProfile = () => {
 				<Link to="/user/edit">Edit profile</Link>
 				<button onClick={handleDeleteProfile}>Delete profile</button>
 			</div>
-		</main>
+		</section>
 	)
 }
 

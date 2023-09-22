@@ -61,33 +61,6 @@ const Header = () => {
 
 							<li className="primary__navigation-item">
 								<Link
-									to="/categories"
-									className="primary__navigation-link"
-								>
-									Categories
-								</Link>
-							</li>
-
-							<li className="primary__navigation-item">
-								<Link
-									to="/transfers"
-									className="primary__navigation-link"
-								>
-									Transfers
-								</Link>
-							</li>
-
-							<li className="primary__navigation-item">
-								<Link
-									to="/sources"
-									className="primary__navigation-link"
-								>
-									Sources
-								</Link>
-							</li>
-
-							<li className="primary__navigation-item">
-								<Link
 									to="/debts"
 									className="primary__navigation-link"
 								>
@@ -110,7 +83,9 @@ const Header = () => {
 				</ul>
 				{isLoggedIn() ? (
 					<div className="primary__navigation-group">
-						<p>Hello, {getUserName()}</p>
+						<p>
+							Hello, <Link to="/user/">{getUserName()}</Link>
+						</p>
 						<LogoutButton />
 					</div>
 				) : (
