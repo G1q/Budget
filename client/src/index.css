@@ -89,3 +89,15 @@ textarea {
 	margin: 0;
 	font-size: 0.875rem;
 }
+
+.buttons-group {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.buttons-group__checkbox {
+	display: flex;
+	align-items: center;
+	width: max-content;
+}

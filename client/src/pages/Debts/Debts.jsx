@@ -44,12 +44,14 @@ const Debts = () => {
 		<main>
 			<h1>Debts</h1>
 			<div className="buttons-group">
-				<Link
-					to="./create"
-					className="create-btn"
-				>
-					Create new debt
-				</Link>
+				<div>
+					<Link
+						to="./create"
+						className="create-btn"
+					>
+						Create new debt
+					</Link>
+				</div>
 			</div>
 
 			{error && <p className="error-msg transaction__error-msg">{error}</p>}
