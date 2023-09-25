@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import { amountWithDecimals } from '../../../utilities/format'
 
 const CreateExpense = () => {
 	const { getUserId } = useAuth()
@@ -11,6 +12,8 @@ const CreateExpense = () => {
 	const [budgets, setBudgets] = useState([])
 	const [categories, setCategories] = useState([])
 	const [subcategories, setSubcategories] = useState([])
+	const [currentBudget, setCurrentBudget] = useState('')
+	const [budgetError, setBudgetError] = useState('')
 
 	const navigate = useNavigate()
 
@@ -46,11 +49,20 @@ const CreateExpense = () => {
 		getCategories()
 	}, [])
 
-	const handleChange = (e) => {
+	const handleChange = async (e) => {
 		setInputs((prev) => ({
 			...prev,
 			[e.target.name]: e.target.value,
 		}))
+		if (e.target.name === 'budget') {
+			const selectedBudget = await axiosInstance.get(`/budgets/view/${e.target.value}`)
+			setCurrentBudget(selectedBudget.data)
+		}
+		if (e.target.name === 'amount') {
+			e.target.value > currentBudget.currentAmount
+				? setBudgetError('Your budget does not meet minimum requirements for this expense')
+				: setBudgetError('')
+		}
 	}
 
 	const handleSubmit = async (e) => {
@@ -96,27 +108,34 @@ const CreateExpense = () => {
 				<div className="form-group">
 					<label htmlFor="budget">Budget</label>
 					{budgets.length > 0 ? (
-						<select
-							name="budget"
-							id="budget"
-							onChange={handleChange}
-							required
-						>
-							<option
-								value=""
-								hidden
+						<>
+							<select
+								name="budget"
+								id="budget"
+								onChange={handleChange}
+								required
 							>
-								Select budget..
-							</option>
-							{budgets.map((budget) => (
 								<option
-									key={budget._id}
-									value={budget._id}
+									value=""
+									hidden
 								>
-									{budget.title}
+									Select budget..
 								</option>
-							))}
-						</select>
+								{budgets.map((budget) => (
+									<option
+										key={budget._id}
+										value={budget._id}
+									>
+										{budget.title}
+									</option>
+								))}
+							</select>
+							{currentBudget && (
+								<p className="input__info">
+									Currently you have {amountWithDecimals(Number(currentBudget.currentAmount), currentBudget.currency)} in this budget account!
+								</p>
+							)}
+						</>
 					) : (
 						<Link to="/budgets/create">Create your first budget!</Link>
 					)}
@@ -132,6 +151,7 @@ const CreateExpense = () => {
 						required
 						step={0.01}
 					/>
+					{budgetError && <p className="error-msg input__info	">{budgetError}</p>}
 				</div>
 
 				<div className="form-group">
