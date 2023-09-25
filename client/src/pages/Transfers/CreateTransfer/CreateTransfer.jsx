@@ -71,7 +71,7 @@ const CreateTransfer = () => {
 				}
 
 				// Redirect
-				navigate('/transfers')
+				navigate('/user/transfers')
 			}
 		} catch (error) {
 			setError(error.message)
