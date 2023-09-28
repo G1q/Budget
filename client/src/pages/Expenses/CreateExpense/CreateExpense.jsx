@@ -175,7 +175,7 @@ const CreateExpense = () => {
 							>
 								Select category..
 							</option>
-							{categories.map((category) => (
+							{categories.sort().map((category) => (
 								<option
 									key={category}
 									value={category}
@@ -206,7 +206,7 @@ const CreateExpense = () => {
 							>
 								Select subcategory..
 							</option>
-							{subcategories.map((subcategory) => (
+							{subcategories.sort().map((subcategory) => (
 								<option
 									key={subcategory}
 									value={subcategory}

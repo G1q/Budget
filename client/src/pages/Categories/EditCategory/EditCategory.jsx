@@ -38,7 +38,7 @@ const EditCategory = () => {
 		try {
 			const response = await axiosInstance.put(`categories/edit/${id}`, category)
 			if (response.status === 200) {
-				navigate('/categories')
+				navigate('/user/categories')
 			} else {
 				setError(response.data.error || 'Update failed')
 			}
