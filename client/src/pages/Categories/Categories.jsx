@@ -128,7 +128,7 @@ const Categories = () => {
 								<td>
 									<Link
 										className="edit-btn"
-										to={`/categories/edit/${category._id}`}
+										to={`/user/categories/edit/${category._id}`}
 									>
 										Edit
 									</Link>

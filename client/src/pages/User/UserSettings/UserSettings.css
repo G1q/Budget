@@ -1,0 +1,15 @@
+.settings__option {
+	margin-bottom: 1rem;
+}
+
+.settings__option--row {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.settings__option--row select,
+.settings__option--row input {
+	flex: 1;
+	max-width: max-content;
+}

@@ -25,6 +25,24 @@ const userSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		settings: {
+			language: {
+				type: String,
+				default: 'en',
+			},
+			currencies: {
+				type: String,
+				default: 'RON',
+			},
+			pagination: {
+				type: String,
+				default: 15,
+			},
+			theme: {
+				type: String,
+				default: 'light',
+			},
+		},
 	},
 	{
 		timestamps: true,

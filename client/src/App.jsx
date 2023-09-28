@@ -36,6 +36,7 @@ import Transactions from './pages/Transactions/Transactions'
 import PayDebt from './pages/Expenses/PayDebt/PayDebt'
 import UserDashboard from './pages/User/UserDashboard/UserDashboard'
 import UserLayout from './layouts/UserLayout'
+import UserSettings from './pages/User/UserSettings/UserSettings'
 
 const App = () => {
 	return (
@@ -121,6 +122,14 @@ const App = () => {
 									<Route
 										path="/user/transfers/edit/:id"
 										element={<EditTransfer />}
+									/>
+								</Route>
+							</Route>
+							<Route path="/user/settings">
+								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+									<Route
+										index
+										element={<UserSettings />}
 									/>
 								</Route>
 							</Route>
