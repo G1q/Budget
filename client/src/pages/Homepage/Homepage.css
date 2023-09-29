@@ -1,25 +1,21 @@
-.summaries {
-}
-
 .summaries__wrapper {
 	display: flex;
 	gap: 1rem;
+	flex-wrap: wrap;
 }
 
 .summaries__card {
 	border: 1px solid #333;
 	border-radius: 0.25em;
-	padding: 0.5rem;
+	padding: 0.5rem 2rem;
 	text-align: center;
-	display: grid;
-	align-items: center;
 }
 
-.summaries__card p {
+.summaries__card--title {
 	font-size: 1.25rem;
 }
 
-.summaries__card p span {
+.summaries__card--title span {
 	font-weight: 700;
 	color: royalblue;
 }
@@ -36,4 +32,18 @@
 .summaries__card-link {
 	font-size: 0.875rem;
 	margin-top: 1rem;
+}
+
+.summaries__card--list {
+	padding: 0;
+	margin: 1rem;
+	text-align: left;
+	font-size: 0.875rem;
+	list-style-type: none;
+}
+
+.summaries__card--list-item {
+	margin-bottom: 0.5rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #333;
 }
