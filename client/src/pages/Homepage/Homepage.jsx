@@ -13,11 +13,18 @@ const Homepage = () => {
 	const [transactions, setTransactions] = useState([])
 	const [expenses, setExpenses] = useState([])
 	const [expensesCategories, setExpensesCategories] = useState([])
+	const [allExpensesByCategory, setAllExpensesByCategory] = useState([])
+	const [expensesSubCategories, setExpensesSubCategories] = useState([])
+	const [allExpensesBySubCategory, setAllExpensesBySubCategory] = useState([])
 	const [error, setError] = useState(null)
+	const [subcategories, setSubcategories] = useState([])
+	const [expensePerSelectedproduct, setExpensePerSelectedProduct] = useState(null)
 
 	useEffect(() => {
 		getBudgets()
 		getTransactions()
+		allExpensesCategory()
+		allExpensesSubCategory()
 	}, [])
 
 	const getBudgets = async () => {
@@ -36,6 +43,7 @@ const Homepage = () => {
 
 			setExpenses(expenses.data)
 			setExpensesCategories([...new Set(expenses.data.map((expense) => expense.category))])
+			setExpensesSubCategories([...new Set(expenses.data.map((expense) => expense.subcategory))])
 			setTransactions(incomes.data.concat(expenses.data))
 		} catch (error) {
 			setError(error.message)
@@ -59,6 +67,40 @@ const Homepage = () => {
 			if (expenses[i].category === category) total += expenses[i].amount
 		}
 		return amountWithDecimals(total)
+	}
+
+	const expensesPerSubCategory = (subcategory) => {
+		let total = 0
+		for (let i = 0; i < expenses.length; i++) {
+			if (expenses[i].subcategory === subcategory) total += expenses[i].amount
+		}
+		return amountWithDecimals(total)
+	}
+
+	const allExpensesCategory = () => {
+		const allExpensesPerCategory = []
+		expensesCategories.map((cat) => allExpensesPerCategory.push({ title: cat, amount: expensesPerCategory(cat) }))
+		setAllExpensesByCategory(allExpensesPerCategory.sort((a, b) => b.amount - a.amount))
+	}
+
+	const allExpensesSubCategory = () => {
+		const allExpensesPerSubCategory = []
+		expensesSubCategories.map((subcategory) => allExpensesPerSubCategory.push({ title: subcategory, amount: expensesPerSubCategory(subcategory) }))
+		setAllExpensesBySubCategory(allExpensesPerSubCategory.sort((a, b) => b.amount - a.amount))
+		console.log(allExpensesBySubCategory)
+	}
+
+	const getSubCategories = async (currentCategory) => {
+		try {
+			const response = await axiosInstance.get(`/categories/${getUserId()}`)
+			setSubcategories([...new Set(response.data.filter((cat) => cat.title === currentCategory).map((cat) => cat.subcategory))])
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const handleSelectChange = (e) => {
+		setExpensePerSelectedProduct(expensesPerSubCategory(e.target.value))
 	}
 
 	return (
@@ -155,11 +197,101 @@ const Homepage = () => {
 						</div>
 
 						<div className="summaries__card">
-							<h2 className="summaries__card--title">Expenses per category</h2>
+							<h2 className="summaries__card--title">Expenses per category (first 5)</h2>
+							<ul className="summaries__card--list">
+								{allExpensesByCategory.slice(0, 5).map((cat) => (
+									<li
+										className="summaries__card--list-item"
+										key={cat.title}
+									>
+										{cat.title} - {cat.amount}
+									</li>
+								))}
+							</ul>
+						</div>
+
+						<div className="summaries__card">
+							<h2 className="summaries__card--title">Expenses per subcategory (first 5)</h2>
+							<ul className="summaries__card--list">
+								{allExpensesBySubCategory.slice(0, 5).map((subcategory) => (
+									<li
+										className="summaries__card--list-item"
+										key={subcategory.title}
+									>
+										{subcategory.title} - {subcategory.amount}
+									</li>
+								))}
+							</ul>
 						</div>
 					</div>
 				</section>
 			)}
+
+			<section>
+				<h2>Tools</h2>
+				<div className="tool__card">
+					<h3>Get amount expense per product</h3>
+					<div className="select__group">
+						<label htmlFor="select__group--category">Category</label>
+						{expensesCategories.length > 0 ? (
+							<select
+								name="select__group--category"
+								id="select__group--category"
+								onChange={(e) => {
+									getSubCategories(e.target.value)
+								}}
+								required
+							>
+								<option
+									value=""
+									hidden
+								>
+									Select category..
+								</option>
+								{expensesCategories.sort().map((category) => (
+									<option
+										key={category}
+										value={category}
+									>
+										{category}
+									</option>
+								))}
+							</select>
+						) : (
+							<Link to="/user/categories/">Create your first category!</Link>
+						)}
+					</div>
+
+					{subcategories.length > 0 ? (
+						<div className="select__group">
+							<label htmlFor="select__group--subcategory">Subcategory</label>
+							<select
+								name="select__group--subcategory"
+								id="select__group--subcategory"
+								onChange={handleSelectChange}
+							>
+								<option
+									value=""
+									hidden
+								>
+									Select subcategory..
+								</option>
+								{subcategories.sort().map((subcategory) => (
+									<option
+										key={subcategory}
+										value={subcategory}
+									>
+										{subcategory}
+									</option>
+								))}
+							</select>
+						</div>
+					) : (
+						''
+					)}
+					<p>{expensePerSelectedproduct}</p>
+				</div>
+			</section>
 		</main>
 	)
 }

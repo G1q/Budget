@@ -47,3 +47,13 @@
 	padding-bottom: 0.5rem;
 	border-bottom: 1px solid #333;
 }
+
+.tool__card {
+	padding: 1rem;
+	border: 1px solid #333;
+	border-radius: 0.5em;
+}
+
+.tool__card h3 {
+	margin: 0;
+}
