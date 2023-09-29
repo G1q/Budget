@@ -5,10 +5,6 @@ import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { amountWithDecimals } from '../../utilities/format'
 import { formatDate } from '../../utilities/formatDates'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const Homepage = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -64,19 +60,6 @@ const Homepage = () => {
 		return amountWithDecimals(total)
 	}
 
-	// Chart
-	const labels = expensesCategories
-	const data = {
-		labels,
-		datasets: [
-			{
-				label: 'Total expenses',
-				data: labels.map((label) => expensesPerCategory(label)),
-				backgroundColor: 'royalblue',
-			},
-		],
-	}
-
 	return (
 		<main>
 			<h1>Homepage</h1>
@@ -119,31 +102,6 @@ const Homepage = () => {
 							View all transactions
 						</Link>
 					</div>
-
-					{/* <div className="summaries__card">
-						<table>
-							<thead>
-								<tr>
-									<th>Category</th>
-									<th>Total amount</th>
-								</tr>
-							</thead>
-							<tbody>
-								{expensesCategories.map((category) => (
-									<tr key={category}>
-										<td>{category}</td>
-										<td>{expensesPerCategory(category)}</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div> */}
-				</div>
-				<div
-					className="summaries__card"
-					style={{ marginInline: 'auto', marginBlock: '1rem', maxHeight: '300px' }}
-				>
-					<Bar data={data} />
 				</div>
 			</section>
 		</main>
