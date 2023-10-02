@@ -1,12 +1,12 @@
 import React from 'react'
 
-const SelectInterval = ({ onChange }) => {
+const SelectInterval = ({ onChange, label }) => {
 	return (
 		<div
 			className="select__interval"
 			style={{ display: 'flex', alignItems: 'center' }}
 		>
-			<label htmlFor="selectInterval">Select date</label>
+			<label htmlFor="selectInterval">{label}</label>
 			<select
 				name="selectInterval"
 				id="selectInterval"

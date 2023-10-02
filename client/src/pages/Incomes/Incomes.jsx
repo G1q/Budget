@@ -148,7 +148,10 @@ const Incomes = () => {
 					</button>
 				</div>
 
-				<SelectInterval onChange={handleSelectIntervalChange} />
+				<SelectInterval
+					onChange={handleSelectIntervalChange}
+					label="Select date"
+				/>
 			</div>
 
 			<dialog

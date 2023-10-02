@@ -10,6 +10,7 @@ const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [debts, setDebts] = useState([])
 	const [error, setError] = useState(null)
+	const [activeDebts, setActiveDebts] = useState(true)
 
 	const getDebts = async () => {
 		try {
@@ -22,7 +23,7 @@ const Debts = () => {
 
 	useEffect(() => {
 		getDebts()
-	}, [])
+	}, [activeDebts])
 
 	const handleDelete = async (id) => {
 		const confirmDelete = window.confirm('Are you sure do you want delete this debt?')
@@ -43,14 +44,26 @@ const Debts = () => {
 	return isLoggedIn() ? (
 		<main>
 			<h1>Debts</h1>
-			<div className="buttons-group">
-				<div>
-					<Link
-						to="./create"
-						className="create-btn"
-					>
-						Create new debt
-					</Link>
+			<div className="header__actions">
+				<div className="buttons-group">
+					<div>
+						<Link
+							to="./create"
+							className="create-btn"
+						>
+							Create new debt
+						</Link>
+					</div>
+				</div>
+
+				<div className="buttons-group__checkbox">
+					<label htmlFor="activeDebts">View inactive debts</label>
+					<input
+						type="checkbox"
+						name="activeDebts"
+						id="activeDebts"
+						onChange={() => setActiveDebts(!activeDebts)}
+					/>
 				</div>
 			</div>
 
@@ -69,31 +82,33 @@ const Debts = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{debts.map((debt) => (
-							<tr key={debt._id}>
-								<td>{formatDate(new Date(debt.date))}</td>
-								<td>{debt.creditor.title}</td>
-								<td>{debt.startAmount > 0 ? `-${amountWithDecimals(debt.startAmount, debt.currency)}` : 0}</td>
-								<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
-								<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
-								<td>
-									<Link
-										className="edit-btn"
-										to={`/debts/edit/${debt._id}`}
-									>
-										Edit
-									</Link>
-								</td>
-								<td>
-									<button
-										className="delete-btn"
-										onClick={() => handleDelete(debt._id)}
-									>
-										&times;
-									</button>
-								</td>
-							</tr>
-						))}
+						{debts
+							.filter((debt) => (activeDebts ? debt.currentAmount > 0 : debt))
+							.map((debt) => (
+								<tr key={debt._id}>
+									<td>{formatDate(new Date(debt.date))}</td>
+									<td>{debt.creditor.title}</td>
+									<td>{debt.startAmount > 0 ? `-${amountWithDecimals(debt.startAmount, debt.currency)}` : 0}</td>
+									<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
+									<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
+									<td>
+										<Link
+											className="edit-btn"
+											to={`/debts/edit/${debt._id}`}
+										>
+											Edit
+										</Link>
+									</td>
+									<td>
+										<button
+											className="delete-btn"
+											onClick={() => handleDelete(debt._id)}
+										>
+											&times;
+										</button>
+									</td>
+								</tr>
+							))}
 					</tbody>
 				</table>
 			) : (

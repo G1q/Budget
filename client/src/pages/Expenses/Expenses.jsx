@@ -140,7 +140,10 @@ const Expenses = () => {
 					)}
 				</div>
 
-				<SelectInterval onChange={handleSelectIntervalChange} />
+				<SelectInterval
+					onChange={handleSelectIntervalChange}
+					label="Select date"
+				/>
 			</div>
 
 			{error && <p className="error-msg transaction__error-msg">{error}</p>}

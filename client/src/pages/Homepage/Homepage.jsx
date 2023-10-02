@@ -6,6 +6,7 @@ import axiosInstance from '../../utilities/axiosconfig'
 import { amountWithDecimals } from '../../utilities/format'
 import { formatDate } from '../../utilities/formatDates'
 import CardMeter from '../../components/CardMeter/CardMeter'
+import SelectInterval from '../../components/SelectInterval/SelectInterval'
 
 const Homepage = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -49,8 +50,8 @@ const Homepage = () => {
 
 	const getTransactions = async () => {
 		try {
-			const incomes = await axiosInstance(`incomes/${getUserId()}`)
-			const expenses = await axiosInstance(`expenses/${getUserId()}`)
+			const incomes = await axiosInstance(`incomes/${getUserId()}`, { params: { startDate: '1970-01-01', endDate: new Date() } })
+			const expenses = await axiosInstance(`expenses/${getUserId()}`, { params: { startDate: '1970-01-01', endDate: new Date() } })
 
 			setExpenses(expenses.data)
 			setExpensesCategories([...new Set(expenses.data.map((expense) => expense.category))])
@@ -199,18 +200,7 @@ const Homepage = () => {
 
 						<div className="summaries__card">
 							<h2 className="summaries__card--title">Budget movements</h2>
-							<select
-								name="budget__movements"
-								id="budget__movements"
-							>
-								<option value="all-time">All time</option>
-								<option value="this-year">This year</option>
-								<option value="this-month">This month</option>
-								<option value="last-month">Last month</option>
-								<option value="today">Today</option>
-								<option value="last-day">Last day</option>
-								<option value="custom-date">Custom...</option>
-							</select>
+							<SelectInterval />
 							<ul className="summaries__card--list">
 								{budgets.map((budget) => (
 									<li
