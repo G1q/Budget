@@ -6,6 +6,7 @@ import axiosInstance from '../../utilities/axiosconfig'
 import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
 import { formatDate } from '../../utilities/formatDates'
 import { amountWithDecimals } from '../../utilities/format'
+import SelectInterval from '../../components/SelectInterval/SelectInterval'
 
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -13,19 +14,22 @@ const Incomes = () => {
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [sourceError, setSourceError] = useState('')
 	const [budgetError, setBudgetError] = useState('')
+	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+
+	useEffect(() => {
+		getIncomes()
+	}, [dateInterval])
 
 	const getIncomes = async () => {
 		try {
-			const response = await axiosInstance(`incomes/${getUserId()}`)
+			const response = await axiosInstance.get(`incomes/${getUserId()}`, {
+				params: { startDate: dateInterval.startDate, endDate: dateInterval.endDate },
+			})
 			setIncomes(response.data)
 		} catch (error) {
 			console.log(error)
 		}
 	}
-
-	useEffect(() => {
-		getIncomes()
-	}, [])
 
 	const handleDelete = async (id) => {
 		const confirmDelete = window.confirm('Are you sure do you want delete this income? The source budget will debit with income amount.')
@@ -76,23 +80,75 @@ const Incomes = () => {
 		}
 	}
 
+	const handleSelectIntervalChange = (e) => {
+		const getLastDayOfMonth = (date) => {
+			const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth(), 1)
+			const lastDayOfMonth = new Date(nextMonthFirstDay - 1)
+			return lastDayOfMonth
+		}
+
+		let startDate = new Date()
+		startDate.setHours(0, 0, 0, 0)
+		let endDate = new Date()
+		endDate.setHours(23, 59, 59, 0)
+		switch (e.target.value) {
+			case 'all-time':
+				startDate = new Date('1970-01-01')
+				break
+			case 'this-year':
+				startDate.setDate(1)
+				startDate.setMonth(0)
+				break
+			case 'this-month':
+				startDate.setDate(1)
+				break
+			case 'last-month':
+				startDate.setMonth(startDate.getMonth() - 1)
+				startDate.setDate(1)
+				endDate = getLastDayOfMonth(endDate)
+				break
+			case 'today':
+				break
+			case 'yesterday':
+				startDate.setDate(startDate.getDate() - 1)
+				endDate.setDate(endDate.getDate() - 1)
+				break
+			case 'custom':
+				startDate = new Date('1970-01-01')
+				endDate = new Date()
+				break
+			default:
+				startDate = new Date('1970-01-01')
+				endDate = new Date()
+		}
+
+		setDateInterval({
+			startDate,
+			endDate,
+		})
+	}
+
 	return isLoggedIn() ? (
 		<main>
 			<h1>Incomes</h1>
-			<div className="buttons-group">
-				<Link
-					to="./create"
-					className="create-btn"
-				>
-					Create income
-				</Link>
-				<button
-					className="create-btn popup-btn"
-					id="create-source__btn"
-					onClick={openDialog}
-				>
-					Create new source
-				</button>
+			<div className="header__actions">
+				<div className="buttons-group">
+					<Link
+						to="./create"
+						className="create-btn"
+					>
+						Create income
+					</Link>
+					<button
+						className="create-btn popup-btn"
+						id="create-source__btn"
+						onClick={openDialog}
+					>
+						Create new source
+					</button>
+				</div>
+
+				<SelectInterval onChange={handleSelectIntervalChange} />
 			</div>
 
 			<dialog

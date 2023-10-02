@@ -90,6 +90,12 @@ textarea {
 	font-size: 0.875rem;
 }
 
+.header__actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .buttons-group {
 	display: flex;
 	align-items: center;

@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { formatDate } from '../../utilities/formatDates'
 import { amountWithDecimals } from '../../utilities/format'
+import SelectInterval from '../../components/SelectInterval/SelectInterval'
 
 const ITEMS_PER_PAGE = 10
 
@@ -14,6 +15,7 @@ const Transactions = () => {
 	const [error, setError] = useState(null)
 	const [startItem, setStartItem] = useState(0)
 	const [endItem, setEndItem] = useState(ITEMS_PER_PAGE)
+	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 
 	const handleNextButton = () => {
 		setStartItem((prev) => prev + ITEMS_PER_PAGE)
@@ -27,8 +29,8 @@ const Transactions = () => {
 
 	const getTransactions = async () => {
 		try {
-			const incomes = await axiosInstance(`incomes/${getUserId()}`)
-			const expenses = await axiosInstance(`expenses/${getUserId()}`)
+			const incomes = await axiosInstance(`incomes/${getUserId()}`, { params: { startDate: dateInterval.startDate, endDate: dateInterval.endDate } })
+			const expenses = await axiosInstance(`expenses/${getUserId()}`, { params: { startDate: dateInterval.startDate, endDate: dateInterval.endDate } })
 
 			setTransactions(incomes.data.concat(expenses.data))
 		} catch (error) {
@@ -38,18 +40,70 @@ const Transactions = () => {
 
 	useEffect(() => {
 		getTransactions()
-	}, [])
+	}, [dateInterval])
+
+	const handleSelectIntervalChange = (e) => {
+		const getLastDayOfMonth = (date) => {
+			const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth(), 1)
+			const lastDayOfMonth = new Date(nextMonthFirstDay - 1)
+			return lastDayOfMonth
+		}
+
+		let startDate = new Date()
+		startDate.setHours(0, 0, 0, 0)
+		let endDate = new Date()
+		endDate.setHours(23, 59, 59, 0)
+		switch (e.target.value) {
+			case 'all-time':
+				startDate = new Date('1970-01-01')
+				break
+			case 'this-year':
+				startDate.setDate(1)
+				startDate.setMonth(0)
+				break
+			case 'this-month':
+				startDate.setDate(1)
+				break
+			case 'last-month':
+				startDate.setMonth(startDate.getMonth() - 1)
+				startDate.setDate(1)
+				endDate = getLastDayOfMonth(endDate)
+				break
+			case 'today':
+				break
+			case 'yesterday':
+				startDate.setDate(startDate.getDate() - 1)
+				endDate.setDate(endDate.getDate() - 1)
+				break
+			case 'custom':
+				startDate = new Date('1970-01-01')
+				endDate = new Date()
+				break
+			default:
+				startDate = new Date('1970-01-01')
+				endDate = new Date()
+		}
+
+		setDateInterval({
+			startDate,
+			endDate,
+		})
+	}
 
 	return isLoggedIn() ? (
 		<main>
 			<h1>Transactions</h1>
-			<div className="buttons-group">
-				<Link
-					to="./create"
-					className="create-btn"
-				>
-					Create transaction
-				</Link>
+			<div className="header__actions">
+				<div className="buttons-group">
+					<Link
+						to="./create"
+						className="create-btn"
+					>
+						Create transaction
+					</Link>
+				</div>
+
+				<SelectInterval onChange={handleSelectIntervalChange} />
 			</div>
 
 			{error && <p className="error-msg transaction__error-msg">{error}</p>}

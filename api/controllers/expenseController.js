@@ -79,8 +79,14 @@ const deleteExpense = async (req, res) => {
 }
 
 const getExpenses = async (req, res) => {
+	const startDate = req.query.startDate
+	const endDate = req.query.endDate
+	const userId = req.params.id
+
 	try {
-		const expenses = await Expense.find({ user: req.params.id }).populate('budget', 'title').sort({ date: -1, createdAt: -1 })
+		const expenses = await Expense.find({ user: userId, date: { $gte: startDate, $lte: endDate } })
+			.populate('budget', 'title')
+			.sort({ date: -1, createdAt: -1 })
 		if (!expenses) {
 			return res.status(404).json({ error: 'Expenses not found' })
 		}

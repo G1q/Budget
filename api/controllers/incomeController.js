@@ -35,8 +35,15 @@ const createIncome = async (req, res) => {
 }
 
 const getIncomes = async (req, res) => {
+	const startDate = req.query.startDate
+	const endDate = req.query.endDate
+	const userId = req.params.id
+
 	try {
-		const incomes = await Income.find({ user: req.params.id }).populate('source', 'title').populate('budget', 'title').sort({ date: -1, createdAt: -1 })
+		const incomes = await Income.find({ user: userId, date: { $gte: startDate, $lte: endDate } })
+			.populate('source', 'title')
+			.populate('budget', 'title')
+			.sort({ date: -1, createdAt: -1 })
 		if (!incomes) {
 			return res.status(404).json({ error: 'Incomes not found' })
 		}
