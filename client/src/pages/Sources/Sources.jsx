@@ -56,7 +56,7 @@ const Sources = () => {
 			getSources()
 			setError(null)
 			clearForm()
-			navigate('/sources')
+			navigate('/user/sources')
 		} catch (error) {
 			setError(error.message)
 		}

@@ -10,6 +10,7 @@ import CardMeter from '../../components/CardMeter/CardMeter'
 const Homepage = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [budgets, setBudgets] = useState([])
+	const [debts, setDebts] = useState([])
 	const [transactions, setTransactions] = useState([])
 	const [expenses, setExpenses] = useState([])
 	const [expensesCategories, setExpensesCategories] = useState([])
@@ -23,6 +24,7 @@ const Homepage = () => {
 	useEffect(() => {
 		getBudgets()
 		getTransactions()
+		getDebts()
 		allExpensesCategory()
 		allExpensesSubCategory()
 	}, [])
@@ -31,6 +33,15 @@ const Homepage = () => {
 		try {
 			const response = await axiosInstance.get(`budgets/${getUserId()}`)
 			setBudgets(response.data)
+		} catch {
+			setError(error.message)
+		}
+	}
+
+	const getDebts = async () => {
+		try {
+			const response = await axiosInstance.get(`debts/${getUserId()}`)
+			setDebts(response.data)
 		} catch {
 			setError(error.message)
 		}
@@ -61,6 +72,17 @@ const Homepage = () => {
 		return amountWithDecimals(total, currency)
 	}
 
+	const totalDebts = () => {
+		let total = 0
+		let currency
+		// TODO: separat pe valuta
+		for (let i = 0; i < debts.length; i++) {
+			total += debts[i].currentAmount
+			currency = debts[i].currency
+		}
+		return amountWithDecimals(total, currency)
+	}
+
 	const expensesPerCategory = (category) => {
 		let total = 0
 		for (let i = 0; i < expenses.length; i++) {
@@ -87,7 +109,6 @@ const Homepage = () => {
 		const allExpensesPerSubCategory = []
 		expensesSubCategories.map((subcategory) => allExpensesPerSubCategory.push({ title: subcategory, amount: expensesPerSubCategory(subcategory) }))
 		setAllExpensesBySubCategory(allExpensesPerSubCategory.sort((a, b) => b.amount - a.amount))
-		console.log(allExpensesBySubCategory)
 	}
 
 	const getSubCategories = async (currentCategory) => {
@@ -109,7 +130,7 @@ const Homepage = () => {
 			{isLoggedIn() && (
 				<section className="summaries">
 					<div className="summaries__wrapper">
-						<div className="summaries__card summaries__budget-total">
+						<div className="summaries__card">
 							{budgets.length ? (
 								<>
 									<h2 className="summaries__card--title">
@@ -129,6 +150,18 @@ const Homepage = () => {
 							) : (
 								<p>
 									You don't have any budgets created! Please create your first budget: <Link to="/budgets">Create budget</Link>
+								</p>
+							)}
+						</div>
+
+						<div className="summaries__card">
+							{debts.length ? (
+								<h2 className="summaries__card--title">
+									Debts total: <span>{totalDebts()}</span>
+								</h2>
+							) : (
+								<p>
+									You don't have any debts! Please create your first debt: <Link to="/debts">Create debt</Link>
 								</p>
 							)}
 						</div>
