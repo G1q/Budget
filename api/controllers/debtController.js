@@ -82,14 +82,20 @@ const deleteDebt = async (req, res) => {
 
 const getDebts = async (req, res) => {
 	try {
+		const isUser = await User.findById(req.params.id)
+
+		if (!isUser) {
+			return res.status(404).json({ message: 'No user with this ID!' })
+		}
+
 		const debts = await Debt.find({ user: req.params.id }).populate('creditor', 'title').sort({ date: -1, createdAt: -1 })
 		if (!debts) {
-			return res.status(404).json({ error: 'Debts not found' })
+			return res.status(404).json({ message: 'Debts not found' })
 		}
 
 		res.status(200).json(debts)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: 'Internal Server Error' })
 	}
 }
 

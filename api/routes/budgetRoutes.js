@@ -17,7 +17,4 @@ router.delete('/:id', deleteBudget)
 // Get all budgets by user
 router.get('/:id', getBudgets)
 
-// Get total
-router.get('/total/:id', getTotal)
-
 module.exports = router

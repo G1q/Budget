@@ -2,6 +2,7 @@ const Budget = require('../models/Budget')
 const User = require('../models/User')
 const Income = require('../models/Income')
 const Expense = require('../models/Expense')
+const { ERROR_MESSAGES } = require('../messages/errors.js')
 
 const createBudget = async (req, res) => {
 	try {
@@ -11,7 +12,7 @@ const createBudget = async (req, res) => {
 		const existingUsername = await User.findById(user)
 
 		if (!existingUsername) {
-			return res.status(400).json({ error: 'No user with this id!' })
+			return res.status(400).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
 		}
 
 		// Create a new budget
@@ -29,7 +30,7 @@ const createBudget = async (req, res) => {
 
 		res.status(201).json({ message: 'Budget registered successfully' })
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
@@ -45,7 +46,7 @@ const getBudget = async (req, res) => {
 
 		res.status(200).json(budget)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
@@ -61,7 +62,7 @@ const editBudget = async (req, res) => {
 
 		res.status(200).json(updatedBudget)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
@@ -85,43 +86,27 @@ const deleteBudget = async (req, res) => {
 			res.status(200).json({ message: 'Budget deleted successfully!' })
 		}
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
 const getBudgets = async (req, res) => {
 	try {
+		const isUser = await User.findById(req.params.id)
+
+		if (!isUser) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
+		}
+
 		const budgets = await Budget.find({ user: req.params.id })
 		if (!budgets) {
-			return res.status(404).json({ error: 'Budgets not found' })
+			return res.status(404).json({ message: 'Budgets not found for this user' })
 		}
 
 		res.status(200).json(budgets)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
-const getTotal = async (req, res) => {
-	const userId = req.params.id
-	try {
-		const result = await Budget.aggregate([
-			{
-				$match: {
-					user: userId,
-				},
-			},
-			{
-				$group: {
-					_id: null,
-					total: { $sum: '$currentAmount' },
-				},
-			},
-		])
-		res.status(200).json({ total: result[2] })
-	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
-	}
-}
-
-module.exports = { createBudget, getBudget, editBudget, deleteBudget, getBudgets, getTotal }
+module.exports = { createBudget, getBudget, editBudget, deleteBudget, getBudgets }
