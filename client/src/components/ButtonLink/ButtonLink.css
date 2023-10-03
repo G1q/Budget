@@ -1,0 +1,37 @@
+.btn-link {
+	display: inline-block;
+
+	margin: 0.25rem;
+	padding: 0.5em 1em;
+	border: none;
+	border-radius: 0.25em;
+	outline: none;
+
+	background-color: hsl(225, 73%, 57%);
+	color: #fff;
+
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.btn-link:is(:hover, :focus-visible) {
+	background-color: hsl(225, 73%, 47%);
+}
+
+.btn-link:focus-visible {
+	outline: 2px solid hsl(225, 73%, 27%);
+	outline-offset: 1px;
+}
+
+.btn-link[data-type='danger'] {
+	background-color: hsl(348, 83%, 47%);
+}
+
+.btn-link[data-type='danger']:is(:hover, :focus-visible) {
+	background-color: hsl(348, 83%, 37%);
+}
+
+.btn-link[data-type='danger']:focus-visible {
+	outline: 2px solid hsl(348, 83%, 27%);
+	outline-offset: 1px;
+}

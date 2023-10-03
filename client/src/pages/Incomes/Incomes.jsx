@@ -7,6 +7,8 @@ import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
 import { formatDate } from '../../utilities/formatDates'
 import { amountWithDecimals } from '../../utilities/format'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
+import Button from '../../components/Button/Button'
+import ButtonLink from '../../components/ButtonLink/ButtonLink'
 
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -133,19 +135,15 @@ const Incomes = () => {
 			<h1>Incomes</h1>
 			<div className="header__actions">
 				<div className="buttons-group">
-					<Link
-						to="./create"
-						className="create-btn"
-					>
-						Create income
-					</Link>
-					<button
-						className="create-btn popup-btn"
+					<ButtonLink to="./create">Create income</ButtonLink>
+
+					<Button
 						id="create-source__btn"
 						onClick={openDialog}
+						className="popup-btn"
 					>
 						Create new source
-					</button>
+					</Button>
 				</div>
 
 				<SelectInterval

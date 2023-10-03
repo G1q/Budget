@@ -6,6 +6,7 @@ import axiosInstance from '../../utilities/axiosconfig'
 import { formatDate } from '../../utilities/formatDates'
 import { amountWithDecimals } from '../../utilities/format'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
+import ButtonLink from '../../components/ButtonLink/ButtonLink'
 
 const Expenses = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -116,28 +117,10 @@ const Expenses = () => {
 			<h1>Expenses</h1>
 			<div className="header__actions">
 				<div className="buttons-group">
-					<Link
-						to="./create"
-						className="create-btn"
-					>
-						Create expense
-					</Link>
+					<ButtonLink to="./create">Create expense</ButtonLink>
+					<ButtonLink to="/user/categories">Create new category</ButtonLink>
 
-					<Link
-						to="/user/categories"
-						className="create-btn"
-					>
-						Create new category
-					</Link>
-
-					{debts.length > 0 && (
-						<Link
-							to="./paydebt"
-							className="create-btn"
-						>
-							Pay debt
-						</Link>
-					)}
+					{debts.length > 0 && <ButtonLink to="./paydebt">Pay debt</ButtonLink>}
 				</div>
 
 				<SelectInterval
