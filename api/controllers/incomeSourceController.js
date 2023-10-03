@@ -2,21 +2,23 @@ const IncomeSource = require('../models/IncomeSource')
 const User = require('../models/User')
 const Income = require('../models/Income')
 const Debt = require('../models/Debt')
+const { ERROR_MESSAGES } = require('../messages/errors.js')
+const { SUCCESS_MESSAGES } = require('../messages/succes.js')
 
 const createSource = async (req, res) => {
 	const { title, user } = req.body
 	try {
 		// Check if the username exist
-		const existingUsername = await User.findOne({ _id: user })
+		const isUser = await User.findById(user)
 
-		if (!existingUsername) {
-			return res.status(400).json({ error: 'No user with this id!' })
+		if (!isUser) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
 		}
 
 		// Check if is another source with same title for same user
-		const existingSameSourceForSameUser = await IncomeSource.findOne({ title, user: existingUsername._id })
+		const existingSameSourceForSameUser = await IncomeSource.findOne({ title, user })
 		if (existingSameSourceForSameUser) {
-			return res.status(403).json({ error: 'This source was register for this user!' })
+			return res.status(403).json({ message: ERROR_MESSAGES.EXISTING_SOURCE.message })
 		}
 
 		// Create a new income source
@@ -27,9 +29,9 @@ const createSource = async (req, res) => {
 
 		await newIncomeSource.save()
 
-		res.status(201).json({ message: 'Source registered successfully' })
+		res.status(201).json({ message: SUCCESS_MESSAGES.SOURCE_REGISTERED.message })
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
@@ -54,13 +56,13 @@ const deleteSource = async (req, res) => {
 
 		if (referencedIncomes > 0 || referencedDebts > 0) {
 			// Check if source has been used to some incomes
-			res.status(403).json({ error: "You can't delete this source because have transactions on it!" })
+			res.status(403).json({ message: ERROR_MESSAGES.USED_SOURCE.message })
 		} else {
 			await IncomeSource.findByIdAndDelete(incomeSourceId)
-			res.status(200).json({ message: 'Income source deleted successfully!' })
+			res.status(200).json({ message: SUCCESS_MESSAGES.SOURCE_DELETED.message })
 		}
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 

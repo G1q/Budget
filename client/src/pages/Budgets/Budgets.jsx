@@ -1,11 +1,23 @@
-import { Link, Navigate } from 'react-router-dom'
-import './Budgets.css'
+// Import dependencies
+import { Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import axiosInstance from '../../utilities/axiosconfig'
+
+// Import custom elements
 import TdMeter from '../../components/TdMeter/TdMeter'
-import { amountWithDecimals } from '../../utilities/format'
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
+import DataTable from '../../components/DataTable/DataTable'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import EditButton from '../../components/EditButton/EditButton'
+import DeleteButton from '../../components/DeleteButton/DeleteButton'
+
+// Import utilities
+import { amountWithDecimals } from '../../utilities/format'
+import axiosInstance from '../../utilities/axiosconfig'
+import { fetchBudgets } from '../../utilities/fetchData'
+
+// Import styling
+import './Budgets.css'
 
 const Budgets = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -13,18 +25,10 @@ const Budgets = () => {
 	const [error, setError] = useState(null)
 	const [success, setSucces] = useState(null)
 
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-			setError(null)
-		} catch (error) {
-			setError(error)
-		}
-	}
-
 	useEffect(() => {
-		getBudgets()
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleDelete = async (id) => {
@@ -35,9 +39,11 @@ const Budgets = () => {
 				const response = await axiosInstance.delete(`budgets/${id}`)
 				setError(null)
 				setSucces(response.data.message)
-				getBudgets()
+				fetchBudgets(getUserId())
+					.then((responseData) => setBudgets(responseData))
+					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
-				setError(error.response.data.error)
+				setError(error.response.data.message)
 			}
 		}
 	}
@@ -50,51 +56,39 @@ const Budgets = () => {
 				<ButtonLink to="./create">Create budget</ButtonLink>
 				<ButtonLink to="/user/transfers/create">Transfer between budgets</ButtonLink>
 			</div>
-			{success && <p className="error-msg transaction__error-msg">{success}</p>}
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
+				/>
+			)}
 			{budgets.length > 0 ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Title</th>
-							<th>Start amount</th>
-							<th>Current amount</th>
-							<th>Target amount</th>
-							<th>Edit budget</th>
-							<th>Delete budget</th>
+				<DataTable cols={['Title', 'Start amount', 'Current amount', 'Target amount', 'Edit budget', 'Delete budget']}>
+					{budgets.map((budget) => (
+						<tr key={budget._id}>
+							<td>{budget.title}</td>
+							<td>{amountWithDecimals(budget.startAmount, budget.currency)}</td>
+							<td>{amountWithDecimals(budget.currentAmount, budget.currency)}</td>
+							<TdMeter
+								amount={budget.currentAmount}
+								target={budget.targetAmount}
+								currency={budget.currency}
+							/>
+							<td>
+								<EditButton to={`/budgets/edit/${budget._id}`} />
+							</td>
+							<td>
+								<DeleteButton onClick={() => handleDelete(budget._id)} />
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{budgets.map((budget) => (
-							<tr key={budget._id}>
-								<td>{budget.title}</td>
-								<td>{amountWithDecimals(budget.startAmount, budget.currency)}</td>
-								<td>{amountWithDecimals(budget.currentAmount, budget.currency)}</td>
-								<TdMeter
-									amount={budget.currentAmount}
-									target={budget.targetAmount}
-									currency={budget.currency}
-								/>
-								<td>
-									<Link
-										className="edit-btn"
-										to={`/budgets/edit/${budget._id}`}
-									>
-										Edit
-									</Link>
-								</td>
-								<td>
-									<button
-										className="delete-btn"
-										onClick={() => handleDelete(budget._id)}
-									>
-										&times;
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+					))}
+				</DataTable>
 			) : (
 				<p>Please create your first budget to start!</p>
 			)}

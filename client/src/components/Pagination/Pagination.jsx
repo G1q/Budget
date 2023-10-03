@@ -1,40 +1,26 @@
-import { useState } from 'react'
 import './Pagination.css'
+import Button from '../Button/Button'
 
-const Pagination = ({ itemsPerPage, list }) => {
+const Pagination = ({ items = 10, startItem = 0, endItem = 10, dataArray = [] }) => {
 	const [startItem, setStartItem] = useState(0)
-	const [endItem, setEndItem] = useState(itemsPerPage)
-
-	const handleNextButton = () => {
-		setStartItem((prev) => prev + itemsPerPage)
-		setEndItem((prev) => prev + itemsPerPage)
-	}
+	const [endItem, setEndItem] = useState(items)
 
 	const handlePrevButton = () => {
-		setStartItem((prev) => prev - itemsPerPage)
-		setEndItem((prev) => prev - itemsPerPage)
+		setStartItem((prev) => prev - items)
+		setEndItem((prev) => prev - items)
+	}
+
+	const handleNextButton = () => {
+		setStartItem((prev) => prev + items)
+		setEndItem((prev) => prev + items)
 	}
 
 	return (
 		<div>
-			{startItem > 0 && (
-				<button
-					type="button"
-					onClick={handlePrevButton}
-				>
-					Prev
-				</button>
-			)}
-			{endItem < list.length && (
-				<button
-					type="button"
-					onClick={handleNextButton}
-				>
-					Next
-				</button>
-			)}
+			{startItem > 0 && <Button onClick={handlePrevButton}>Prev</Button>}
+			{endItem < dataArray.length && <Button onClick={handleNextButton}>Next</Button>}
 			<p>
-				{Math.ceil(endItem / itemsPerPage)} / {Math.ceil(list.length / itemsPerPage)} pages
+				{Math.ceil(endItem / items)} / {Math.ceil(dataArray.length / items)} pages
 			</p>
 		</div>
 	)

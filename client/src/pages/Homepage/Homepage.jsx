@@ -21,6 +21,8 @@ const Homepage = () => {
 	const [transactions, setTransactions] = useState([])
 	const [error, setError] = useState(null)
 
+	const transactionsParams = { startDate: '1970-01-01', endDate: new Date() }
+
 	useEffect(() => {
 		fetchBudgets(getUserId())
 			.then((responseData) => setBudgets(responseData))
@@ -30,7 +32,7 @@ const Homepage = () => {
 			.then((responseData) => setDebts(responseData))
 			.catch((error) => setError(error.response.data.message))
 
-		fetchTransactions(getUserId())
+		fetchTransactions(getUserId(), transactionsParams)
 			.then((responseData) => setTransactions(responseData))
 			.catch((error) => setError(error.response.data.message))
 	}, [])

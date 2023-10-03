@@ -5,12 +5,14 @@ import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
 import Button from '../../components/Button/Button'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
 const Sources = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [sources, setSources] = useState([])
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [error, setError] = useState(null)
+	const [success, setSuccess] = useState(null)
 
 	const navigate = useNavigate()
 
@@ -32,11 +34,8 @@ const Sources = () => {
 
 		if (confirmDelete) {
 			try {
-				const source = await axiosInstance.get(`incomes/source/view/${id}`)
-
-				// Delete source
-				await axiosInstance.delete(`incomes/source/${id}`)
-
+				const response = await axiosInstance.delete(`incomes/source/${id}`)
+				setSuccess(response.data.message)
 				// Refresh sources list
 				getSources()
 			} catch (error) {
@@ -103,7 +102,18 @@ const Sources = () => {
 				</form>
 			</dialog>
 
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
+				/>
+			)}
 			{sources.length > 0 ? (
 				<table>
 					<thead>

@@ -1,37 +1,43 @@
-import './Incomes.css'
-import { Link, Navigate } from 'react-router-dom'
+// Import dependencies
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
-import { formatDate } from '../../utilities/formatDates'
-import { amountWithDecimals } from '../../utilities/format'
+
+// Import custom components
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import Button from '../../components/Button/Button'
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
+import DeleteButton from '../../components/DeleteButton/DeleteButton'
+import EditButton from '../../components/EditButton/EditButton'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import DataTable from '../../components/DataTable/DataTable'
+
+// Import utilities
+import axiosInstance from '../../utilities/axiosconfig'
+import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import { amountWithDecimals, formatDate } from '../../utilities/format'
+import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
+import { fetchIncomes } from '../../utilities/fetchData'
+
+// Import styling
+import './Incomes.css'
+import Dialog from '../../components/Dialog/Dialog'
 
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [incomes, setIncomes] = useState([])
+	const [error, setError] = useState(null)
+	const [success, setSuccess] = useState(null)
 	const [sourceTitle, setSourceTitle] = useState('')
-	const [sourceError, setSourceError] = useState('')
-	const [budgetError, setBudgetError] = useState('')
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 
-	useEffect(() => {
-		getIncomes()
-	}, [dateInterval])
+	const navigate = useNavigate()
 
-	const getIncomes = async () => {
-		try {
-			const response = await axiosInstance.get(`incomes/${getUserId()}`, {
-				params: { startDate: dateInterval.startDate, endDate: dateInterval.endDate },
-			})
-			setIncomes(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
+	useEffect(() => {
+		fetchIncomes(getUserId(), dateInterval)
+			.then((responseData) => setIncomes(responseData))
+			.catch((error) => setError(error.response.data.message))
+	}, [dateInterval])
 
 	const handleDelete = async (id) => {
 		const confirmDelete = window.confirm('Are you sure do you want delete this income? The source budget will debit with income amount.')
@@ -49,85 +55,43 @@ const Incomes = () => {
 				if (newAmount < 0) throw new Error('Budget will decrease under 0. Please check again!')
 
 				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newAmount })
-				setBudgetError('')
 
 				// Delete income
-				await axiosInstance.delete(`incomes/${id}`)
+				try {
+					const response = await axiosInstance.delete(`incomes/${id}`)
+					setError(null)
+					setSuccess(response.data.message)
+				} catch (error) {
+					setSuccess(null)
+					setError(error.response.data.message)
+				}
 
 				// Refresh incomes list
-				getIncomes()
+				fetchIncomes(getUserId(), dateInterval)
+					.then((responseData) => setIncomes(responseData))
+					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
-				setBudgetError(error)
+				setError(error.response.data.message)
 			}
 		}
 	}
 
 	const handleCreateSource = async (e) => {
 		e.preventDefault()
+		const source = {
+			title: sourceTitle,
+			user: getUserId(),
+		}
 		try {
-			const source = {
-				title: sourceTitle,
-				user: getUserId(),
-			}
 			const response = await axiosInstance.post('incomes/source', source)
-			if (response.status === 201) {
-				setSourceError('')
-				clearForm()
-				navigate('/incomes')
-			} else {
-				setSourceError(response.data.error || 'Registration failed')
-			}
+			clearForm()
+			setError(null)
+			setSuccess(response.data.message)
+			navigate('/incomes')
 		} catch (error) {
-			setSourceError(error.response.data.error)
+			setSuccess(null)
+			setError(error.response.data.message)
 		}
-	}
-
-	const handleSelectIntervalChange = (e) => {
-		const getLastDayOfMonth = (date) => {
-			const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth(), 1)
-			const lastDayOfMonth = new Date(nextMonthFirstDay - 1)
-			return lastDayOfMonth
-		}
-
-		let startDate = new Date()
-		startDate.setHours(0, 0, 0, 0)
-		let endDate = new Date()
-		endDate.setHours(23, 59, 59, 0)
-		switch (e.target.value) {
-			case 'all-time':
-				startDate = new Date('1970-01-01')
-				break
-			case 'this-year':
-				startDate.setDate(1)
-				startDate.setMonth(0)
-				break
-			case 'this-month':
-				startDate.setDate(1)
-				break
-			case 'last-month':
-				startDate.setMonth(startDate.getMonth() - 1)
-				startDate.setDate(1)
-				endDate = getLastDayOfMonth(endDate)
-				break
-			case 'today':
-				break
-			case 'yesterday':
-				startDate.setDate(startDate.getDate() - 1)
-				endDate.setDate(endDate.getDate() - 1)
-				break
-			case 'custom':
-				startDate = new Date('1970-01-01')
-				endDate = new Date()
-				break
-			default:
-				startDate = new Date('1970-01-01')
-				endDate = new Date()
-		}
-
-		setDateInterval({
-			startDate,
-			endDate,
-		})
 	}
 
 	return isLoggedIn() ? (
@@ -138,7 +102,6 @@ const Incomes = () => {
 					<ButtonLink to="./create">Create income</ButtonLink>
 
 					<Button
-						id="create-source__btn"
 						onClick={openDialog}
 						className="popup-btn"
 					>
@@ -147,78 +110,61 @@ const Incomes = () => {
 				</div>
 
 				<SelectInterval
-					onChange={handleSelectIntervalChange}
+					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
 					label="Select date"
 				/>
 			</div>
 
-			<dialog
-				className="popup-dialog"
-				id="create-source-dialog"
+			<Dialog
+				title="Create new source"
+				textButton="Create source"
+				onClick={closeDialog}
+				onSubmit={handleCreateSource}
 			>
-				<h2 className="popup-dialog__title">Create new source</h2>
-				<button
-					className="popup-close-btn"
-					onClick={closeDialog}
-				>
-					&times;
-				</button>
-				<form
-					className="popup-dialog__form"
-					onSubmit={handleCreateSource}
-				>
-					<label htmlFor="title">Title</label>
-					<input
-						type="text"
-						name="title"
-						id="title"
-						onChange={(e) => setSourceTitle(e.target.value)}
+				<label htmlFor="title">Title</label>
+				<input
+					type="text"
+					name="title"
+					id="title"
+					onChange={(e) => setSourceTitle(e.target.value)}
+				/>
+				{error && (
+					<StatusMessage
+						type="error"
+						message={error}
 					/>
-					<Button type="submit">Create source</Button>
-					<p className="error-msg">{sourceError}</p>
-				</form>
-			</dialog>
+				)}
+			</Dialog>
 
-			{budgetError && <p className="error-msg transaction__error-msg">{budgetError.message}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
+				/>
+			)}
 			{incomes.length > 0 ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Source</th>
-							<th>Budget</th>
-							<th>Amount</th>
-							<th>Edit income</th>
-							<th>Delete income</th>
+				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit income', 'Delete income']}>
+					{incomes.map((income) => (
+						<tr key={income._id}>
+							<td>{formatDate(new Date(income.date))}</td>
+							<td>{income.source.title}</td>
+							<td>{income.budget.title}</td>
+							<td>{amountWithDecimals(income.amount, income.currency)}</td>
+							<td>
+								<EditButton to={`/incomes/edit/${income._id}`} />
+							</td>
+							<td>
+								<DeleteButton onClick={() => handleDelete(income._id)} />
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{incomes.map((income) => (
-							<tr key={income._id}>
-								<td>{formatDate(new Date(income.date))}</td>
-								<td>{income.source.title}</td>
-								<td>{income.budget.title}</td>
-								<td>{amountWithDecimals(income.amount, income.currency)}</td>
-								<td>
-									<Link
-										className="edit-btn"
-										to={`/incomes/edit/${income._id}`}
-									>
-										Edit
-									</Link>
-								</td>
-								<td>
-									<button
-										className="delete-btn"
-										onClick={() => handleDelete(income._id)}
-									>
-										&times;
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+					))}
+				</DataTable>
 			) : (
 				<p>You don't have any incomes!</p>
 			)}

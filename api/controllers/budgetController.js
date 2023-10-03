@@ -3,6 +3,7 @@ const User = require('../models/User')
 const Income = require('../models/Income')
 const Expense = require('../models/Expense')
 const { ERROR_MESSAGES } = require('../messages/errors.js')
+const { SUCCESS_MESSAGES } = require('../messages/succes.js')
 
 const createBudget = async (req, res) => {
 	try {
@@ -28,7 +29,7 @@ const createBudget = async (req, res) => {
 
 		await newBudget.save()
 
-		res.status(201).json({ message: 'Budget registered successfully' })
+		res.status(201).json({ message: SUCCESS_MESSAGES.BUDGET_REGISTERED.message })
 	} catch (error) {
 		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
@@ -41,7 +42,7 @@ const getBudget = async (req, res) => {
 		// Fetch user profile
 		const budget = await Budget.findById(budgetId)
 		if (!budget) {
-			return res.status(404).json({ error: 'Budget not found' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_BUDGET_FOUND.message })
 		}
 
 		res.status(200).json(budget)
@@ -57,7 +58,7 @@ const editBudget = async (req, res) => {
 		const updatedBudget = await Budget.findByIdAndUpdate(budgetId, req.body, { new: true })
 
 		if (!updatedBudget) {
-			return res.status(404).json({ error: 'Budget not found' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_BUDGET_FOUND.message })
 		}
 
 		res.status(200).json(updatedBudget)
@@ -76,14 +77,14 @@ const deleteBudget = async (req, res) => {
 
 		if (referencedIncomes > 0 || referencedExpenses > 0) {
 			// Check if budget have transaction on it
-			res.status(403).json({ error: "You can't delete this budget because have transactions on it!" })
+			res.status(403).json({ message: ERROR_MESSAGES.USED_BUDGET.message })
 		} else if (budget.currentAmount > 0) {
 			// Check if budget have amount bigger than 0
-			res.status(403).json({ error: "You can't delete this budget because have amount grater than 0. First, transfer all amounts to another budget!" })
+			res.status(403).json({ message: ERROR_MESSAGES.NO_EMPTY_BUDGET.message })
 		} else {
 			// Delete budget if haven't any transactions
 			await Budget.findByIdAndDelete(budgetId)
-			res.status(200).json({ message: 'Budget deleted successfully!' })
+			res.status(200).json({ message: SUCCESS_MESSAGES.BUDGET_DELETED.message })
 		}
 	} catch (error) {
 		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
@@ -100,7 +101,7 @@ const getBudgets = async (req, res) => {
 
 		const budgets = await Budget.find({ user: req.params.id })
 		if (!budgets) {
-			return res.status(404).json({ message: 'Budgets not found for this user' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_BUDGETS.message })
 		}
 
 		res.status(200).json(budgets)
