@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import './EditUser.css'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../../utilities/axiosconfig'
+import Button from '../../../../components/Button/Button'
 
 const EditUser = () => {
 	const { id } = useParams()
@@ -49,7 +50,10 @@ const EditUser = () => {
 	return (
 		<main className="admin-page">
 			<h1 className="admin-page__main-title">Edit user {username}</h1>
-			<form className="edit-profile__form">
+			<form
+				className="edit-profile__form"
+				onSubmit={handleSubmit}
+			>
 				<div className="edit-profile__form-group">
 					<label htmlFor="username">Username:</label>
 					<input
@@ -111,7 +115,7 @@ const EditUser = () => {
 					/>
 				</div>
 
-				<button onClick={handleSubmit}>Save changes</button>
+				<Button type="submit">Save changes</Button>
 				{error && <p className="error-msg">{error}</p>}
 			</form>
 		</main>

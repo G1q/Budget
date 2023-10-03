@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axiosInstance from '../../../../utilities/axiosconfig'
+import Button from '../../../../components/Button/Button'
 
 // Import style
 import './CreateUser.css'
@@ -73,7 +74,7 @@ const CreateUser = () => {
 						<option value="admin">Admin</option>
 					</select>
 				</div>
-				<button type="submit">Create</button>
+				<Button type="submit">Create</Button>
 			</form>
 		</main>
 	)

@@ -174,7 +174,7 @@ const Incomes = () => {
 						id="title"
 						onChange={(e) => setSourceTitle(e.target.value)}
 					/>
-					<button>Create source</button>
+					<Button type="submit">Create source</Button>
 					<p className="error-msg">{sourceError}</p>
 				</form>
 			</dialog>

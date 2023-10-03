@@ -3,6 +3,8 @@ import './UserProfile.css'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
+import ButtonLink from '../../../components/ButtonLink/ButtonLink'
+import Button from '../../../components/Button/Button'
 
 const UserProfile = () => {
 	const { getUserId, setAuthToken } = useAuth()
@@ -53,8 +55,13 @@ const UserProfile = () => {
 				</p>
 			</div>
 			<div className="profile__actions">
-				<Link to="/user/edit">Edit profile</Link>
-				<button onClick={handleDeleteProfile}>Delete profile</button>
+				<ButtonLink to="/user/edit">Edit profile</ButtonLink>
+				<Button
+					datatype="danger"
+					onClick={handleDeleteProfile}
+				>
+					Delete profile
+				</Button>
 			</div>
 		</section>
 	)

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
 import { amountWithDecimals } from '../../../utilities/format'
+import Button from '../../../components/Button/Button'
 
 const CreateExpense = () => {
 	const { getUserId } = useAuth()
@@ -231,7 +232,7 @@ const CreateExpense = () => {
 					></textarea>
 				</div>
 				{error && <p className="error-msg transaction__error-msg">{error}</p>}
-				<button type="submit">Create expense</button>
+				<Button type="submit">Create expense</Button>
 			</form>
 		</main>
 	)

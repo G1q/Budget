@@ -6,6 +6,8 @@ import axiosInstance from '../../utilities/axiosconfig'
 import { formatDate } from '../../utilities/formatDates'
 import { amountWithDecimals } from '../../utilities/format'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
+import ButtonLink from '../../components/ButtonLink/ButtonLink'
+import Button from '../../components/Button/Button'
 
 const ITEMS_PER_PAGE = 10
 
@@ -95,12 +97,7 @@ const Transactions = () => {
 			<h1>Transactions</h1>
 			<div className="header__actions">
 				<div className="buttons-group">
-					<Link
-						to="./create"
-						className="create-btn"
-					>
-						Create transaction
-					</Link>
+					<ButtonLink to="./create">Create transaction</ButtonLink>
 				</div>
 
 				<SelectInterval onChange={handleSelectIntervalChange} />
@@ -136,22 +133,8 @@ const Transactions = () => {
 						</tbody>
 					</table>
 					<div>
-						{startItem > 0 && (
-							<button
-								type="button"
-								onClick={handlePrevButton}
-							>
-								Prev
-							</button>
-						)}
-						{endItem < transactions.length && (
-							<button
-								type="button"
-								onClick={handleNextButton}
-							>
-								Next
-							</button>
-						)}
+						{startItem > 0 && <Button onClick={handlePrevButton}>Prev</Button>}
+						{endItem < transactions.length && <Button onClick={handleNextButton}>Next</Button>}
 						<p>
 							{Math.ceil(endItem / ITEMS_PER_PAGE)} / {Math.ceil(transactions.length / ITEMS_PER_PAGE)} pages
 						</p>

@@ -3,6 +3,7 @@ import { useAuth } from '../../../contexts/AuthContext'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../utilities/axiosconfig'
+import Button from '../../../components/Button/Button'
 
 const EditProfile = () => {
 	const { getUserId } = useAuth()
@@ -48,7 +49,10 @@ const EditProfile = () => {
 		<main className="edit-profile__page">
 			<h1>My profile</h1>
 
-			<form className="edit-profile__form">
+			<form
+				className="edit-profile__form"
+				onSubmit={handleSubmit}
+			>
 				<div className="edit-profile__form-group">
 					<label htmlFor="username">Username:</label>
 					<input
@@ -81,7 +85,7 @@ const EditProfile = () => {
 					/>
 				</div>
 
-				<button onClick={handleSubmit}>Save changes</button>
+				<Button type="submit">Save changes</Button>
 				{error && <p className="error-msg">{error}</p>}
 			</form>
 		</main>

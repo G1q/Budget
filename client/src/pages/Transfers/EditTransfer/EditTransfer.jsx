@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const EditTransfer = () => {
 	const { getUserId } = useAuth()
@@ -193,7 +194,7 @@ const EditTransfer = () => {
 						value={transfer.description}
 					></textarea>
 				</div>
-				<button type="submit">Edit transfer</button>
+				<Button type="submit">Edit transfer</Button>
 			</form>
 		</main>
 	)

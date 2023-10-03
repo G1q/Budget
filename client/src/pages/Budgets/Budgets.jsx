@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import TdMeter from '../../components/TdMeter/TdMeter'
 import { amountWithDecimals } from '../../utilities/format'
+import ButtonLink from '../../components/ButtonLink/ButtonLink'
 
 const Budgets = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -46,18 +47,8 @@ const Budgets = () => {
 			<h1>Budgets</h1>
 
 			<div className="buttons-group">
-				<Link
-					to="./create"
-					className="create-btn"
-				>
-					Create budget
-				</Link>
-				<Link
-					to="/user/transfers/create"
-					className="create-btn"
-				>
-					Transfer between budgets
-				</Link>
+				<ButtonLink to="./create">Create budget</ButtonLink>
+				<ButtonLink to="/user/transfers/create">Transfer between budgets</ButtonLink>
 			</div>
 			{success && <p className="error-msg transaction__error-msg">{success}</p>}
 			{error && <p className="error-msg transaction__error-msg">{error}</p>}

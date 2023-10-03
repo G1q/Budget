@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import Button from '../../components/Button/Button'
 
 const Sources = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -66,13 +67,13 @@ const Sources = () => {
 		<main>
 			<h1>Sources</h1>
 			<div className="buttons-group">
-				<button
-					className="create-btn popup-btn"
+				<Button
+					className="popup-btn"
 					id="create-source__btn"
 					onClick={openDialog}
 				>
 					Create new source
-				</button>
+				</Button>
 			</div>
 
 			<dialog
@@ -97,7 +98,7 @@ const Sources = () => {
 						id="title"
 						onChange={(e) => setSourceTitle(e.target.value)}
 					/>
-					<button>Create source</button>
+					<Button type="submit">Create source</Button>
 					<p className="error-msg">{error}</p>
 				</form>
 			</dialog>
@@ -119,7 +120,7 @@ const Sources = () => {
 								<td>
 									<Link
 										className="edit-btn"
-										to={`/sources/edit/${source._id}`}
+										to={`/user/sources/edit/${source._id}`}
 									>
 										Edit
 									</Link>

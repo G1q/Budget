@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import Button from '../../components/Button/Button'
 
 const Categories = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -66,13 +67,13 @@ const Categories = () => {
 		<main>
 			<h1>Categories</h1>
 			<div className="buttons-group">
-				<button
-					className="create-btn popup-btn"
+				<Button
+					className="popup-btn"
 					id="create-category__btn"
 					onClick={openDialog}
 				>
 					Create new category
-				</button>
+				</Button>
 			</div>
 
 			<dialog

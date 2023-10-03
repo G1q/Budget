@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const CreateIncome = () => {
 	const { getUserId } = useAuth()
@@ -167,7 +168,7 @@ const CreateIncome = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Create income</button>
+				<Button type="submit">Create income</Button>
 			</form>
 		</main>
 	)

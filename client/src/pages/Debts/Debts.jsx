@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import { formatDate } from '../../utilities/formatDates'
 import { amountWithDecimals } from '../../utilities/format'
+import ButtonLink from '../../components/ButtonLink/ButtonLink'
 
 const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -46,14 +47,7 @@ const Debts = () => {
 			<h1>Debts</h1>
 			<div className="header__actions">
 				<div className="buttons-group">
-					<div>
-						<Link
-							to="./create"
-							className="create-btn"
-						>
-							Create new debt
-						</Link>
-					</div>
+					<ButtonLink to="./create">Create new debt</ButtonLink>
 				</div>
 
 				<div className="buttons-group__checkbox">

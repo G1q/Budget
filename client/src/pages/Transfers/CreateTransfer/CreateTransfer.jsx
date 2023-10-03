@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const CreateTransfer = () => {
 	const { getUserId } = useAuth()
@@ -175,7 +176,7 @@ const CreateTransfer = () => {
 					></textarea>
 				</div>
 				{error && <p className="error-msg transaction__error-msg">{error}</p>}
-				<button type="submit">Create transfer</button>
+				<Button type="submit">Create transfer</Button>
 			</form>
 		</main>
 	)

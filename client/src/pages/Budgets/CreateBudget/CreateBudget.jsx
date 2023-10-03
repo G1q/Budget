@@ -1,8 +1,9 @@
 import './CreateBudget.css'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const CreateBudget = () => {
 	const { getUserId } = useAuth()
@@ -104,7 +105,7 @@ const CreateBudget = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Create budget</button>
+				<Button type="submit">Create budget</Button>
 			</form>
 		</main>
 	)

@@ -2,6 +2,7 @@ import './EditSource.css'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../../../utilities/axiosconfig'
+import Button from '../../../components/Button/Button'
 
 const EditSource = () => {
 	const { id } = useParams()
@@ -56,7 +57,7 @@ const EditSource = () => {
 						value={source.title}
 					/>
 				</div>
-				<button type="submit">Edit source</button>
+				<Button type="submit">Edit source</Button>
 			</form>
 		</main>
 	)

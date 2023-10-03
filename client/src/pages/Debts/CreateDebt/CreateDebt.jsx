@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const CreateDebt = () => {
 	const { getUserId } = useAuth()
@@ -126,7 +127,7 @@ const CreateDebt = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Create debt</button>
+				<Button type="submit">Create debt</Button>
 			</form>
 		</main>
 	)

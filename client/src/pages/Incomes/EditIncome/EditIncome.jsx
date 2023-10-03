@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const EditIncome = () => {
 	const { getUserId } = useAuth()
@@ -183,7 +184,7 @@ const EditIncome = () => {
 						value={income.description}
 					></textarea>
 				</div>
-				<button type="submit">Edit income</button>
+				<Button type="submit">Edit income</Button>
 			</form>
 		</main>
 	)

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './EditBudget.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../../../utilities/axiosconfig'
+import Button from '../../../components/Button/Button'
 
 const EditBudget = () => {
 	const { id } = useParams()
@@ -137,7 +138,7 @@ const EditBudget = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Edit budget</button>
+				<Button type="submit">Edit budget</Button>
 			</form>
 		</main>
 	)
