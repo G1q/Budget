@@ -1,10 +1,11 @@
-import React from 'react'
+import { useState } from 'react'
+import { formatInputDate } from '../../utilities/format'
 
-const SelectInterval = ({ onChange, label }) => {
+const SelectInterval = ({ onChange, label, showCustom }) => {
 	return (
 		<div
 			className="select__interval"
-			style={{ display: 'flex', alignItems: 'center' }}
+			style={{ display: 'grid', alignItems: 'center', gridTemplateColumns: 'auto 1fr', gap: '.5rem' }}
 		>
 			<label htmlFor="selectInterval">{label}</label>
 			<select
@@ -20,6 +21,28 @@ const SelectInterval = ({ onChange, label }) => {
 				<option value="yesterday">Yesterday</option>
 				<option value="custom">Custom (in progress...)</option>
 			</select>
+
+			<div
+				className="custom-dates"
+				style={showCustom ? { display: 'block' } : { display: 'none' }}
+			>
+				<label htmlFor="startDate">Start date</label>
+				<input
+					type="date"
+					name="startDate"
+					id="startDate"
+					defaultValue={'2023-01-01'}
+					onChange={onChange}
+				/>
+				<label htmlFor="endDate">End date</label>
+				<input
+					type="date"
+					name="endDate"
+					id="endDate"
+					defaultValue={formatInputDate(new Date())}
+					onChange={onChange}
+				/>
+			</div>
 		</div>
 	)
 }

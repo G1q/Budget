@@ -18,6 +18,15 @@ export const fetchIncomes = async (id, params = {}) => {
 	}
 }
 
+export const fetchExpenses = async (id, params = {}) => {
+	try {
+		const response = await axiosInstance.get(`expenses/${id}`, { params })
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
 export const fetchDebts = async (id) => {
 	try {
 		const response = await axiosInstance.get(`debts/${id}`)

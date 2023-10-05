@@ -3,9 +3,19 @@
 /*
 Ussage:
 Import this function
-Add useState for default: const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+Add useState for default: 
+	a. const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+	b. const [showCustom, setShowCustom] = useState(false)
 Add useEffect dependencies array: [dateInterval]
-Add component in page: <SelectInterval onChange={(e) => setDateInterval(handleSelectIntervalChange(e))} />
+Add component in page: 
+	a. With custom dates: 
+			<SelectInterval
+				onChange={(e) => {
+					setDateInterval(handleSelectIntervalChange(e))
+					e.target.value === 'custom' ? setShowCustom(true) : setShowCustom(false)
+				}}
+				showCustom={showCustom}
+			/>
 */
 export const handleSelectIntervalChange = (e) => {
 	const getLastDayOfMonth = (date) => {
@@ -41,14 +51,19 @@ export const handleSelectIntervalChange = (e) => {
 			endDate.setDate(endDate.getDate() - 1)
 			break
 		case 'custom':
-			startDate = new Date('1970-01-01')
-			endDate = new Date()
+			const startValue = new Date(document.querySelector('#startDate').value)
+			const endValue = new Date(document.querySelector('#endDate').value)
+			startDate.setDate(startValue.getDate())
+			startDate.setMonth(startValue.getMonth())
+			startDate.setFullYear(startValue.getFullYear())
+			endDate.setDate(endValue.getDate())
+			endDate.setMonth(endValue.getMonth())
+			endDate.setFullYear(endValue.getFullYear())
 			break
 		default:
 			startDate = new Date('1970-01-01')
 			endDate = new Date()
 	}
-
 	return {
 		startDate,
 		endDate,

@@ -6,10 +6,12 @@ import { useAuth } from '../../contexts/AuthContext'
 // Import custom components
 import CardMeter from '../../components/CardMeter/CardMeter'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
-import { fetchBudgets, fetchDebts, fetchTransactions } from '../../utilities/fetchData'
+import { fetchBudgets, fetchDebts, fetchExpenses, fetchIncomes, fetchTransactions } from '../../utilities/fetchData'
+import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 
 // Import styling
 import './Homepage.css'
@@ -17,9 +19,13 @@ import './Homepage.css'
 const Homepage = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [budgets, setBudgets] = useState([])
-	const [debts, setDebts] = useState([])
 	const [transactions, setTransactions] = useState([])
+	const [expenses, setExpenses] = useState([])
+	const [incomes, setIncomes] = useState([])
+	const [debts, setDebts] = useState([])
 	const [error, setError] = useState(null)
+	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+	const [showCustom, setShowCustom] = useState(false)
 
 	const transactionsParams = { startDate: '1970-01-01', endDate: new Date() }
 
@@ -35,7 +41,15 @@ const Homepage = () => {
 		fetchTransactions(getUserId(), transactionsParams)
 			.then((responseData) => setTransactions(responseData))
 			.catch((error) => setError(error.response.data.message))
-	}, [])
+
+		fetchExpenses(getUserId(), dateInterval)
+			.then((responseData) => setExpenses(responseData))
+			.catch((error) => setError(error.response.data.message))
+
+		fetchIncomes(getUserId(), dateInterval)
+			.then((responseData) => setIncomes(responseData))
+			.catch((error) => setError(error.response.data.message))
+	}, [dateInterval])
 
 	const totalAmount = () => {
 		let total = 0
@@ -59,10 +73,35 @@ const Homepage = () => {
 		return amountWithDecimals(total, currency)
 	}
 
+	const totalExpenses = () => {
+		let total = 0
+		let currency
+		for (let i = 0; i < expenses.length; i++) {
+			total += expenses[i].amount
+			currency = expenses[i].currency
+		}
+		return amountWithDecimals(total, currency)
+	}
+
+	const totalIncomes = () => {
+		let total = 0
+		let currency
+		for (let i = 0; i < incomes.length; i++) {
+			total += incomes[i].amount
+			currency = incomes[i].currency
+		}
+		return amountWithDecimals(total, currency)
+	}
+
 	return (
 		<main>
 			<h1>Homepage</h1>
-			{error && <p className="error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			{isLoggedIn() && (
 				<section className="summaries">
 					<div className="summaries__wrapper">
@@ -134,32 +173,30 @@ const Homepage = () => {
 						</div>
 
 						<div className="summaries__card">
-							<h2 className="summaries__card--title">Budget movements</h2>
-							<SelectInterval />
-							<ul className="summaries__card--list">
-								{budgets.map((budget) => (
-									<li
-										className="summaries__card--list-item"
-										key={budget._id}
-									>
-										{`${budget.title} ${
-											budget.startAmount !== budget.currentAmount
-												? budget.startAmount
-													? (((budget.currentAmount - budget.startAmount) / budget.startAmount) * 100).toFixed(2)
-													: 100
-												: 0
-										}%`}
-									</li>
-								))}
-							</ul>
+							<SelectInterval
+								onChange={(e) => {
+									setDateInterval(handleSelectIntervalChange(e))
+									e.target.value === 'custom' ? setShowCustom(true) : setShowCustom(false)
+								}}
+								label="Select date"
+								showCustom={showCustom}
+							/>
+							<p
+								className="summaries__card--info"
+								style={{ '--text-clr': 'crimson' }}
+							>
+								Total expenses: <span>{totalExpenses()}</span>
+							</p>
+							<p
+								className="summaries__card--info"
+								style={{ '--text-clr': 'forestgreen' }}
+							>
+								Total incomes: <span>{totalIncomes()}</span>
+							</p>
 						</div>
 					</div>
 				</section>
 			)}
-
-			<section>
-				<h2>Tools</h2>
-			</section>
 		</main>
 	)
 }

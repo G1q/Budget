@@ -12,3 +12,12 @@ export const formatDate = (date) => {
 
 	return `${day}-${month}-${year}`
 }
+
+// Return date in format YYYY-MM-DD for input:date
+export const formatInputDate = (date) => {
+	const day = date.getDate().toString().padStart(2, '0')
+	const month = (date.getMonth() + 1).toString().padStart(2, '0')
+	const year = date.getFullYear()
+
+	return `${year}-${month}-${day}`
+}
