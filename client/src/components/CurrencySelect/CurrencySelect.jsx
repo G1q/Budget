@@ -1,12 +1,14 @@
 import React from 'react'
 
-const CurrencySelect = () => {
+const CurrencySelect = ({ label = 'Currency', value, onChange }) => {
 	return (
 		<>
-			<label htmlFor="currency">Currency</label>
+			<label htmlFor="currency">{label}</label>
 			<select
 				name="currency"
 				id="currency"
+				value={value}
+				onChange={onChange}
 			>
 				<option value="RON">RON</option>
 				<option

@@ -64,3 +64,12 @@ export const getDebt = async (id) => {
 		throw error
 	}
 }
+
+export const getBudget = async (id) => {
+	try {
+		const response = await axiosInstance.get(`budgets/view/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}

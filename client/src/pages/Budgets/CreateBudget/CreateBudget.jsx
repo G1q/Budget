@@ -1,14 +1,23 @@
-import './CreateBudget.css'
+// Import dependencies
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom elements
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+import CurrencySelect from '../../../components/CurrencySelect/CurrencySelect'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+
+// Import styling
+import './CreateBudget.css'
 
 const CreateBudget = () => {
 	const { getUserId } = useAuth()
-	const [error, setError] = useState('')
 	const [inputs, setInputs] = useState({ user: getUserId() })
+	const [error, setError] = useState('')
 
 	const navigate = useNavigate()
 
@@ -36,7 +45,7 @@ const CreateBudget = () => {
 	return (
 		<main>
 			<h1>Create new budget</h1>
-			{error && <p className="error-message">{error}</p>}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="title">Title</label>
@@ -73,26 +82,7 @@ const CreateBudget = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="currency">Currency</label>
-					<select
-						name="currency"
-						id="currency"
-						onChange={handleChange}
-					>
-						<option value="RON">RON</option>
-						<option
-							value="EUR"
-							disabled
-						>
-							EUR
-						</option>
-						<option
-							value="USD"
-							disabled
-						>
-							USD
-						</option>
-					</select>
+					<CurrencySelect />
 				</div>
 
 				<div className="form-group">
@@ -105,6 +95,12 @@ const CreateBudget = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
+				{error && (
+					<StatusMessage
+						type="error"
+						message={error}
+					/>
+				)}
 				<Button type="submit">Create budget</Button>
 			</form>
 		</main>
