@@ -2,6 +2,7 @@ import './EditCategory.css'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../../../utilities/axiosconfig'
+import Button from '../../../components/Button/Button'
 
 const EditCategory = () => {
 	const { id } = useParams()
@@ -74,7 +75,7 @@ const EditCategory = () => {
 						onChange={handleChange}
 					/>
 				</div>
-				<button type="submit">Edit category</button>
+				<Button type="submit">Edit category</Button>
 			</form>
 		</main>
 	)

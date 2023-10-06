@@ -1,37 +1,33 @@
-import './CreateIncome.css'
+// Import dependencies
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
+import Button from '../../../components/Button/Button'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+
+// Import styling
+import './CreateIncome.css'
+import { fetchBudgets, fetchSources } from '../../../utilities/fetchData'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 
 const CreateIncome = () => {
 	const { getUserId } = useAuth()
-	const [error, setError] = useState('')
-	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [sources, setSources] = useState([])
 	const [budgets, setBudgets] = useState([])
-
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getSources = async () => {
-		try {
-			const response = await axiosInstance(`/incomes/source/${getUserId()}`)
-			setSources(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
+	const [inputs, setInputs] = useState({ user: getUserId() })
+	const [error, setError] = useState('')
 
 	useEffect(() => {
-		getBudgets()
-		getSources()
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
+		fetchSources(getUserId())
+			.then((responseData) => setSources(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const navigate = useNavigate()
@@ -46,32 +42,29 @@ const CreateIncome = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axiosInstance.post('incomes', inputs)
-			if (response.status === 201) {
-				try {
-					// Change budget to new amount
-					const budgetId = inputs.budget
-					const amount = inputs.amount
-					const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
-					const res = await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) + Number(amount) })
+			await axiosInstance.post('incomes', inputs)
+			// Change budget to new amount
+			const budgetId = inputs.budget
+			const amount = inputs.amount
+			const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
+			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) + Number(amount) })
 
-					// Redirect
-					navigate('/incomes')
-				} catch (error) {
-					setError(response.data.error || 'Registration failed')
-				}
-			} else {
-				setError(response.data.error || 'Registration failed')
-			}
+			// Redirect
+			navigate('/incomes')
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return (
 		<main>
 			<h1>Create new income</h1>
-			{error && <p className="error-message">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="date">Date</label>
@@ -167,7 +160,7 @@ const CreateIncome = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Create income</button>
+				<Button type="submit">Create income</Button>
 			</form>
 		</main>
 	)

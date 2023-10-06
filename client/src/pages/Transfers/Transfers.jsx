@@ -3,8 +3,8 @@ import { Link, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { formatDate } from '../../utilities/formatDates'
-import { amountWithDecimals } from '../../utilities/format'
+import { amountWithDecimals, formatDate } from '../../utilities/format'
+import ButtonLink from '../../components/ButtonLink/ButtonLink'
 
 const Transfers = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -56,12 +56,7 @@ const Transfers = () => {
 		<main>
 			<h1>Transfers</h1>
 			<div className="buttons-group">
-				<Link
-					to="./create"
-					className="create-btn"
-				>
-					Create transfer
-				</Link>
+				<ButtonLink to="./create">Create transfer</ButtonLink>
 			</div>
 
 			{error && <p className="error-msg transaction__error-msg">{error}</p>}
@@ -87,7 +82,7 @@ const Transfers = () => {
 								<td>
 									<Link
 										className="edit-btn"
-										to={`/transfers/edit/${transfer._id}`}
+										to={`/user/transfers/edit/${transfer._id}`}
 									>
 										Edit
 									</Link>

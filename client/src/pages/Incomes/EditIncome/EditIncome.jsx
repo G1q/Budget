@@ -1,8 +1,18 @@
-import './EditIncome.css'
-import { useEffect, useState } from 'react'
+// Import dependencies
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '../../../utilities/axiosconfig'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
+import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchBudgets, fetchSources, getIncome } from '../../../utilities/fetchData'
+
+// Import styling
+import './EditIncome.css'
 
 const EditIncome = () => {
 	const { getUserId } = useAuth()
@@ -15,38 +25,19 @@ const EditIncome = () => {
 
 	const navigate = useNavigate()
 
-	const getIncome = async () => {
-		try {
-			const response = await axiosInstance.get(`incomes/view/${id}`)
-			setIncome(response.data)
-			setInitialIncome(response.data)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getSources = async () => {
-		try {
-			const response = await axiosInstance(`/incomes/source/${getUserId()}`)
-			setSources(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
 	useEffect(() => {
-		getIncome()
-		getBudgets()
-		getSources()
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
+		fetchSources(getUserId())
+			.then((responseData) => setSources(responseData))
+			.catch((error) => setError(error.response.data.message))
+		getIncome(id)
+			.then((responseData) => {
+				setIncome(responseData)
+				setInitialIncome(responseData)
+			})
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -90,14 +81,19 @@ const EditIncome = () => {
 				navigate('/incomes')
 			}
 		} catch (error) {
-			setError(error.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return (
 		<main>
 			<h1>Edit income</h1>
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="source">Source</label>
@@ -183,7 +179,7 @@ const EditIncome = () => {
 						value={income.description}
 					></textarea>
 				</div>
-				<button type="submit">Edit income</button>
+				<Button type="submit">Edit income</Button>
 			</form>
 		</main>
 	)

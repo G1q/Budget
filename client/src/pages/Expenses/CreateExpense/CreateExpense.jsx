@@ -1,52 +1,40 @@
-import './CreateExpense.css'
+// Import dependencies
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
+import Button from '../../../components/Button/Button'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
 import { amountWithDecimals } from '../../../utilities/format'
+import { fetchBudgets, fetchCategories, getSubcategories } from '../../../utilities/fetchData'
+
+// Import styling
+import './CreateExpense.css'
 
 const CreateExpense = () => {
 	const { getUserId } = useAuth()
-	const [error, setError] = useState('')
+
 	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [budgets, setBudgets] = useState([])
 	const [categories, setCategories] = useState([])
 	const [subcategories, setSubcategories] = useState([])
-	const [currentBudget, setCurrentBudget] = useState('')
-	const [budgetError, setBudgetError] = useState('')
+	const [selectedBudget, setSelectedBudget] = useState('')
+
+	const [budgetError, setBudgetError] = useState(null)
+	const [error, setError] = useState('')
 
 	const navigate = useNavigate()
 
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance.get(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getCategories = async () => {
-		try {
-			const response = await axiosInstance.get(`/categories//${getUserId()}`)
-			setCategories([...new Set(response.data.map((cat) => cat.title))])
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getSubCategories = async (currentCategory) => {
-		try {
-			const response = await axiosInstance.get(`/categories/${getUserId()}`)
-			setSubcategories([...new Set(response.data.filter((cat) => cat.title === currentCategory).map((cat) => cat.subcategory))])
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
 	useEffect(() => {
-		getBudgets()
-		getCategories()
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
+		fetchCategories(getUserId())
+			.then((responseData) => setCategories(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = async (e) => {
@@ -56,12 +44,12 @@ const CreateExpense = () => {
 		}))
 		if (e.target.name === 'budget') {
 			const selectedBudget = await axiosInstance.get(`/budgets/view/${e.target.value}`)
-			setCurrentBudget(selectedBudget.data)
+			setSelectedBudget(selectedBudget.data)
 		}
 		if (e.target.name === 'amount') {
-			e.target.value > currentBudget.currentAmount
+			e.target.value > selectedBudget.currentAmount
 				? setBudgetError('Your budget does not meet minimum requirements for this expense')
-				: setBudgetError('')
+				: setBudgetError(null)
 		}
 	}
 
@@ -75,17 +63,15 @@ const CreateExpense = () => {
 			const newAmount = Number(response.data.currentAmount) - Number(amount)
 
 			// Check if expense is bigger than budget current amount
-			if (newAmount < 0) {
-				throw new Error("You don't have minimum amount in selected budget to complete this transaction!")
-			} else {
-				await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount })
-				await axiosInstance.post('expenses', inputs)
-			}
+			if (newAmount < 0) throw new Error("You don't have minimum amount in selected budget to complete this transaction!")
+
+			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount })
+			await axiosInstance.post('expenses', inputs)
 
 			// Redirect
 			navigate('/expenses')
 		} catch (error) {
-			setError(error.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
@@ -130,9 +116,10 @@ const CreateExpense = () => {
 									</option>
 								))}
 							</select>
-							{currentBudget && (
+							{selectedBudget && (
 								<p className="input__info">
-									Currently you have {amountWithDecimals(Number(currentBudget.currentAmount), currentBudget.currency)} in this budget account!
+									Currently you have {amountWithDecimals(Number(selectedBudget.currentAmount), selectedBudget.currency)} in this budget
+									account!
 								</p>
 							)}
 						</>
@@ -165,7 +152,9 @@ const CreateExpense = () => {
 									...prev,
 									[e.target.name]: e.target.value,
 								}))
-								getSubCategories(e.target.value)
+								getSubcategories(e.target.value, getUserId())
+									.then((responseData) => setSubcategories(responseData))
+									.catch((error) => setError(error.response.data.message))
 							}}
 							required
 						>
@@ -231,7 +220,7 @@ const CreateExpense = () => {
 					></textarea>
 				</div>
 				{error && <p className="error-msg transaction__error-msg">{error}</p>}
-				<button type="submit">Create expense</button>
+				<Button type="submit">Create expense</Button>
 			</form>
 		</main>
 	)

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
+import Button from '../../components/Button/Button'
 
 const Register = () => {
 	const { isLoggedIn } = useAuth()
@@ -60,7 +61,7 @@ const Register = () => {
 						required
 					/>
 				</div>
-				<button type="submit">Register</button>
+				<Button type="submit">Register</Button>
 			</form>
 			<p>
 				Do you have an account? <Link to="/login">Login</Link>

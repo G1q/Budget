@@ -2,6 +2,8 @@ const Budget = require('../models/Budget')
 const User = require('../models/User')
 const Income = require('../models/Income')
 const Expense = require('../models/Expense')
+const { ERROR_MESSAGES } = require('../messages/errors.js')
+const { SUCCESS_MESSAGES } = require('../messages/success.js')
 
 const createBudget = async (req, res) => {
 	try {
@@ -11,7 +13,7 @@ const createBudget = async (req, res) => {
 		const existingUsername = await User.findById(user)
 
 		if (!existingUsername) {
-			return res.status(400).json({ error: 'No user with this id!' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
 		}
 
 		// Create a new budget
@@ -27,101 +29,83 @@ const createBudget = async (req, res) => {
 
 		await newBudget.save()
 
-		res.status(201).json({ message: 'Budget registered successfully' })
+		res.status(201).json({ message: SUCCESS_MESSAGES.BUDGET.REGISTERED.message })
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
-	}
-}
-
-const getBudget = async (req, res) => {
-	try {
-		const budgetId = req.params.id
-
-		// Fetch user profile
-		const budget = await Budget.findById(budgetId)
-		if (!budget) {
-			return res.status(404).json({ error: 'Budget not found' })
-		}
-
-		res.status(200).json(budget)
-	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
-	}
-}
-
-const editBudget = async (req, res) => {
-	try {
-		const budgetId = req.params.id
-
-		const updatedBudget = await Budget.findByIdAndUpdate(budgetId, req.body, { new: true })
-
-		if (!updatedBudget) {
-			return res.status(404).json({ error: 'Budget not found' })
-		}
-
-		res.status(200).json(updatedBudget)
-	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
-	}
-}
-
-const deleteBudget = async (req, res) => {
-	const budgetId = req.params.id
-
-	try {
-		const budget = await Budget.findById(budgetId)
-		const referencedIncomes = await Income.countDocuments({ budget: budgetId })
-		const referencedExpenses = await Expense.countDocuments({ budget: budgetId })
-
-		if (referencedIncomes > 0 || referencedExpenses > 0) {
-			// Check if budget have transaction on it
-			res.status(403).json({ error: "You can't delete this budget because have transactions on it!" })
-		} else if (budget.currentAmount > 0) {
-			// Check if budget have amount bigger than 0
-			res.status(403).json({ error: "You can't delete this budget because have amount grater than 0. First, transfer all amounts to another budget!" })
-		} else {
-			// Delete budget if haven't any transactions
-			await Budget.findByIdAndDelete(budgetId)
-			res.status(200).json({ message: 'Budget deleted successfully!' })
-		}
-	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
 const getBudgets = async (req, res) => {
 	try {
+		const isUser = await User.findById(req.params.id)
+
+		if (!isUser) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
+		}
+
 		const budgets = await Budget.find({ user: req.params.id })
 		if (!budgets) {
-			return res.status(404).json({ error: 'Budgets not found' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_BUDGETS.message })
 		}
 
 		res.status(200).json(budgets)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
-const getTotal = async (req, res) => {
-	const userId = req.params.id
+const getBudget = async (req, res) => {
 	try {
-		const result = await Budget.aggregate([
-			{
-				$match: {
-					user: userId,
-				},
-			},
-			{
-				$group: {
-					_id: null,
-					total: { $sum: '$currentAmount' },
-				},
-			},
-		])
-		res.status(200).json({ total: result[2] })
+		const budget = await Budget.findById(req.params.id)
+		if (!budget) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_BUDGET_FOUND.message })
+		}
+
+		res.status(200).json(budget)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
-module.exports = { createBudget, getBudget, editBudget, deleteBudget, getBudgets, getTotal }
+const updateBudget = async (req, res) => {
+	try {
+		const updatedBudget = await Budget.findByIdAndUpdate(req.params.id, req.body, { new: true })
+
+		if (!updatedBudget) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_BUDGET_FOUND.message })
+		}
+
+		res.status(200).json({ message: SUCCESS_MESSAGES.BUDGET.UPDATED.message })
+	} catch (error) {
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
+	}
+}
+
+const deleteBudget = async (req, res) => {
+	try {
+		const budget = await Budget.findById(req.params.id)
+
+		if (!budget) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_BUDGET_FOUND.message })
+		}
+
+		const referencedIncomes = await Income.countDocuments({ budget: req.params.id })
+		const referencedExpenses = await Expense.countDocuments({ budget: req.params.id })
+
+		if (referencedIncomes > 0 || referencedExpenses > 0) {
+			// Check if budget have transaction on it
+			res.status(403).json({ message: ERROR_MESSAGES.USED_BUDGET.message })
+		} else if (budget.currentAmount > 0) {
+			// Check if budget have amount bigger than 0
+			res.status(403).json({ message: ERROR_MESSAGES.NO_EMPTY_BUDGET.message })
+		} else {
+			// Delete budget if haven't any transactions
+			await Budget.findByIdAndDelete(req.params.id)
+			res.status(200).json({ message: SUCCESS_MESSAGES.BUDGET.DELETED.message })
+		}
+	} catch (error) {
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
+	}
+}
+
+module.exports = { createBudget, getBudget, updateBudget, deleteBudget, getBudgets }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+import Button from '../../../components/Button/Button'
 
 const PayDebt = () => {
 	const { getUserId } = useAuth()
@@ -176,7 +177,7 @@ const PayDebt = () => {
 					></textarea>
 				</div>
 				{error && <p className="error-msg transaction__error-msg">{error}</p>}
-				<button type="submit">Create new payment</button>
+				<Button type="submit">Create new payment</Button>
 			</form>
 		</main>
 	)

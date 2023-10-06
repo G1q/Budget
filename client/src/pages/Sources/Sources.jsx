@@ -3,13 +3,17 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+// TODO: import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import Button from '../../components/Button/Button'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
 const Sources = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [sources, setSources] = useState([])
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [error, setError] = useState(null)
+	const [success, setSuccess] = useState(null)
 
 	const navigate = useNavigate()
 
@@ -31,11 +35,8 @@ const Sources = () => {
 
 		if (confirmDelete) {
 			try {
-				const source = await axiosInstance.get(`incomes/source/view/${id}`)
-
-				// Delete source
-				await axiosInstance.delete(`incomes/source/${id}`)
-
+				const response = await axiosInstance.delete(`incomes/source/${id}`)
+				setSuccess(response.data.message)
 				// Refresh sources list
 				getSources()
 			} catch (error) {
@@ -55,8 +56,8 @@ const Sources = () => {
 			await axiosInstance.post('incomes/source', source)
 			getSources()
 			setError(null)
-			clearForm()
-			navigate('/sources')
+			closeDialog()
+			navigate('/user/sources')
 		} catch (error) {
 			setError(error.message)
 		}
@@ -66,13 +67,13 @@ const Sources = () => {
 		<main>
 			<h1>Sources</h1>
 			<div className="buttons-group">
-				<button
-					className="create-btn popup-btn"
+				<Button
+					className="popup-btn"
 					id="create-source__btn"
 					onClick={openDialog}
 				>
 					Create new source
-				</button>
+				</Button>
 			</div>
 
 			<dialog
@@ -97,12 +98,23 @@ const Sources = () => {
 						id="title"
 						onChange={(e) => setSourceTitle(e.target.value)}
 					/>
-					<button>Create source</button>
+					<Button type="submit">Create source</Button>
 					<p className="error-msg">{error}</p>
 				</form>
 			</dialog>
 
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
+				/>
+			)}
 			{sources.length > 0 ? (
 				<table>
 					<thead>
@@ -119,7 +131,7 @@ const Sources = () => {
 								<td>
 									<Link
 										className="edit-btn"
-										to={`/sources/edit/${source._id}`}
+										to={`/user/sources/edit/${source._id}`}
 									>
 										Edit
 									</Link>

@@ -1,62 +1,48 @@
-import './EditExpense.css'
-import { useEffect, useState } from 'react'
+// Import dependencies
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '../../../utilities/axiosconfig'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
+import Button from '../../../components/Button/Button'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchBudgets, fetchCategories, getExpense, getSubcategories } from '../../../utilities/fetchData'
+
+// Import styling
+import './EditExpense.css'
 
 const EditExpense = () => {
 	const { getUserId } = useAuth()
 	const { id } = useParams()
+
 	const [budgets, setBudgets] = useState([])
 	const [expense, setExpense] = useState('')
-	const [error, setError] = useState('')
 	const [initialExpense, setInitialExpense] = useState('')
 	const [categories, setCategories] = useState([])
 	const [subcategories, setSubcategories] = useState([])
 
+	const [error, setError] = useState(null)
+
 	const navigate = useNavigate()
 
-	const getExpense = async () => {
-		try {
-			const response = await axiosInstance.get(`expenses/view/${id}`)
-			setExpense(response.data)
-			setInitialExpense(response.data)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getCategories = async () => {
-		try {
-			const response = await axiosInstance.get(`/categories//${getUserId()}`)
-			setCategories([...new Set(response.data.map((cat) => cat.title))])
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getSubCategories = async (currentCategory) => {
-		try {
-			const response = await axiosInstance.get(`/categories/${getUserId()}`)
-			setSubcategories([...new Set(response.data.filter((cat) => cat.title === currentCategory).map((cat) => cat.subcategory))])
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
 	useEffect(() => {
-		getExpense()
-		getBudgets()
-		getCategories()
+		getExpense(id)
+			.then((responseData) => {
+				setExpense(responseData)
+				setInitialExpense(responseData)
+			})
+			.catch((error) => setError(error.response.data.message))
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
+		fetchCategories(getUserId())
+			.then((responseData) => setCategories(responseData))
+			.catch((error) => setError(error.response.data.message))
+		getSubcategories(expense.category, getUserId())
+			.then((responseData) => setSubcategories(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -163,7 +149,9 @@ const EditExpense = () => {
 									...prev,
 									[e.target.name]: e.target.value,
 								}))
-								getSubCategories(e.target.value)
+								getSubcategories(e.target.value, getUserId())
+									.then((responseData) => setSubcategories(responseData))
+									.catch((error) => setError(error.response.data.message))
 							}}
 							required
 							value={expense.category}
@@ -188,34 +176,30 @@ const EditExpense = () => {
 					)}
 				</div>
 
-				{subcategories.length > 0 ? (
-					<div className="form-group">
-						<label htmlFor="subcategory">Subcategory</label>
-						<select
-							name="subcategory"
-							id="subcategory"
-							onChange={handleChange}
-							value={expense.subcategory}
+				<div className="form-group">
+					<label htmlFor="subcategory">Subcategory</label>
+					<select
+						name="subcategory"
+						id="subcategory"
+						onChange={handleChange}
+						value={expense.subcategory}
+					>
+						<option
+							value=""
+							hidden
 						>
+							Select subcategory..
+						</option>
+						{subcategories.map((subcategory) => (
 							<option
-								value=""
-								hidden
+								key={subcategory}
+								value={subcategory}
 							>
-								Select subcategory..
+								{subcategory}
 							</option>
-							{subcategories.map((subcategory) => (
-								<option
-									key={subcategory}
-									value={subcategory}
-								>
-									{subcategory}
-								</option>
-							))}
-						</select>
-					</div>
-				) : (
-					''
-				)}
+						))}
+					</select>
+				</div>
 
 				<div className="form-group">
 					<label htmlFor="description">Description</label>
@@ -228,7 +212,7 @@ const EditExpense = () => {
 						value={expense.description}
 					></textarea>
 				</div>
-				<button type="submit">Edit expense</button>
+				<Button type="submit">Edit expense</Button>
 			</form>
 		</main>
 	)

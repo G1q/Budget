@@ -3,6 +3,7 @@ import './Users.css'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../../contexts/AuthContext'
 import axiosInstance from '../../../utilities/axiosconfig'
+import ButtonLink from '../../../components/ButtonLink/ButtonLink'
 
 const Users = () => {
 	const { getUserRole } = useAuth()
@@ -36,12 +37,7 @@ const Users = () => {
 		<main className="admin-page">
 			<h1 className="admin-page__main-title">Users</h1>
 
-			<Link
-				to="/admin/users/create"
-				className="admin-page__create-btn"
-			>
-				Add new user
-			</Link>
+			<ButtonLink to="/admin/users/create">Add new user</ButtonLink>
 
 			<table className="admin-page__table">
 				<thead>

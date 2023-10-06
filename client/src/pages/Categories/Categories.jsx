@@ -3,7 +3,9 @@ import './Categories.css'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+// TODO: import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import Button from '../../components/Button/Button'
 
 const Categories = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -52,7 +54,7 @@ const Categories = () => {
 			console.log(response)
 			if (response.status === 201) {
 				setError('')
-				clearForm()
+				closeDialog()
 				navigate(0)
 			} else {
 				setError(response.data.error || 'Registration failed')
@@ -66,13 +68,13 @@ const Categories = () => {
 		<main>
 			<h1>Categories</h1>
 			<div className="buttons-group">
-				<button
-					className="create-btn popup-btn"
+				<Button
+					className="popup-btn"
 					id="create-category__btn"
 					onClick={openDialog}
 				>
 					Create new category
-				</button>
+				</Button>
 			</div>
 
 			<dialog
@@ -105,7 +107,7 @@ const Categories = () => {
 						id="subcategory"
 						onChange={(e) => setSubcategoryTitle(e.target.value)}
 					/>
-					<button>Create category</button>
+					<Button type="submit">Create category</Button>
 					<p className="error-msg">{error}</p>
 				</form>
 			</dialog>

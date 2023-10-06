@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react'
-import './EditBudget.css'
+// Import dependencies
 import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+
+// Import custom elements
+import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+import CurrencySelect from '../../../components/CurrencySelect/CurrencySelect'
+
+// Import utilities
 import axiosInstance from '../../../utilities/axiosconfig'
+
+// Import styling
+import './EditBudget.css'
+import { getBudget } from '../../../utilities/fetchData'
 
 const EditBudget = () => {
 	const { id } = useParams()
 	const [budget, setBudget] = useState('')
-	const [budgetTitle, setBudgetTitle] = useState('')
-	const [error, setError] = useState('')
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getBudget = async () => {
-		try {
-			const response = await axiosInstance.get(`budgets/view/${id}`)
-			setBudget(response.data)
-			setBudgetTitle(response.data.title)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
 	useEffect(() => {
-		getBudget()
+		getBudget(id)
+			.then((responseData) => setBudget(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -36,20 +38,21 @@ const EditBudget = () => {
 		e.preventDefault()
 		try {
 			const response = await axiosInstance.put(`budgets/${id}`, budget)
-			if (response.status === 200) {
-				navigate('/budgets')
-			} else {
-				setError(response.data.error || 'Update failed')
-			}
+			navigate('/budgets')
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return (
 		<main>
-			<h1>Edit budget {budgetTitle}</h1>
-			{error && <p className="error-message">{error}</p>}
+			<h1>Edit budget</h1>
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="title">Title</label>
@@ -103,27 +106,10 @@ const EditBudget = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="currency">Currency</label>
-					<select
-						name="currency"
-						id="currency"
+					<CurrencySelect
 						value={budget.currency}
 						onChange={handleChange}
-					>
-						<option value="RON">RON</option>
-						<option
-							value="EUR"
-							disabled
-						>
-							EUR
-						</option>
-						<option
-							value="USD"
-							disabled
-						>
-							USD
-						</option>
-					</select>
+					/>
 				</div>
 
 				<div className="form-group">
@@ -137,7 +123,8 @@ const EditBudget = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Edit budget</button>
+
+				<Button type="submit">Edit budget</Button>
 			</form>
 		</main>
 	)

@@ -1,13 +1,23 @@
-import './CreateBudget.css'
+// Import dependencies
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import axiosInstance from '../../../utilities/axiosconfig'
+import { useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom elements
+import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+import CurrencySelect from '../../../components/CurrencySelect/CurrencySelect'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+
+// Import styling
+import './CreateBudget.css'
 
 const CreateBudget = () => {
 	const { getUserId } = useAuth()
-	const [error, setError] = useState('')
 	const [inputs, setInputs] = useState({ user: getUserId() })
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
@@ -21,21 +31,17 @@ const CreateBudget = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axiosInstance.post('budgets', inputs)
-			if (response.status === 201) {
-				navigate('/budgets')
-			} else {
-				setError(response.data.error || 'Registration failed')
-			}
+			await axiosInstance.post('budgets', inputs)
+			navigate('/budgets')
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return (
 		<main>
 			<h1>Create new budget</h1>
-			{error && <p className="error-message">{error}</p>}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="title">Title</label>
@@ -72,26 +78,7 @@ const CreateBudget = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="currency">Currency</label>
-					<select
-						name="currency"
-						id="currency"
-						onChange={handleChange}
-					>
-						<option value="RON">RON</option>
-						<option
-							value="EUR"
-							disabled
-						>
-							EUR
-						</option>
-						<option
-							value="USD"
-							disabled
-						>
-							USD
-						</option>
-					</select>
+					<CurrencySelect />
 				</div>
 
 				<div className="form-group">
@@ -104,7 +91,13 @@ const CreateBudget = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<button type="submit">Create budget</button>
+				{error && (
+					<StatusMessage
+						type="error"
+						message={error}
+					/>
+				)}
+				<Button type="submit">Create budget</Button>
 			</form>
 		</main>
 	)
