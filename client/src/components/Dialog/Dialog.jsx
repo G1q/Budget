@@ -1,6 +1,18 @@
 import './Dialog.css'
 import Button from '../Button/Button'
 
+export const openDialog = () => {
+	const dialogContainer = document.querySelector('.popup-dialog')
+	dialogContainer.showModal()
+}
+
+export const closeDialog = () => {
+	const dialogContainer = document.querySelector('.popup-dialog')
+	const form = document.querySelector('.popup-dialog__form')
+	form.reset()
+	dialogContainer.close()
+}
+
 const Dialog = ({ title, textButton, onClick, onSubmit, children }) => {
 	return (
 		<dialog className="popup-dialog">

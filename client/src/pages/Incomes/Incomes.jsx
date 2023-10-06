@@ -11,11 +11,10 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import EditButton from '../../components/EditButton/EditButton'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
-import Dialog from '../../components/Dialog/Dialog'
+import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, closeDialog } from '../../utilities/popup'
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { fetchIncomes } from '../../utilities/fetchData'

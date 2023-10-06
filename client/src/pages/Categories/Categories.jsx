@@ -3,7 +3,8 @@ import './Categories.css'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, closeDialog } from '../../utilities/popup'
+// TODO: import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import { openDialog, closeDialog } from '../../components/Dialog/Dialog'
 import Button from '../../components/Button/Button'
 
 const Categories = () => {
