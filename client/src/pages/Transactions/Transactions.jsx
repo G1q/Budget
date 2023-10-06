@@ -6,7 +6,8 @@ import { useAuth } from '../../contexts/AuthContext'
 // Import custom components
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
-import Button from '../../components/Button/Button'
+import DataTable from '../../components/DataTable/DataTable'
+import Pagination from '../../components/Pagination/Pagination'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
@@ -15,7 +16,6 @@ import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 
 // Import styling
 import './Transactions.css'
-import DataTable from '../../components/DataTable/DataTable'
 
 const ITEMS_PER_PAGE = 10
 
@@ -76,13 +76,14 @@ const Transactions = () => {
 							))}
 					</DataTable>
 
-					<div>
-						{startItem > 0 && <Button onClick={handlePrevButton}>Prev</Button>}
-						{endItem < transactions.length && <Button onClick={handleNextButton}>Next</Button>}
-						<p>
-							{Math.ceil(endItem / ITEMS_PER_PAGE)} / {Math.ceil(transactions.length / ITEMS_PER_PAGE)} pages
-						</p>
-					</div>
+					<Pagination
+						startIndex={startItem}
+						endIndex={endItem}
+						dataArray={transactions}
+						numberOfItemsPerPage={ITEMS_PER_PAGE}
+						onClickNext={handleNextButton}
+						onClickPrev={handlePrevButton}
+					/>
 				</>
 			) : (
 				<p>You don't have any transactions!</p>

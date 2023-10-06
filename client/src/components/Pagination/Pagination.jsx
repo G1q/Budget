@@ -1,29 +1,54 @@
 import './Pagination.css'
 import Button from '../Button/Button'
 
-const Pagination = ({ items = 10, startItem = 0, endItem = 10, dataArray = [] }) => {
-	const [startItem, setStartItem] = useState(0)
-	const [endItem, setEndItem] = useState(items)
-
-	const handlePrevButton = () => {
-		setStartItem((prev) => prev - items)
-		setEndItem((prev) => prev - items)
-	}
-
-	const handleNextButton = () => {
-		setStartItem((prev) => prev + items)
-		setEndItem((prev) => prev + items)
-	}
-
+const Pagination = ({ startIndex, endIndex, dataArray, numberOfItemsPerPage, onClickPrev, onClickNext }) => {
 	return (
-		<div>
-			{startItem > 0 && <Button onClick={handlePrevButton}>Prev</Button>}
-			{endItem < dataArray.length && <Button onClick={handleNextButton}>Next</Button>}
+		<div className="pagination">
+			{startIndex > 0 && <Button onClick={onClickPrev}>Prev</Button>}
+			{endIndex < dataArray.length && <Button onClick={onClickNext}>Next</Button>}
 			<p>
-				{Math.ceil(endItem / items)} / {Math.ceil(dataArray.length / items)} pages
+				{Math.ceil(endIndex / numberOfItemsPerPage)} / {Math.ceil(dataArray.length / numberOfItemsPerPage)} pages
 			</p>
 		</div>
 	)
 }
 
 export default Pagination
+
+/* How to implement:
+	1. import useState, useEffect from React and Pagination element to your page
+
+	2. Set const ITEMS_PER_PAGE = number of elements you want to display
+
+	3. Set default values: 	
+		const [startItem, setStartItem] = useState(0)
+		const [endItem, setEndItem] = useState(ITEMS_PER_PAGE)
+
+	4. Put code below in your useEffect hook (only if you have SelectInterval component in page)
+		setStartItem(0)
+		setEndItem(ITEMS_PER_PAGE)
+
+	5. Add handle functions for buttons: 
+		const handleNextButton = () => {
+			setStartItem((prev) => prev + ITEMS_PER_PAGE)
+			setEndItem((prev) => prev + ITEMS_PER_PAGE)
+		}
+
+		const handlePrevButton = () => {
+			setStartItem((prev) => prev - ITEMS_PER_PAGE)
+			setEndItem((prev) => prev - ITEMS_PER_PAGE)
+		}
+
+	6. Use slice inside your table data array you want to show ITEMS_PER_PAGE elements:
+		.slice(startItem, endItem)
+		
+	7. Add element to your page:
+		<Pagination
+			startIndex={startItem}
+			endIndex={endItem}
+			dataArray={array} 
+			numberOfItemsPerPage={ITEMS_PER_PAGE}
+			onClickNext={handleNextButton}
+			onClickPrev={handlePrevButton}
+		/>
+*/
