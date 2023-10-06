@@ -1,27 +1,30 @@
-import './CreateDebt.css'
+// Import dependencies
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+import CurrencySelect from '../../../components/CurrencySelect/CurrencySelect'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchSources } from '../../../utilities/fetchData'
+
+// Import styling
+import './CreateDebt.css'
 
 const CreateDebt = () => {
 	const { getUserId } = useAuth()
-	const [error, setError] = useState(null)
-	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [sources, setSources] = useState([])
-
-	const getSources = async () => {
-		try {
-			const response = await axiosInstance(`/incomes/source/${getUserId()}`)
-			setSources(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
+	const [inputs, setInputs] = useState({ user: getUserId() })
+	const [error, setError] = useState(null)
 
 	useEffect(() => {
-		getSources()
+		fetchSources(getUserId())
+			.then((responseData) => setSources(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const navigate = useNavigate()
@@ -47,7 +50,7 @@ const CreateDebt = () => {
 	return (
 		<main>
 			<h1>Create new debt</h1>
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="date">Date</label>
@@ -85,7 +88,7 @@ const CreateDebt = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/incomes">Create your first source!</Link>
+						<Link to="/user/sources">Create your first source!</Link>
 					)}
 					<p className="input__info">
 						If you want to create new creditors in the future, you can do that from Profile &gt; <Link to="/user/sources">Sources</Link>
@@ -105,16 +108,7 @@ const CreateDebt = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="currency">Currency</label>
-					<select
-						name="currency"
-						id="currency"
-					>
-						<option value="RON">RON</option>
-						<option value="EUR">EUR</option>
-						<option value="USD">USD</option>
-						<option value="GBP">GBP</option>
-					</select>
+					<CurrencySelect />
 				</div>
 
 				<div className="form-group">
@@ -127,6 +121,12 @@ const CreateDebt = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
+				{error && (
+					<StatusMessage
+						type="error"
+						message={error}
+					/>
+				)}
 				<Button type="submit">Create debt</Button>
 			</form>
 		</main>

@@ -11,6 +11,7 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import EditButton from '../../components/EditButton/EditButton'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
+import Dialog from '../../components/Dialog/Dialog'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
@@ -21,7 +22,6 @@ import { fetchIncomes } from '../../utilities/fetchData'
 
 // Import styling
 import './Incomes.css'
-import Dialog from '../../components/Dialog/Dialog'
 
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()

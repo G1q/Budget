@@ -15,6 +15,20 @@ const SUCCESS_MESSAGES = {
 		message: 'Income source deleted successfully!',
 		statusCode: 200,
 	},
+	DEBT: {
+		REGISTERED: {
+			message: 'Debt registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'Debt updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'Debt deleted successfully!',
+			statusCode: 200,
+		},
+	},
 }
 
 module.exports = { SUCCESS_MESSAGES }

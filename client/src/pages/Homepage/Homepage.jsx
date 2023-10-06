@@ -30,25 +30,27 @@ const Homepage = () => {
 	const transactionsParams = { startDate: '1970-01-01', endDate: new Date() }
 
 	useEffect(() => {
-		fetchBudgets(getUserId())
-			.then((responseData) => setBudgets(responseData))
-			.catch((error) => setError(error.response.data.message))
+		if (isLoggedIn()) {
+			fetchBudgets(getUserId())
+				.then((responseData) => setBudgets(responseData))
+				.catch((error) => setError(error.response.data.message))
 
-		fetchDebts(getUserId())
-			.then((responseData) => setDebts(responseData))
-			.catch((error) => setError(error.response.data.message))
+			fetchDebts(getUserId())
+				.then((responseData) => setDebts(responseData))
+				.catch((error) => setError(error.response.data.message))
 
-		fetchTransactions(getUserId(), transactionsParams)
-			.then((responseData) => setTransactions(responseData))
-			.catch((error) => setError(error.response.data.message))
+			fetchTransactions(getUserId(), transactionsParams)
+				.then((responseData) => setTransactions(responseData))
+				.catch((error) => setError(error.response.data.message))
 
-		fetchExpenses(getUserId(), dateInterval)
-			.then((responseData) => setExpenses(responseData))
-			.catch((error) => setError(error.response.data.message))
+			fetchExpenses(getUserId(), dateInterval)
+				.then((responseData) => setExpenses(responseData))
+				.catch((error) => setError(error.response.data.message))
 
-		fetchIncomes(getUserId(), dateInterval)
-			.then((responseData) => setIncomes(responseData))
-			.catch((error) => setError(error.response.data.message))
+			fetchIncomes(getUserId(), dateInterval)
+				.then((responseData) => setIncomes(responseData))
+				.catch((error) => setError(error.response.data.message))
+		}
 	}, [dateInterval])
 
 	const totalAmount = () => {

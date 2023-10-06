@@ -1,40 +1,35 @@
-import './EditDebt.css'
-import { useEffect, useState } from 'react'
+// Import dependencies
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '../../../utilities/axiosconfig'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchSources, getDebt } from '../../../utilities/fetchData'
+
+// Import styling
+import './EditDebt.css'
 
 const EditDebt = () => {
 	const { getUserId } = useAuth()
 	const { id } = useParams()
-	const [sources, setSources] = useState([])
 	const [debt, setDebt] = useState('')
-	const [error, setError] = useState('')
+	const [sources, setSources] = useState([])
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getSources = async () => {
-		try {
-			const response = await axiosInstance(`/incomes/source/${getUserId()}`)
-			setSources(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const getDebt = async () => {
-		try {
-			const response = await axiosInstance(`/debts/view/${id}`)
-			setDebt(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
 	useEffect(() => {
-		getSources()
-		getDebt()
+		fetchSources(getUserId())
+			.then((responseData) => setSources(responseData))
+			.catch((error) => setError(error.response.data.message))
+		getDebt(id)
+			.then((responseData) => setDebt(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -50,14 +45,19 @@ const EditDebt = () => {
 			await axiosInstance.put(`debts/${id}`, debt)
 			navigate('/debts')
 		} catch (error) {
-			setError(error.message)
+			setError(error.response.data.message)
 		}
 	}
 
 	return (
 		<main>
 			<h1>Edit debt</h1>
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="creditor">Creditor</label>
@@ -85,7 +85,7 @@ const EditDebt = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/incomes">Create your first source!</Link>
+						<Link to="/user/sources">Create your first source!</Link>
 					)}
 				</div>
 

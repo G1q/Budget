@@ -31,6 +31,14 @@ const ERROR_MESSAGES = {
 		message: "You can't delete this source because have transactions on it!",
 		statusCode: 403,
 	},
+	NO_CREDITOR_FOUND: {
+		message: 'No creditor with this id!',
+		statusCode: 404,
+	},
+	NO_DEBT_FOUND: {
+		message: 'No debt found with this id!',
+		statusCode: 404,
+	},
 }
 
 module.exports = { ERROR_MESSAGES }

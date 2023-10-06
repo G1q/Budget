@@ -106,7 +106,7 @@ const Categories = () => {
 						id="subcategory"
 						onChange={(e) => setSubcategoryTitle(e.target.value)}
 					/>
-					<button>Create category</button>
+					<Button type="submit">Create category</Button>
 					<p className="error-msg">{error}</p>
 				</form>
 			</dialog>

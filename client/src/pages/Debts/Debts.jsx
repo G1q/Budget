@@ -1,43 +1,53 @@
-import './Debts.css'
-import { Link, Navigate } from 'react-router-dom'
+// Import dependencies
 import { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
-import axiosInstance from '../../utilities/axiosconfig'
-import { formatDate } from '../../utilities/formatDates'
-import { amountWithDecimals } from '../../utilities/format'
+
+// Import custom components
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import { amountWithDecimals, formatDate } from '../../utilities/format'
+import axiosInstance from '../../utilities/axiosconfig'
+import { fetchDebts } from '../../utilities/fetchData'
+
+// Import styling
+import './Debts.css'
+import EditButton from '../../components/EditButton/EditButton'
+import DeleteButton from '../../components/DeleteButton/DeleteButton'
+import DataTable from '../../components/DataTable/DataTable'
 
 const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [debts, setDebts] = useState([])
 	const [error, setError] = useState(null)
+	const [success, setSuccess] = useState(null)
 	const [activeDebts, setActiveDebts] = useState(true)
 
-	const getDebts = async () => {
-		try {
-			const response = await axiosInstance(`debts/${getUserId()}`)
-			setDebts(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
 	useEffect(() => {
-		getDebts()
+		fetchDebts(getUserId())
+			.then((responseData) => setDebts(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [activeDebts])
 
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this debt?')
+		const confirmDelete = window.confirm('Are you sure you want to delete this debt?')
 
 		if (confirmDelete) {
 			try {
 				// Delete debt
-				await axiosInstance.delete(`debts/${id}`)
+				const response = await axiosInstance.delete(`debts/${id}`)
+				setError(null)
+				setSuccess(response.data.message)
 
 				// Refresh debts list
-				getDebts()
+				fetchDebts(getUserId())
+					.then((responseData) => setDebts(responseData))
+					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
-				setError(error.message)
+				setSuccess(null)
+				setError(error.response.data.message)
 			}
 		}
 	}
@@ -50,61 +60,51 @@ const Debts = () => {
 					<ButtonLink to="./create">Create new debt</ButtonLink>
 				</div>
 
-				<div className="buttons-group__checkbox">
-					<label htmlFor="activeDebts">View inactive debts</label>
-					<input
-						type="checkbox"
-						name="activeDebts"
-						id="activeDebts"
-						onChange={() => setActiveDebts(!activeDebts)}
-					/>
-				</div>
+				{debts.length > 0 && (
+					<div className="buttons-group__checkbox">
+						<label htmlFor="activeDebts">View inactive debts</label>
+						<input
+							type="checkbox"
+							name="activeDebts"
+							id="activeDebts"
+							onChange={() => setActiveDebts(!activeDebts)}
+						/>
+					</div>
+				)}
 			</div>
 
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
+				/>
+			)}
 			{debts.length > 0 ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Creditor</th>
-							<th>Start amount</th>
-							<th>Current amount</th>
-							<th>Active</th>
-							<th>Edit debt</th>
-							<th>Delete debt</th>
-						</tr>
-					</thead>
-					<tbody>
-						{debts
-							.filter((debt) => (activeDebts ? debt.currentAmount > 0 : debt))
-							.map((debt) => (
-								<tr key={debt._id}>
-									<td>{formatDate(new Date(debt.date))}</td>
-									<td>{debt.creditor.title}</td>
-									<td>{debt.startAmount > 0 ? `-${amountWithDecimals(debt.startAmount, debt.currency)}` : 0}</td>
-									<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
-									<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
-									<td>
-										<Link
-											className="edit-btn"
-											to={`/debts/edit/${debt._id}`}
-										>
-											Edit
-										</Link>
-									</td>
-									<td>
-										<button
-											className="delete-btn"
-											onClick={() => handleDelete(debt._id)}
-										>
-											&times;
-										</button>
-									</td>
-								</tr>
-							))}
-					</tbody>
-				</table>
+				<DataTable cols={['Date', 'Creditor', 'Start amount', 'Current amount', 'Active', 'Edit debt', 'Delete debt']}>
+					{debts
+						.filter((debt) => (activeDebts ? debt.currentAmount > 0 : debt))
+						.map((debt) => (
+							<tr key={debt._id}>
+								<td>{formatDate(new Date(debt.date))}</td>
+								<td>{debt.creditor.title}</td>
+								<td>{debt.startAmount > 0 ? `-${amountWithDecimals(debt.startAmount, debt.currency)}` : 0}</td>
+								<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
+								<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
+								<td>
+									<EditButton to={`/debts/edit/${debt._id}`} />
+								</td>
+								<td>
+									<DeleteButton onClick={() => handleDelete(debt._id)} />
+								</td>
+							</tr>
+						))}
+				</DataTable>
 			) : (
 				<p>You don't have any debts!</p>
 			)}

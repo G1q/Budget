@@ -119,8 +119,7 @@ const Expenses = () => {
 				<div className="buttons-group">
 					<ButtonLink to="./create">Create expense</ButtonLink>
 					<ButtonLink to="/user/categories">Create new category</ButtonLink>
-
-					{debts.length > 0 && <ButtonLink to="./paydebt">Pay debt</ButtonLink>}
+					{debts.length > 0 && <ButtonLink>Pay debt (disabled)</ButtonLink>} {/* to="./paydebt" */}
 				</div>
 
 				<SelectInterval

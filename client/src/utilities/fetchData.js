@@ -46,3 +46,21 @@ export const fetchTransactions = async (id, params = {}) => {
 		throw error
 	}
 }
+
+export const fetchSources = async (id) => {
+	try {
+		const response = await axiosInstance(`/incomes/source/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
+export const getDebt = async (id) => {
+	try {
+		const response = await axiosInstance(`/debts/view/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}

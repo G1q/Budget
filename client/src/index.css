@@ -103,7 +103,11 @@ textarea {
 }
 
 .buttons-group__checkbox {
-	display: flex;
+	display: grid;
+	grid-template-columns: auto 1fr;
 	align-items: center;
-	width: max-content;
+}
+
+.buttons-group__checkbox label {
+	margin: 0;
 }

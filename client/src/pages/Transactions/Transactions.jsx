@@ -31,6 +31,8 @@ const Transactions = () => {
 		fetchTransactions(getUserId(), dateInterval)
 			.then((responseData) => setTransactions(responseData))
 			.catch((error) => setError(error.response.data.message))
+		setStartItem(0)
+		setEndItem(ITEMS_PER_PAGE)
 	}, [dateInterval])
 
 	const handleNextButton = () => {

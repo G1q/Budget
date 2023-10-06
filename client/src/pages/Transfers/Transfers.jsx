@@ -83,7 +83,7 @@ const Transfers = () => {
 								<td>
 									<Link
 										className="edit-btn"
-										to={`/transfers/edit/${transfer._id}`}
+										to={`/user/transfers/edit/${transfer._id}`}
 									>
 										Edit
 									</Link>
