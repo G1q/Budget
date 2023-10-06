@@ -1,11 +1,10 @@
-import { useState } from 'react'
 import { formatInputDate } from '../../utilities/format'
 
 const SelectInterval = ({ onChange, label, showCustom }) => {
 	return (
 		<div
 			className="select__interval"
-			style={{ display: 'grid', alignItems: 'center', gridTemplateColumns: 'auto 1fr', gap: '.5rem' }}
+			style={{ display: 'grid', alignItems: 'center', gridTemplateColumns: 'auto 1fr', gap: '.5rem', marginBlock: '.5rem' }}
 		>
 			<label htmlFor="selectInterval">{label}</label>
 			<select

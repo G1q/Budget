@@ -48,11 +48,10 @@ const Transactions = () => {
 	return isLoggedIn() ? (
 		<main>
 			<h1>Transactions</h1>
-			<div className="header__actions">
-				<div className="buttons-group">
-					<ButtonLink to="./create">Create transaction</ButtonLink>
-				</div>
-
+			<div
+				className="header__actions"
+				style={{ display: 'flex', justifyContent: 'flex-end' }}
+			>
 				<SelectInterval onChange={(e) => setDateInterval(handleSelectIntervalChange(e))} />
 			</div>
 

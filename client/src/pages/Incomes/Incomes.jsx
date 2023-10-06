@@ -26,10 +26,10 @@ import './Incomes.css'
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [incomes, setIncomes] = useState([])
+	const [inputs, setInputs] = useState('')
+	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
-	const [sourceTitle, setSourceTitle] = useState('')
-	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 
 	const navigate = useNavigate()
 
@@ -71,6 +71,7 @@ const Incomes = () => {
 					.then((responseData) => setIncomes(responseData))
 					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
+				setSuccess(null)
 				setError(error.response.data.message)
 			}
 		}
@@ -78,12 +79,8 @@ const Incomes = () => {
 
 	const handleCreateSource = async (e) => {
 		e.preventDefault()
-		const source = {
-			title: sourceTitle,
-			user: getUserId(),
-		}
 		try {
-			const response = await axiosInstance.post('incomes/source', source)
+			const response = await axiosInstance.post('incomes/source', { title: inputs, user: getUserId() })
 			clearForm()
 			setError(null)
 			setSuccess(response.data.message)
@@ -126,7 +123,7 @@ const Incomes = () => {
 					type="text"
 					name="title"
 					id="title"
-					onChange={(e) => setSourceTitle(e.target.value)}
+					onChange={(e) => setInputs(e.target.value)}
 				/>
 				{error && (
 					<StatusMessage

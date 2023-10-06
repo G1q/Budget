@@ -31,14 +31,10 @@ const CreateBudget = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axiosInstance.post('budgets', inputs)
-			if (response.status === 201) {
-				navigate('/budgets')
-			} else {
-				setError(response.data.error || 'Registration failed')
-			}
+			await axiosInstance.post('budgets', inputs)
+			navigate('/budgets')
 		} catch (error) {
-			setError(error.response.data.error)
+			setError(error.response.data.message)
 		}
 	}
 
