@@ -39,6 +39,10 @@ const ERROR_MESSAGES = {
 		message: 'No debt found with this id!',
 		statusCode: 404,
 	},
+	NO_INCOME_FOUND: {
+		message: 'No income found with this id!',
+		statusCode: 404,
+	},
 }
 
 module.exports = { ERROR_MESSAGES }

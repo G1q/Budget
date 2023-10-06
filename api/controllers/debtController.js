@@ -1,8 +1,8 @@
 const Debt = require('../models/Debt')
 const User = require('../models/User')
 const IncomeSource = require('../models/IncomeSource')
-const { ERROR_MESSAGES } = require('../messages/errors')
-const { SUCCESS_MESSAGES } = require('../messages/succes')
+const { ERROR_MESSAGES } = require('../messages/errors.js')
+const { SUCCESS_MESSAGES } = require('../messages/success.js')
 
 const createDebt = async (req, res) => {
 	const { user, date, startAmount, creditor, description, currency } = req.body

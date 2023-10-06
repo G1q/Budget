@@ -73,3 +73,12 @@ export const getBudget = async (id) => {
 		throw error
 	}
 }
+
+export const getIncome = async (id) => {
+	try {
+		const response = await axiosInstance.get(`incomes/view/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}

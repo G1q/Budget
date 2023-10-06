@@ -3,7 +3,7 @@ const User = require('../models/User')
 const Income = require('../models/Income')
 const Debt = require('../models/Debt')
 const { ERROR_MESSAGES } = require('../messages/errors.js')
-const { SUCCESS_MESSAGES } = require('../messages/succes.js')
+const { SUCCESS_MESSAGES } = require('../messages/success.js')
 
 const createSource = async (req, res) => {
 	const { title, user } = req.body

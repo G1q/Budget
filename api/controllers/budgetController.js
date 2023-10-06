@@ -3,7 +3,7 @@ const User = require('../models/User')
 const Income = require('../models/Income')
 const Expense = require('../models/Expense')
 const { ERROR_MESSAGES } = require('../messages/errors.js')
-const { SUCCESS_MESSAGES } = require('../messages/succes.js')
+const { SUCCESS_MESSAGES } = require('../messages/success.js')
 
 const createBudget = async (req, res) => {
 	try {

@@ -13,6 +13,20 @@ const SUCCESS_MESSAGES = {
 			statusCode: 200,
 		},
 	},
+	INCOME: {
+		REGISTERED: {
+			message: 'Income registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'Income updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'Income deleted successfully!',
+			statusCode: 200,
+		},
+	},
 	DEBT: {
 		REGISTERED: {
 			message: 'Debt registered successfully!',
