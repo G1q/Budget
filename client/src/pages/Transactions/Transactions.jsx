@@ -5,9 +5,9 @@ import { useAuth } from '../../contexts/AuthContext'
 
 // Import custom components
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
-import ButtonLink from '../../components/ButtonLink/ButtonLink'
 import DataTable from '../../components/DataTable/DataTable'
 import Pagination from '../../components/Pagination/Pagination'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
@@ -55,7 +55,12 @@ const Transactions = () => {
 				<SelectInterval onChange={(e) => setDateInterval(handleSelectIntervalChange(e))} />
 			</div>
 
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			{transactions.length > 0 ? (
 				<>
 					<DataTable cols={['Date', 'Budget', 'Amount', 'Type']}>

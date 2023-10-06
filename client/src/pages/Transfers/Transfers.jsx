@@ -3,8 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { formatDate } from '../../utilities/formatDates'
-import { amountWithDecimals } from '../../utilities/format'
+import { amountWithDecimals, formatDate } from '../../utilities/format'
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
 
 const Transfers = () => {

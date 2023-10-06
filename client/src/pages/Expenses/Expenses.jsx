@@ -1,47 +1,43 @@
-import './Expenses.css'
-import { Link, Navigate } from 'react-router-dom'
+// Import dependencies
+import { Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import axiosInstance from '../../utilities/axiosconfig'
-import { formatDate } from '../../utilities/formatDates'
-import { amountWithDecimals } from '../../utilities/format'
+
+// Import custom components
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import DataTable from '../../components/DataTable/DataTable'
+import EditButton from '../../components/EditButton/EditButton'
+import DeleteButton from '../../components/DeleteButton/DeleteButton'
+
+// Import utilities
+import axiosInstance from '../../utilities/axiosconfig'
+import { amountWithDecimals, formatDate } from '../../utilities/format'
+import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
+import { fetchDebts, fetchExpenses, fetchIncomes } from '../../utilities/fetchData'
+
+// Import styling
+import './Expenses.css'
 
 const Expenses = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [expenses, setExpenses] = useState([])
 	const [debts, setDebts] = useState([])
-	const [error, setError] = useState(null)
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+	const [error, setError] = useState(null)
 
 	useEffect(() => {
-		getExpenses()
-		getDebts()
+		fetchExpenses(getUserId(), dateInterval)
+			.then((responseData) => setExpenses(responseData))
+			.catch((error) => setError(error.response.data.message))
+		fetchDebts(getUserId())
+			.then((responseData) => setDebts(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [dateInterval])
 
-	const getExpenses = async () => {
-		try {
-			const response = await axiosInstance.get(`expenses/${getUserId()}`, {
-				params: { startDate: dateInterval.startDate, endDate: dateInterval.endDate },
-			})
-			setExpenses(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
-	const getDebts = async () => {
-		try {
-			const response = await axiosInstance.get(`/debts/${getUserId()}`)
-			setDebts(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this expense? The source budget will credit with expense amount.')
+		const confirmDelete = window.confirm('Are you sure you want to delete this expense? The source budget will credit with expense amount.')
 
 		if (confirmDelete) {
 			try {
@@ -57,59 +53,13 @@ const Expenses = () => {
 				await axiosInstance.delete(`expenses/${id}`)
 
 				// Refresh expenses list
-				getExpenses()
+				fetchExpenses(getUserId(), dateInterval)
+					.then((responseData) => setExpenses(responseData))
+					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
-				setError(error.message)
+				setError(error.response.data.message)
 			}
 		}
-	}
-
-	const handleSelectIntervalChange = (e) => {
-		const getLastDayOfMonth = (date) => {
-			const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth(), 1)
-			const lastDayOfMonth = new Date(nextMonthFirstDay - 1)
-			return lastDayOfMonth
-		}
-
-		let startDate = new Date()
-		startDate.setHours(0, 0, 0, 0)
-		let endDate = new Date()
-		endDate.setHours(23, 59, 59, 0)
-		switch (e.target.value) {
-			case 'all-time':
-				startDate = new Date('1970-01-01')
-				break
-			case 'this-year':
-				startDate.setDate(1)
-				startDate.setMonth(0)
-				break
-			case 'this-month':
-				startDate.setDate(1)
-				break
-			case 'last-month':
-				startDate.setMonth(startDate.getMonth() - 1)
-				startDate.setDate(1)
-				endDate = getLastDayOfMonth(endDate)
-				break
-			case 'today':
-				break
-			case 'yesterday':
-				startDate.setDate(startDate.getDate() - 1)
-				endDate.setDate(endDate.getDate() - 1)
-				break
-			case 'custom':
-				startDate = new Date('1970-01-01')
-				endDate = new Date()
-				break
-			default:
-				startDate = new Date('1970-01-01')
-				endDate = new Date()
-		}
-
-		setDateInterval({
-			startDate,
-			endDate,
-		})
 	}
 
 	return isLoggedIn() ? (
@@ -123,57 +73,35 @@ const Expenses = () => {
 				</div>
 
 				<SelectInterval
-					onChange={handleSelectIntervalChange}
+					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
 					label="Select date"
 				/>
 			</div>
 
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			{expenses.length > 0 ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Budget</th>
-							<th>Amount</th>
-							<th>Category</th>
-							<th>Subcategory</th>
-							<th>Edit expense</th>
-							<th>Delete expense</th>
+				<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit expense', 'Delete expense']}>
+					{expenses.map((expense) => (
+						<tr key={expense._id}>
+							<td>{formatDate(new Date(expense.date))}</td>
+							<td>{expense.budget.title}</td>
+							<td>{amountWithDecimals(expense.amount, expense.currency)}</td>
+							<td>{expense.category}</td>
+							<td>{expense.subcategory}</td>
+							<td>
+								<EditButton to={`/expenses/edit/${expense._id}`} />
+							</td>
+							<td>
+								<DeleteButton onClick={() => handleDelete(expense._id)} />
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{expenses.map((expense) => (
-							<tr key={expense._id}>
-								<td>{formatDate(new Date(expense.date))}</td>
-								<td>{expense.budget.title}</td>
-								<td>{amountWithDecimals(expense.amount, expense.currency)}</td>
-								<td>{expense.category}</td>
-								<td>{expense.subcategory}</td>
-								<td>
-									{expense.category !== 'Debt' ? (
-										<Link
-											className="edit-btn"
-											to={`/expenses/edit/${expense._id}`}
-										>
-											Edit
-										</Link>
-									) : (
-										'-'
-									)}
-								</td>
-								<td>
-									<button
-										className="delete-btn"
-										onClick={() => handleDelete(expense._id)}
-									>
-										&times;
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+					))}
+				</DataTable>
 			) : (
 				<p>You don't have any expenses!</p>
 			)}

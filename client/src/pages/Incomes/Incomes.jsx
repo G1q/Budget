@@ -62,7 +62,7 @@ const Incomes = () => {
 					setSuccess(response.data.message)
 				} catch (error) {
 					setSuccess(null)
-					setError(error.response.data.message)
+					error.response ? setError(error.response.data.message) : setError(error.message)
 				}
 
 				// Refresh incomes list
@@ -71,7 +71,7 @@ const Incomes = () => {
 					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
 				setSuccess(null)
-				setError(error.response.data.message)
+				error.response ? setError(error.response.data.message) : setError(error.message)
 			}
 		}
 	}
@@ -86,7 +86,7 @@ const Incomes = () => {
 			navigate('/incomes')
 		} catch (error) {
 			setSuccess(null)
-			setError(error.response.data.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 

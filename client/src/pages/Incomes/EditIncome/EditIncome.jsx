@@ -81,7 +81,7 @@ const EditIncome = () => {
 				navigate('/incomes')
 			}
 		} catch (error) {
-			setError(error.response.data.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 

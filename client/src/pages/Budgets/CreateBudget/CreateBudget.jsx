@@ -17,7 +17,7 @@ import './CreateBudget.css'
 const CreateBudget = () => {
 	const { getUserId } = useAuth()
 	const [inputs, setInputs] = useState({ user: getUserId() })
-	const [error, setError] = useState('')
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
@@ -34,7 +34,7 @@ const CreateBudget = () => {
 			await axiosInstance.post('budgets', inputs)
 			navigate('/budgets')
 		} catch (error) {
-			setError(error.response.data.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 

@@ -47,6 +47,16 @@ export const fetchTransactions = async (id, params = {}) => {
 	}
 }
 
+export const fetchCategories = async (id) => {
+	// Only unique categories
+	try {
+		const response = await axiosInstance.get(`/categories//${id}`)
+		return [...new Set(response.data.map((cat) => cat.title))]
+	} catch (error) {
+		throw error
+	}
+}
+
 export const fetchSources = async (id) => {
 	try {
 		const response = await axiosInstance(`/incomes/source/${id}`)
@@ -78,6 +88,24 @@ export const getIncome = async (id) => {
 	try {
 		const response = await axiosInstance.get(`incomes/view/${id}`)
 		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
+export const getExpense = async (id) => {
+	try {
+		const response = await axiosInstance.get(`expenses/view/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
+export const getSubcategories = async (category, userId) => {
+	try {
+		const response = await axiosInstance.get(`/categories/${userId}`)
+		return [...new Set(response.data.filter((cat) => cat.title === category).map((cat) => cat.subcategory))]
 	} catch (error) {
 		throw error
 	}

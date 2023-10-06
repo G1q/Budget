@@ -17,7 +17,7 @@ import { getBudget } from '../../../utilities/fetchData'
 const EditBudget = () => {
 	const { id } = useParams()
 	const [budget, setBudget] = useState('')
-	const [error, setError] = useState('')
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
@@ -40,7 +40,7 @@ const EditBudget = () => {
 			const response = await axiosInstance.put(`budgets/${id}`, budget)
 			navigate('/budgets')
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
