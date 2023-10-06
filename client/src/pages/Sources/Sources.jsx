@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import { openDialog, closeDialog } from '../../utilities/popup'
 import Button from '../../components/Button/Button'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
@@ -55,7 +55,7 @@ const Sources = () => {
 			await axiosInstance.post('incomes/source', source)
 			getSources()
 			setError(null)
-			clearForm()
+			closeDialog()
 			navigate('/user/sources')
 		} catch (error) {
 			setError(error.message)

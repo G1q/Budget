@@ -3,7 +3,7 @@ import './Categories.css'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import { openDialog, closeDialog } from '../../utilities/popup'
 import Button from '../../components/Button/Button'
 
 const Categories = () => {
@@ -53,7 +53,7 @@ const Categories = () => {
 			console.log(response)
 			if (response.status === 201) {
 				setError('')
-				clearForm()
+				closeDialog()
 				navigate(0)
 			} else {
 				setError(response.data.error || 'Registration failed')

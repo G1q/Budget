@@ -15,7 +15,7 @@ import Dialog from '../../components/Dialog/Dialog'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
-import { openDialog, clearForm, closeDialog } from '../../utilities/popup'
+import { openDialog, closeDialog } from '../../utilities/popup'
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { fetchIncomes } from '../../utilities/fetchData'
@@ -81,7 +81,7 @@ const Incomes = () => {
 		e.preventDefault()
 		try {
 			const response = await axiosInstance.post('incomes/source', { title: inputs, user: getUserId() })
-			clearForm()
+			closeDialog()
 			setError(null)
 			setSuccess(response.data.message)
 			navigate('/incomes')
