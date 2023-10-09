@@ -25,6 +25,7 @@ const Expenses = () => {
 	const [expenses, setExpenses] = useState([])
 	const [debts, setDebts] = useState([])
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+	const [query, setQuery] = useState('')
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
@@ -34,7 +35,7 @@ const Expenses = () => {
 		fetchDebts(getUserId())
 			.then((responseData) => setDebts(responseData))
 			.catch((error) => setError(error.response.data.message))
-	}, [dateInterval])
+	}, [dateInterval, query])
 
 	const handleDelete = async (id) => {
 		const confirmDelete = window.confirm('Are you sure you want to delete this expense? The source budget will credit with expense amount.')
@@ -77,6 +78,15 @@ const Expenses = () => {
 					label="Select date"
 				/>
 			</div>
+			<div className="filter__wrapper">
+				<input
+					type="search"
+					name=""
+					id=""
+					placeholder="Search terms"
+					onChange={(e) => setQuery(e.target.value.toLowerCase())}
+				/>
+			</div>
 
 			{error && (
 				<StatusMessage
@@ -86,21 +96,25 @@ const Expenses = () => {
 			)}
 			{expenses.length > 0 ? (
 				<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit expense', 'Delete expense']}>
-					{expenses.map((expense) => (
-						<tr key={expense._id}>
-							<td>{formatDate(new Date(expense.date))}</td>
-							<td>{expense.budget.title}</td>
-							<td>{amountWithDecimals(expense.amount, expense.currency)}</td>
-							<td>{expense.category}</td>
-							<td>{expense.subcategory}</td>
-							<td>
-								<EditButton to={`/expenses/edit/${expense._id}`} />
-							</td>
-							<td>
-								<DeleteButton onClick={() => handleDelete(expense._id)} />
-							</td>
-						</tr>
-					))}
+					{expenses
+						.filter((expense) =>
+							String(expense.amount).concat(expense.category, expense.subcategory, expense.budget.title).toLowerCase().includes(query)
+						)
+						.map((expense) => (
+							<tr key={expense._id}>
+								<td>{formatDate(new Date(expense.date))}</td>
+								<td>{expense.budget.title}</td>
+								<td>{amountWithDecimals(expense.amount, expense.currency)}</td>
+								<td>{expense.category}</td>
+								<td>{expense.subcategory}</td>
+								<td>
+									<EditButton to={`/expenses/edit/${expense._id}`} />
+								</td>
+								<td>
+									<DeleteButton onClick={() => handleDelete(expense._id)} />
+								</td>
+							</tr>
+						))}
 				</DataTable>
 			) : (
 				<p>You don't have any expenses!</p>
