@@ -37,6 +37,14 @@ const EditBudget = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
+			const logs = budget.logs
+
+			logs.push({
+				date: Date.now(),
+				type: 'update',
+				currentAmount: budget.currentAmount,
+			})
+
 			const response = await axiosInstance.put(`budgets/${id}`, budget)
 			navigate('/budgets')
 		} catch (error) {

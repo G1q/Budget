@@ -46,8 +46,21 @@ const CreateIncome = () => {
 			// Change budget to new amount
 			const budgetId = inputs.budget
 			const amount = inputs.amount
+
 			const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
-			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) + Number(amount) })
+
+			const newAmount = Number(response.data.currentAmount) + Number(amount)
+
+			const logs = response.data.logs
+
+			logs.push({
+				date: Date.now(),
+				type: 'income',
+				currentAmount: newAmount,
+				modifiedAmount: Number(amount),
+			})
+
+			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount, logs })
 
 			// Redirect
 			navigate('/incomes')

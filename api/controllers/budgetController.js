@@ -17,6 +17,12 @@ const createBudget = async (req, res) => {
 		}
 
 		// Create a new budget
+		const logBudget = {
+			date: new Date(),
+			currentAmount: startAmount,
+			type: 'created',
+		}
+
 		const newBudget = new Budget({
 			title,
 			startAmount,
@@ -26,6 +32,8 @@ const createBudget = async (req, res) => {
 			description,
 			user,
 		})
+
+		newBudget.logs.push(logBudget)
 
 		await newBudget.save()
 

@@ -64,11 +64,28 @@ const CreateTransfer = () => {
 				const newSourceAmount = Number(sourceBudget.data.currentAmount) - Number(inputs.amount)
 				const newDestinationAmount = Number(destinationBudget.data.currentAmount) + Number(inputs.amount)
 
+				const logsSource = sourceBudget.data.logs
+				const logsDestination = destinationBudget.data.logs
+
+				logsSource.push({
+					date: Date.now(),
+					type: 'transfer-source',
+					currentAmount: newSourceAmount,
+					modifiedAmount: inputs.amount,
+				})
+
+				logsDestination.push({
+					date: Date.now(),
+					type: 'transfer-destination',
+					currentAmount: newDestinationAmount,
+					modifiedAmount: inputs.amount,
+				})
+
 				if (newSourceAmount < 0) {
 					throw new Error("You don't have this amount in source budget!")
 				} else {
-					await axiosInstance.put(`/budgets/${inputs.sourceId}`, { currentAmount: newSourceAmount })
-					await axiosInstance.put(`/budgets/${inputs.budgetId}`, { currentAmount: newDestinationAmount })
+					await axiosInstance.put(`/budgets/${inputs.sourceId}`, { currentAmount: newSourceAmount, logs: logsSource })
+					await axiosInstance.put(`/budgets/${inputs.budgetId}`, { currentAmount: newDestinationAmount, logs: logsDestination })
 					await axiosInstance.post('transfers', inputs)
 				}
 

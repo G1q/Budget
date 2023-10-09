@@ -1,5 +1,5 @@
 // Import dependencies
-import { Navigate } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -10,6 +10,7 @@ import DataTable from '../../components/DataTable/DataTable'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import EditButton from '../../components/EditButton/EditButton'
 import DeleteButton from '../../components/DeleteButton/DeleteButton'
+import LogButton from '../../components/LogButton/LogButton'
 
 // Import utilities
 import { amountWithDecimals } from '../../utilities/format'
@@ -69,7 +70,7 @@ const Budgets = () => {
 				/>
 			)}
 			{budgets.length > 0 ? (
-				<DataTable cols={['Title', 'Start amount', 'Current amount', 'Target amount', 'Edit budget', 'Delete budget']}>
+				<DataTable cols={['Title', 'Start amount', 'Current amount', 'Target amount', 'Logs', 'Edit budget', 'Delete budget']}>
 					{budgets.map((budget) => (
 						<tr key={budget._id}>
 							<td>{budget.title}</td>
@@ -80,6 +81,9 @@ const Budgets = () => {
 								target={budget.targetAmount}
 								currency={budget.currency}
 							/>
+							<td>
+								<LogButton to={`./log/${budget._id}`} />
+							</td>
 							<td>
 								<EditButton to={`/budgets/edit/${budget._id}`} />
 							</td>

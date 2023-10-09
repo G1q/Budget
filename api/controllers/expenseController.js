@@ -9,10 +9,7 @@ const createExpense = async (req, res) => {
 	try {
 		// Check if the username exist
 		const existingUsername = await User.findOne({ _id: user })
-
-		if (!existingUsername) {
-			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
-		}
+		if (!existingUsername) return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
 
 		// Check if the budget exist
 		const existingBudget = await Budget.findOne({ _id: budget })
@@ -32,7 +29,7 @@ const createExpense = async (req, res) => {
 
 		await newExpense.save()
 
-		res.status(201).json({ message: SUCCESS_MESSAGES.EXPENSE.CREATED.message })
+		res.status(201).json({ message: SUCCESS_MESSAGES.EXPENSE.REGISTERED.message })
 	} catch (error) {
 		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}

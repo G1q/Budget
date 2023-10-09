@@ -62,15 +62,26 @@ const CreateExpense = () => {
 			const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
 			const newAmount = Number(response.data.currentAmount) - Number(amount)
 
+			// Add to log
+			const logs = response.data.logs
+
+			logs.push({
+				date: Date.now(),
+				type: 'expense',
+				currentAmount: newAmount,
+				modifiedAmount: Number(amount),
+			})
+
 			// Check if expense is bigger than budget current amount
 			if (newAmount < 0) throw new Error("You don't have minimum amount in selected budget to complete this transaction!")
 
-			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount })
+			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount, logs })
 			await axiosInstance.post('expenses', inputs)
 
 			// Redirect
 			navigate('/expenses')
 		} catch (error) {
+			console.log(error)
 			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
