@@ -47,7 +47,7 @@ const Debts = () => {
 					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
 				setSuccess(null)
-				setError(error.response.data.message)
+				error.response ? setError(error.response.data.message) : setError(error.message)
 			}
 		}
 	}

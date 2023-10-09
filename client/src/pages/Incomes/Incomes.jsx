@@ -1,5 +1,4 @@
 // Import dependencies
-import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -29,8 +28,6 @@ const Incomes = () => {
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
-
-	const navigate = useNavigate()
 
 	useEffect(() => {
 		fetchIncomes(getUserId(), dateInterval)
@@ -83,7 +80,6 @@ const Incomes = () => {
 			closeDialog()
 			setError(null)
 			setSuccess(response.data.message)
-			navigate('/incomes')
 		} catch (error) {
 			setSuccess(null)
 			error.response ? setError(error.response.data.message) : setError(error.message)

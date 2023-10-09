@@ -1,29 +1,31 @@
-import './EditCategory.css'
+// Import dependencies
+import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '../../../utilities/axiosconfig'
+import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { getCategory } from '../../../utilities/fetchData'
+
+// Import styling
+import './EditCategory.css'
 
 const EditCategory = () => {
+	const { isLoggedIn } = useAuth()
 	const { id } = useParams()
 	const [category, setCategory] = useState('')
-	const [categoryTitle, setCategoryTitle] = useState('')
-	const [error, setError] = useState('')
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getCategory = async () => {
-		try {
-			const response = await axiosInstance.get(`categories/view/${id}`)
-			setCategory(response.data)
-			setCategoryTitle(response.data.title)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
 	useEffect(() => {
-		getCategory()
+		getCategory(id)
+			.then((responseData) => setCategory(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -31,27 +33,28 @@ const EditCategory = () => {
 			...prev,
 			[e.target.name]: e.target.value,
 		}))
-		console.log(category)
 	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axiosInstance.put(`categories/edit/${id}`, category)
-			if (response.status === 200) {
-				navigate('/user/categories')
-			} else {
-				setError(response.data.error || 'Update failed')
-			}
+			await axiosInstance.put(`categories/edit/${id}`, category)
+			navigate('/user/categories')
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
-	return (
+	return isLoggedIn() ? (
 		<main>
-			<h1>Edit category {categoryTitle}</h1>
-			{error && <p className="error-message">{error}</p>}
+			<h1>Edit category</h1>
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="title">Title</label>
@@ -78,6 +81,8 @@ const EditCategory = () => {
 				<Button type="submit">Edit category</Button>
 			</form>
 		</main>
+	) : (
+		<Navigate to="/" />
 	)
 }
 

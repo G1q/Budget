@@ -5,14 +5,14 @@ import { useAuth } from '../../../contexts/AuthContext'
 
 // Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 
 // Import utilities
 import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchBudgets, fetchSources } from '../../../utilities/fetchData'
 
 // Import styling
 import './CreateIncome.css'
-import { fetchBudgets, fetchSources } from '../../../utilities/fetchData'
-import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 
 const CreateIncome = () => {
 	const { getUserId } = useAuth()
@@ -20,6 +20,8 @@ const CreateIncome = () => {
 	const [budgets, setBudgets] = useState([])
 	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [error, setError] = useState('')
+
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		fetchBudgets(getUserId())
@@ -29,8 +31,6 @@ const CreateIncome = () => {
 			.then((responseData) => setSources(responseData))
 			.catch((error) => setError(error.response.data.message))
 	}, [])
-
-	const navigate = useNavigate()
 
 	const handleChange = (e) => {
 		setInputs((prev) => ({
@@ -46,8 +46,21 @@ const CreateIncome = () => {
 			// Change budget to new amount
 			const budgetId = inputs.budget
 			const amount = inputs.amount
+
 			const response = await axiosInstance.get(`/budgets/view/${budgetId}`)
-			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: Number(response.data.currentAmount) + Number(amount) })
+
+			const newAmount = Number(response.data.currentAmount) + Number(amount)
+
+			const logs = response.data.logs
+
+			logs.push({
+				date: Date.now(),
+				type: 'income',
+				currentAmount: newAmount,
+				modifiedAmount: Number(amount),
+			})
+
+			await axiosInstance.put(`/budgets/${budgetId}`, { currentAmount: newAmount, logs })
 
 			// Redirect
 			navigate('/incomes')

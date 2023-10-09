@@ -23,6 +23,10 @@ const ERROR_MESSAGES = {
 		message: 'Budgets not found for this user!',
 		statusCode: 404,
 	},
+	NO_SOME_BUDGET: {
+		message: 'At least one budget does not exist!',
+		statusCode: 404,
+	},
 	EXISTING_SOURCE: {
 		message: 'This source was register for this user!',
 		statusCode: 403,
@@ -30,6 +34,10 @@ const ERROR_MESSAGES = {
 	USED_SOURCE: {
 		message: "You can't delete this source because have transactions on it!",
 		statusCode: 403,
+	},
+	NO_SOURCE_FOUND: {
+		message: 'No sources found!',
+		statusCode: 404,
 	},
 	NO_CREDITOR_FOUND: {
 		message: 'No creditor with this id!',
@@ -40,7 +48,19 @@ const ERROR_MESSAGES = {
 		statusCode: 404,
 	},
 	NO_INCOME_FOUND: {
-		message: 'No income found with this id!',
+		message: 'No incomes found!',
+		statusCode: 404,
+	},
+	NO_EXPENSE_FOUND: {
+		message: 'No expenses found!',
+		statusCode: 404,
+	},
+	NO_CATEGORY_FOUND: {
+		message: 'No category found!',
+		statusCode: 404,
+	},
+	NO_TRANSFER_FOUND: {
+		message: 'No transfer found!',
 		statusCode: 404,
 	},
 }

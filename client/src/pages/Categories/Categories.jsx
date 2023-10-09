@@ -1,32 +1,37 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import './Categories.css'
+// Import dependencies
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import axiosInstance from '../../utilities/axiosconfig'
-// TODO: import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
-import { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+
+// Import custom components
 import Button from '../../components/Button/Button'
+import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import DataTable from '../../components/DataTable/DataTable'
+import EditButton from '../../components/EditButton/EditButton'
+import DeleteButton from '../../components/DeleteButton/DeleteButton'
+
+// Import utilities
+import axiosInstance from '../../utilities/axiosconfig'
+import { fetchAllCategories } from '../../utilities/fetchData'
+
+// Import styling
+import './Categories.css'
 
 const Categories = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [categories, setCategories] = useState([])
-	const [error, setError] = useState('')
 	const [categoryTitle, setCategoryTitle] = useState('')
 	const [subcategoryTitle, setSubcategoryTitle] = useState('')
+	const [error, setError] = useState(null)
+	const [success, setSuccess] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getCategories = async () => {
-		try {
-			const response = await axiosInstance(`categories/${getUserId()}`)
-			setCategories(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
 	useEffect(() => {
-		getCategories()
+		fetchAllCategories(getUserId())
+			.then((responseData) => setCategories(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleDelete = async (id) => {
@@ -35,14 +40,20 @@ const Categories = () => {
 		if (confirmDelete) {
 			try {
 				const response = await axiosInstance.delete(`categories/${id}`)
-				getCategories()
+				setError(null)
+				setSuccess(response.data.message)
+
+				fetchAllCategories(getUserId())
+					.then((responseData) => setCategories(responseData))
+					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
-				console.log(error)
+				setSuccess(null)
+				error.response ? setError(error.response.data.message) : setError(error.message)
 			}
 		}
 	}
 
-	const handleCreateCategory = async (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
 			const category = {
@@ -51,104 +62,91 @@ const Categories = () => {
 				subcategory: subcategoryTitle,
 			}
 			const response = await axiosInstance.post('categories', category)
-			console.log(response)
-			if (response.status === 201) {
-				setError('')
-				closeDialog()
-				navigate(0)
-			} else {
-				setError(response.data.error || 'Registration failed')
-			}
+			closeDialog()
+			setError(null)
+			setSuccess(response.data.message)
+			fetchAllCategories(getUserId())
+				.then((responseData) => setCategories(responseData))
+				.catch((error) => setError(error.response.data.message))
 		} catch (error) {
-			setError(error.response.data.error || 'Internal error')
+			setSuccess(null)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return isLoggedIn() ? (
 		<main>
 			<h1>Categories</h1>
-			<div className="buttons-group">
-				<Button
-					className="popup-btn"
-					id="create-category__btn"
-					onClick={openDialog}
-				>
-					Create new category
-				</Button>
+			<div className="header__actions">
+				<div className="buttons-group">
+					<Button
+						onClick={openDialog}
+						className="popup-btn"
+					>
+						Create new category
+					</Button>
+				</div>
 			</div>
 
-			<dialog
-				className="popup-dialog"
-				id="create-source-dialog"
+			<Dialog
+				title="Create new category"
+				textButton="Create category"
+				onClick={closeDialog}
+				onSubmit={handleSubmit}
 			>
-				<h2 className="popup-dialog__title">Create new category</h2>
-				<button
-					className="popup-close-btn"
-					onClick={closeDialog}
-				>
-					&times;
-				</button>
-				<form
-					className="popup-dialog__form"
-					onSubmit={handleCreateCategory}
-				>
-					<label htmlFor="title">Title</label>
-					<input
-						type="text"
-						name="title"
-						id="title"
-						onChange={(e) => setCategoryTitle(e.target.value)}
-					/>
+				<label htmlFor="title">Title</label>
+				<input
+					type="text"
+					name="title"
+					id="title"
+					onChange={(e) => setCategoryTitle(e.target.value)}
+				/>
 
-					<label htmlFor="subcategory">Subcategory title</label>
-					<input
-						type="text"
-						name="subcategory"
-						id="subcategory"
-						onChange={(e) => setSubcategoryTitle(e.target.value)}
+				<label htmlFor="subcategory">Subcategory title</label>
+				<input
+					type="text"
+					name="subcategory"
+					id="subcategory"
+					onChange={(e) => setSubcategoryTitle(e.target.value)}
+				/>
+				{error && (
+					<StatusMessage
+						type="error"
+						message={error}
 					/>
-					<Button type="submit">Create category</Button>
-					<p className="error-msg">{error}</p>
-				</form>
-			</dialog>
+				)}
+			</Dialog>
+
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
+				/>
+			)}
 
 			{categories.length > 0 ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Category</th>
-							<th>Subcategory</th>
-							<th>Edit category</th>
-							<th>Delete category</th>
+				<DataTable cols={['Category', 'Subcategory', 'Edit category', 'Delete category']}>
+					{categories.map((category) => (
+						<tr key={category._id}>
+							<td>{category.title}</td>
+							<td>{category.subcategory}</td>
+							<td>
+								<EditButton to={`/user/categories/edit/${category._id}`} />
+							</td>
+							<td>
+								<DeleteButton onClick={() => handleDelete(category._id)} />
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{categories.map((category) => (
-							<tr key={category._id}>
-								<td>{category.title}</td>
-								<td>{category.subcategory}</td>
-								<td>
-									<Link
-										className="edit-btn"
-										to={`/user/categories/edit/${category._id}`}
-									>
-										Edit
-									</Link>
-								</td>
-								<td>
-									<button
-										className="delete-btn"
-										onClick={() => handleDelete(category._id)}
-									>
-										&times;
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+					))}
+				</DataTable>
 			) : (
-				<p>Please create your first category to start!</p>
+				<p>You don't have any categories created!</p>
 			)}
 		</main>
 	) : (

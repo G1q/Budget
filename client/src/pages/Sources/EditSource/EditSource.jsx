@@ -1,27 +1,31 @@
-import './EditSource.css'
+// Import dependencies
+import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '../../../utilities/axiosconfig'
+import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { getSource } from '../../../utilities/fetchData'
+
+// Import styling
+import './EditSource.css'
 
 const EditSource = () => {
+	const { isLoggedIn } = useAuth()
 	const { id } = useParams()
 	const [source, setSource] = useState([])
-	const [error, setError] = useState('')
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getSource = async () => {
-		try {
-			const response = await axiosInstance.get(`incomes/source/view/${id}`)
-			setSource(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
 	useEffect(() => {
-		getSource()
+		getSource(id)
+			.then((responseData) => setSource(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -35,16 +39,23 @@ const EditSource = () => {
 		e.preventDefault()
 		try {
 			await axiosInstance.put(`incomes/source/${id}`, source)
-			navigate('/sources')
+			navigate('/user/sources')
 		} catch (error) {
-			setError(error.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
-	return (
+	return isLoggedIn() ? (
 		<main>
 			<h1>Edit income</h1>
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="title">Title</label>
@@ -60,6 +71,8 @@ const EditSource = () => {
 				<Button type="submit">Edit source</Button>
 			</form>
 		</main>
+	) : (
+		<Navigate to="/" />
 	)
 }
 

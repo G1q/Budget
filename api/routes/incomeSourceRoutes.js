@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { createSource, deleteSource, getSources, getSource, editSource } = require('../controllers/incomeSourceController')
+const { createSource, deleteSource, getSources, getSource, updateSource } = require('../controllers/incomeSourceController')
 
 router.post('/', createSource)
 
@@ -10,6 +10,6 @@ router.delete('/:id', deleteSource)
 
 router.get('/view/:id', getSource)
 
-router.put('/:id', editSource)
+router.put('/:id', updateSource)
 
 module.exports = router

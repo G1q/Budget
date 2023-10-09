@@ -37,6 +37,7 @@ import PayDebt from './pages/Expenses/PayDebt/PayDebt'
 import UserDashboard from './pages/User/UserDashboard/UserDashboard'
 import UserLayout from './layouts/UserLayout'
 import UserSettings from './pages/User/UserSettings/UserSettings'
+import LogBudget from './pages/Budgets/LogBudget/LogBudget'
 
 const App = () => {
 	return (
@@ -185,6 +186,13 @@ const App = () => {
 							<Route
 								path="/budgets/edit/:id"
 								element={<EditBudget />}
+							/>
+						</Route>
+
+						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
+							<Route
+								path="/budgets/log/:id"
+								element={<LogBudget />}
 							/>
 						</Route>
 					</Route>

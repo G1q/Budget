@@ -28,6 +28,23 @@ const budgetSchema = new mongoose.Schema(
 			type: String,
 			default: 'RON',
 		},
+		logs: [
+			{
+				date: {
+					type: Date,
+					default: Date.now(),
+				},
+				currentAmount: {
+					type: Number,
+				},
+				modifiedAmount: {
+					type: Number,
+				},
+				type: {
+					type: String,
+				},
+			},
+		],
 	},
 	{
 		timestamps: true,
