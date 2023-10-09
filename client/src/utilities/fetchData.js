@@ -47,6 +47,15 @@ export const fetchTransactions = async (id, params = {}) => {
 	}
 }
 
+export const fetchTransfers = async (id, params = {}) => {
+	try {
+		const response = await axiosInstance.get(`transfers/${id}`, { params })
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
 export const fetchCategories = async (id) => {
 	// Only unique categories
 	try {
@@ -133,6 +142,15 @@ export const getSubcategories = async (category, userId) => {
 export const getSource = async (id) => {
 	try {
 		const response = await axiosInstance.get(`incomes/source/view/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
+export const getTransfer = async (id) => {
+	try {
+		const response = await axiosInstance.get(`transfers/view/${id}`)
 		return response.data
 	} catch (error) {
 		throw error

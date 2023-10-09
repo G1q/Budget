@@ -83,6 +83,20 @@ const SUCCESS_MESSAGES = {
 			statusCode: 200,
 		},
 	},
+	TRANSFER: {
+		REGISTERED: {
+			message: 'Transfer registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'Transfer updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'Transfer deleted successfully!',
+			statusCode: 200,
+		},
+	},
 }
 
 module.exports = { SUCCESS_MESSAGES }

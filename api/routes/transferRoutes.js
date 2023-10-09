@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { createTransfer, getTransfers, deleteTransfer, getTransfer, editTransfer } = require('../controllers/transferController')
+const { createTransfer, getTransfers, deleteTransfer, getTransfer, updateTransfer } = require('../controllers/transferController')
 
 // Create transfer
 router.post('/', createTransfer)
@@ -9,7 +9,7 @@ router.post('/', createTransfer)
 router.get('/view/:id', getTransfer)
 
 // // Route for edit transfer
-router.put('/:id', editTransfer)
+router.put('/:id', updateTransfer)
 
 // // Route for delete transfer
 router.delete('/:id', deleteTransfer)

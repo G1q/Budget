@@ -1,6 +1,8 @@
 const User = require('../models/User')
 const Budget = require('../models/Budget')
 const Transfer = require('../models/Transfer')
+const { ERROR_MESSAGES } = require('../messages/errors.js')
+const { SUCCESS_MESSAGES } = require('../messages/success.js')
 
 const createTransfer = async (req, res) => {
 	const { user, date, amount, sourceId, sourceTitle, budgetId, budgetTitle, description } = req.body
@@ -9,13 +11,13 @@ const createTransfer = async (req, res) => {
 		const existingUsername = await User.findById(user)
 
 		if (!existingUsername) {
-			return res.status(400).json({ error: 'No user with this id!' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_USER_FOUND.message })
 		}
 
 		// Check if the source and destination budget exist
 		const existingSource = await Budget.findById(sourceId)
 		const existingBudget = await Budget.findById(budgetId)
-		if (!existingBudget || !existingSource) return res.status(400).json({ error: 'At least one budget does not exist!' })
+		if (!existingBudget || !existingSource) return res.status(404).json({ message: ERROR_MESSAGES.NO_SOME_BUDGET.message })
 
 		// Create a new expense
 		const newTransfer = new Transfer({
@@ -32,65 +34,63 @@ const createTransfer = async (req, res) => {
 
 		await newTransfer.save()
 
-		res.status(201).json({ message: 'Transfer registered successfully' })
+		res.status(201).json({ message: SUCCESS_MESSAGES.TRANSFER.REGISTERED.message })
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
+	}
+}
+
+const getTransfers = async (req, res) => {
+	const startDate = req.query.startDate
+	const endDate = req.query.endDate
+
+	try {
+		const transfers = await Transfer.find({ user: req.params.id, date: { $gte: startDate, $lte: endDate } }).sort({ date: -1, createdAt: -1 })
+		if (!transfers) {
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_TRANSFER_FOUND.message })
+		}
+
+		res.status(200).json(transfers)
+	} catch (error) {
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
 const getTransfer = async (req, res) => {
 	try {
-		const transferId = req.params.id
+		const transfer = await Transfer.findById(req.params.id)
 
-		// Fetch user profile
-		const transfer = await Transfer.findById(transferId)
 		if (!transfer) {
-			return res.status(404).json({ error: 'Transfer not found' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_TRANSFER_FOUND.message })
 		}
 
 		res.status(200).json(transfer)
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
-const editTransfer = async (req, res) => {
+const updateTransfer = async (req, res) => {
 	try {
-		const transferId = req.params.id
-
-		const updatedTransfer = await Transfer.findByIdAndUpdate(transferId, req.body, { new: true })
+		const updatedTransfer = await Transfer.findByIdAndUpdate(req.params.id, req.body, { new: true })
 
 		if (!updatedTransfer) {
-			return res.status(404).json({ error: 'Transfer not found' })
+			return res.status(404).json({ message: ERROR_MESSAGES.NO_TRANSFER_FOUND.message })
 		}
 
-		res.status(200).json(updatedTransfer)
+		res.status(200).json({ message: SUCCESS_MESSAGES.TRANSFER.UPDATED.message })
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
 const deleteTransfer = async (req, res) => {
-	const transferId = req.params.id
 	try {
-		await Transfer.findByIdAndDelete(transferId)
-		res.status(200).json({ message: 'Transfer deleted successfully!' })
+		await Transfer.findByIdAndDelete(req.params.id)
+		res.status(200).json({ message: SUCCESS_MESSAGES.TRANSFER.DELETED.message })
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
+		res.status(500).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message })
 	}
 }
 
-const getTransfers = async (req, res) => {
-	try {
-		const transfers = await Transfer.find({ user: req.params.id }).sort({ date: -1, createdAt: -1 })
-		if (!transfers) {
-			return res.status(404).json({ error: 'Transfers not found' })
-		}
-
-		res.status(200).json(transfers)
-	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error' })
-	}
-}
-
-module.exports = { createTransfer, getTransfers, deleteTransfer, getTransfer, editTransfer }
+module.exports = { createTransfer, getTransfers, deleteTransfer, getTransfer, updateTransfer }

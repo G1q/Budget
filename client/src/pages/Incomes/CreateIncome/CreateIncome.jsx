@@ -5,14 +5,14 @@ import { useAuth } from '../../../contexts/AuthContext'
 
 // Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 
 // Import utilities
 import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchBudgets, fetchSources } from '../../../utilities/fetchData'
 
 // Import styling
 import './CreateIncome.css'
-import { fetchBudgets, fetchSources } from '../../../utilities/fetchData'
-import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 
 const CreateIncome = () => {
 	const { getUserId } = useAuth()
@@ -20,6 +20,8 @@ const CreateIncome = () => {
 	const [budgets, setBudgets] = useState([])
 	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [error, setError] = useState('')
+
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		fetchBudgets(getUserId())
@@ -29,8 +31,6 @@ const CreateIncome = () => {
 			.then((responseData) => setSources(responseData))
 			.catch((error) => setError(error.response.data.message))
 	}, [])
-
-	const navigate = useNavigate()
 
 	const handleChange = (e) => {
 		setInputs((prev) => ({

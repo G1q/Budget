@@ -1,42 +1,39 @@
-import './EditTransfer.css'
+// Import dependencies
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchBudgets, getTransfer } from '../../../utilities/fetchData'
+
+// Import styling
+import './EditTransfer.css'
 
 const EditTransfer = () => {
-	const { getUserId } = useAuth()
+	const { getUserId, isLoggedIn } = useAuth()
 	const { id } = useParams()
-	const [budgets, setBudgets] = useState([])
 	const [transfer, setTransfer] = useState('')
-	const [error, setError] = useState('')
 	const [initialTransfer, setInitialTransfer] = useState('')
+	const [budgets, setBudgets] = useState([])
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getTransfer = async () => {
-		try {
-			const response = await axiosInstance.get(`transfers/view/${id}`)
-			setTransfer(response.data)
-			setInitialTransfer(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance.get(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-		} catch (error) {
-			setError(error.message)
-		}
-	}
-
 	useEffect(() => {
-		getTransfer()
-		getBudgets()
+		getTransfer(id)
+			.then((responseData) => {
+				setTransfer(responseData)
+				setInitialTransfer(responseData)
+			})
+			.catch((error) => setError(error.response.data.message))
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -111,16 +108,23 @@ const EditTransfer = () => {
 			}
 
 			await axiosInstance.put(`transfers/${id}`, transfer)
-			navigate('/transfers')
+			navigate('/user/transfers')
 		} catch (error) {
-			setError(error.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
-	return (
+	return isLoggedIn() ? (
 		<main>
 			<h1>Edit transfer</h1>
-			{error && <p className="error-msg transaction__error-msg">{error}</p>}
+
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
+
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="sourceId">Source</label>
@@ -197,6 +201,8 @@ const EditTransfer = () => {
 				<Button type="submit">Edit transfer</Button>
 			</form>
 		</main>
+	) : (
+		<Navigate to="/" />
 	)
 }
 

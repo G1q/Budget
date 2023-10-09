@@ -1,29 +1,31 @@
-import './CreateTransfer.css'
-import { Link, useNavigate } from 'react-router-dom'
+// Import dependencies
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import axiosInstance from '../../../utilities/axiosconfig'
 import { useAuth } from '../../../contexts/AuthContext'
+
+// Import custom components
 import Button from '../../../components/Button/Button'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
+
+// Import utilities
+import axiosInstance from '../../../utilities/axiosconfig'
+import { fetchBudgets } from '../../../utilities/fetchData'
+
+// Import styling
+import './CreateTransfer.css'
 
 const CreateTransfer = () => {
-	const { getUserId } = useAuth()
-	const [error, setError] = useState('')
+	const { getUserId, isLoggedIn } = useAuth()
 	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [budgets, setBudgets] = useState([])
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	const getBudgets = async () => {
-		try {
-			const response = await axiosInstance.get(`/budgets/${getUserId()}`)
-			setBudgets(response.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
 	useEffect(() => {
-		getBudgets()
+		fetchBudgets(getUserId())
+			.then((responseData) => setBudgets(responseData))
+			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleChange = (e) => {
@@ -58,10 +60,9 @@ const CreateTransfer = () => {
 				// Change new budgets
 				const sourceBudget = await axiosInstance.get(`/budgets/view/${inputs.sourceId}`)
 				const destinationBudget = await axiosInstance.get(`/budgets/view/${inputs.budgetId}`)
-				if (!sourceBudget || !destinationBudget) throw new Error('At least one budget does not exist!')
-				const amount = inputs.amount
-				const newSourceAmount = Number(sourceBudget.data.currentAmount) - Number(amount)
-				const newDestinationAmount = Number(destinationBudget.data.currentAmount) + Number(amount)
+
+				const newSourceAmount = Number(sourceBudget.data.currentAmount) - Number(inputs.amount)
+				const newDestinationAmount = Number(destinationBudget.data.currentAmount) + Number(inputs.amount)
 
 				if (newSourceAmount < 0) {
 					throw new Error("You don't have this amount in source budget!")
@@ -75,13 +76,19 @@ const CreateTransfer = () => {
 				navigate('/user/transfers')
 			}
 		} catch (error) {
-			setError(error.message)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
-	return (
+	return isLoggedIn() ? (
 		<main>
 			<h1>Create new transfer</h1>
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
@@ -175,10 +182,11 @@ const CreateTransfer = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				{error && <p className="error-msg transaction__error-msg">{error}</p>}
 				<Button type="submit">Create transfer</Button>
 			</form>
 		</main>
+	) : (
+		<Navigate to="/" />
 	)
 }
 
