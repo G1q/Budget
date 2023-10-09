@@ -32,7 +32,6 @@ const Categories = () => {
 		fetchAllCategories(getUserId())
 			.then((responseData) => setCategories(responseData))
 			.catch((error) => setError(error.response.data.message))
-		console.log('render')
 	}, [])
 
 	const handleDelete = async (id) => {
@@ -66,7 +65,9 @@ const Categories = () => {
 			closeDialog()
 			setError(null)
 			setSuccess(response.data.message)
-			navigate(0)
+			fetchAllCategories(getUserId())
+				.then((responseData) => setCategories(responseData))
+				.catch((error) => setError(error.response.data.message))
 		} catch (error) {
 			setSuccess(null)
 			error.response ? setError(error.response.data.message) : setError(error.message)

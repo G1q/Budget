@@ -69,13 +69,19 @@ const SUCCESS_MESSAGES = {
 			statusCode: 200,
 		},
 	},
-	SOURCE_REGISTERED: {
-		message: 'Source registered successfully!',
-		statusCode: 201,
-	},
-	SOURCE_DELETED: {
-		message: 'Income source deleted successfully!',
-		statusCode: 200,
+	SOURCE: {
+		REGISTERED: {
+			message: 'Source registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'Source updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'Source deleted successfully!',
+			statusCode: 200,
+		},
 	},
 }
 

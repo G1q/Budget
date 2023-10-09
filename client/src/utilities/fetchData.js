@@ -112,10 +112,28 @@ export const getExpense = async (id) => {
 	}
 }
 
+export const getCategory = async (id) => {
+	try {
+		const response = await axiosInstance.get(`categories/view/${id}`)
+		return response.data
+	} catch (error) {
+		throw error
+	}
+}
+
 export const getSubcategories = async (category, userId) => {
 	try {
 		const response = await axiosInstance.get(`/categories/${userId}`)
 		return [...new Set(response.data.filter((cat) => cat.title === category).map((cat) => cat.subcategory))]
+	} catch (error) {
+		throw error
+	}
+}
+
+export const getSource = async (id) => {
+	try {
+		const response = await axiosInstance.get(`incomes/source/view/${id}`)
+		return response.data
 	} catch (error) {
 		throw error
 	}
