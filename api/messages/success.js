@@ -27,6 +27,20 @@ const SUCCESS_MESSAGES = {
 			statusCode: 200,
 		},
 	},
+	EXPENSE: {
+		REGISTERED: {
+			message: 'Expense registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'Expense updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'Expense deleted successfully!',
+			statusCode: 200,
+		},
+	},
 	DEBT: {
 		REGISTERED: {
 			message: 'Debt registered successfully!',

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { createExpense, getExpense, editExpense, deleteExpense, getExpenses } = require('../controllers/expenseController')
+const { createExpense, getExpense, updateExpense, deleteExpense, getExpenses } = require('../controllers/expenseController')
 
 // Route for create expense
 router.post('/', createExpense)
@@ -9,7 +9,7 @@ router.post('/', createExpense)
 router.get('/view/:id', getExpense)
 
 // Route for edit expense
-router.put('/:id', editExpense)
+router.put('/:id', updateExpense)
 
 // Route for delete expense
 router.delete('/:id', deleteExpense)

@@ -40,8 +40,11 @@ const ERROR_MESSAGES = {
 		statusCode: 404,
 	},
 	NO_INCOME_FOUND: {
-		message: 'No income found with this id!',
+		message: 'No incomes found!',
 		statusCode: 404,
+	},
+	NO_EXPENSE_FOUND: {
+		message: 'No expenses found!',
 	},
 }
 
