@@ -45,6 +45,11 @@ const ERROR_MESSAGES = {
 	},
 	NO_EXPENSE_FOUND: {
 		message: 'No expenses found!',
+		statusCode: 404,
+	},
+	NO_CATEGORY_FOUND: {
+		message: 'No category found!',
+		statusCode: 404,
 	},
 }
 

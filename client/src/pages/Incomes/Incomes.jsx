@@ -83,7 +83,6 @@ const Incomes = () => {
 			closeDialog()
 			setError(null)
 			setSuccess(response.data.message)
-			navigate('/incomes')
 		} catch (error) {
 			setSuccess(null)
 			error.response ? setError(error.response.data.message) : setError(error.message)

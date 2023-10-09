@@ -41,6 +41,20 @@ const SUCCESS_MESSAGES = {
 			statusCode: 200,
 		},
 	},
+	CATEGORY: {
+		REGISTERED: {
+			message: 'Category registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'Category updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'Category deleted successfully!',
+			statusCode: 200,
+		},
+	},
 	DEBT: {
 		REGISTERED: {
 			message: 'Debt registered successfully!',

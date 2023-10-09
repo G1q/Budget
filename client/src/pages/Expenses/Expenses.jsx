@@ -57,7 +57,7 @@ const Expenses = () => {
 					.then((responseData) => setExpenses(responseData))
 					.catch((error) => setError(error.response.data.message))
 			} catch (error) {
-				setError(error.response.data.message)
+				error.response ? setError(error.response.data.message) : setError(error.message)
 			}
 		}
 	}

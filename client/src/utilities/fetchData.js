@@ -50,8 +50,18 @@ export const fetchTransactions = async (id, params = {}) => {
 export const fetchCategories = async (id) => {
 	// Only unique categories
 	try {
-		const response = await axiosInstance.get(`/categories//${id}`)
+		const response = await axiosInstance.get(`/categories/${id}`)
 		return [...new Set(response.data.map((cat) => cat.title))]
+	} catch (error) {
+		throw error
+	}
+}
+
+export const fetchAllCategories = async (id) => {
+	// All categories
+	try {
+		const response = await axiosInstance.get(`/categories/${id}`)
+		return response.data
 	} catch (error) {
 		throw error
 	}
