@@ -120,7 +120,7 @@ const Expenses = () => {
 								<td>{expense.category}</td>
 								<td>{expense.subcategory}</td>
 								<td>
-									<EditButton to={`/expenses/edit/${expense._id}`} />
+									<EditButton state={{ id: expense._id }} />
 								</td>
 								<td>
 									<DeleteButton onClick={() => handleDelete(expense._id)} />

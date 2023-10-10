@@ -172,7 +172,7 @@ const Incomes = () => {
 								<td>{income.budget.title}</td>
 								<td>{amountWithDecimals(income.amount, income.currency)}</td>
 								<td>
-									<EditButton to={`/incomes/edit/${income._id}`} />
+									<EditButton state={{ id: income._id }} />
 								</td>
 								<td>
 									<DeleteButton onClick={() => handleDelete(income._id)} />

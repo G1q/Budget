@@ -1,5 +1,5 @@
 // Import dependencies
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 
@@ -15,7 +15,8 @@ import './EditExpense.css'
 
 const EditExpense = () => {
 	const { getUserId } = useAuth()
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 
 	const [budgets, setBudgets] = useState([])
 	const [expense, setExpense] = useState('')

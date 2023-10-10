@@ -1,5 +1,5 @@
 // Import dependencies
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 
@@ -16,7 +16,8 @@ import './EditDebt.css'
 
 const EditDebt = () => {
 	const { getUserId } = useAuth()
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [debt, setDebt] = useState('')
 	const [sources, setSources] = useState([])
 	const [error, setError] = useState(null)

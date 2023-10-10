@@ -82,10 +82,10 @@ const Budgets = () => {
 								currency={budget.currency}
 							/>
 							<td>
-								<LogButton to={`./log/${budget._id}`} />
+								<LogButton state={{ id: budget._id }} />
 							</td>
 							<td>
-								<EditButton to={`/budgets/edit/${budget._id}`} />
+								<EditButton state={{ id: budget._id }} />
 							</td>
 							<td>
 								<DeleteButton onClick={() => handleDelete(budget._id)} />

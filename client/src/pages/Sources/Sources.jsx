@@ -127,7 +127,7 @@ const Sources = () => {
 						<tr key={source._id}>
 							<td>{source.title}</td>
 							<td>
-								<EditButton to={`/user/sources/edit/${source._id}`} />
+								<EditButton state={{ id: source._id }} />
 							</td>
 							<td>
 								<DeleteButton onClick={() => handleDelete(source._id)} />

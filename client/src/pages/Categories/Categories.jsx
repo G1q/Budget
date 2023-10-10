@@ -137,7 +137,7 @@ const Categories = () => {
 							<td>{category.title}</td>
 							<td>{category.subcategory}</td>
 							<td>
-								<EditButton to={`/user/categories/edit/${category._id}`} />
+								<EditButton state={{ id: category._id }} />
 							</td>
 							<td>
 								<DeleteButton onClick={() => handleDelete(category._id)} />

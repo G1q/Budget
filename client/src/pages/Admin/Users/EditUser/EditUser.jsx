@@ -1,11 +1,12 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import './EditUser.css'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../../../utilities/axiosconfig'
 import Button from '../../../../components/Button/Button'
 
 const EditUser = () => {
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [user, setUser] = useState('')
 	const [username, setUsername] = useState('')
 	const [error, setError] = useState('')

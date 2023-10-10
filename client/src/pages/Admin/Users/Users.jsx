@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import './Users.css'
-import { Link } from 'react-router-dom'
 import { useAuth } from '../../../contexts/AuthContext'
 import axiosInstance from '../../../utilities/axiosconfig'
 import ButtonLink from '../../../components/ButtonLink/ButtonLink'
+import EditButton from '../../../components/EditButton/EditButton'
 
 const Users = () => {
 	const { getUserRole } = useAuth()
@@ -62,12 +62,7 @@ const Users = () => {
 									userRole === 'admin' && user.role === 'admin' ? (
 										'-'
 									) : (
-										<Link
-											className="admin-page__edit-btn"
-											to={`/admin/users/edit/${user._id}`}
-										>
-											Edit
-										</Link>
+										<EditButton state={{ id: user._id }} />
 									)
 								) : (
 									'-'

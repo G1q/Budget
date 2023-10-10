@@ -123,7 +123,7 @@ const Transfers = () => {
 							<td>{transfer.budgetTitle}</td>
 							<td>{amountWithDecimals(transfer.amount, transfer.currency)}</td>
 							<td>
-								<EditButton to={`/user/transfers/edit/${transfer._id}`} />
+								<EditButton state={{ id: transfer._id }} />
 							</td>
 							<td>
 								<DeleteButton onClick={() => handleDelete(transfer._id)} />

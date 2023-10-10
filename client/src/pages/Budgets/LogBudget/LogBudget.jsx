@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import './LogBudget.css'
-
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { getBudget } from '../../../utilities/fetchData'
-import { amountWithDecimals, formatFullDate } from '../../../utilities/format'
 import LogListComponent from '../../../components/LogListComponent/LogListComponent'
+import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 
 const LogBudget = () => {
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [budget, setBudget] = useState('')
 	const [logs, setLogs] = useState([])
 	const [error, setError] = useState(null)
@@ -24,6 +24,12 @@ const LogBudget = () => {
 	return (
 		<main>
 			<h1>Log budget {budget.title}</h1>
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<Link to="/budgets">Back to budgets list</Link>
 			{logs.length > 0 && (
 				<ul style={{ fontSize: '.875rem' }}>

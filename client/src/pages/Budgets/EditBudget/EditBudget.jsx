@@ -1,5 +1,5 @@
 // Import dependencies
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 // Import custom elements
@@ -15,7 +15,8 @@ import './EditBudget.css'
 import { getBudget } from '../../../utilities/fetchData'
 
 const EditBudget = () => {
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [budget, setBudget] = useState('')
 	const [error, setError] = useState(null)
 

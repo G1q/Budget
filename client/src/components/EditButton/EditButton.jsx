@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 
-const EditButton = ({ to }) => {
+const EditButton = ({ state }) => {
 	return (
 		<Link
 			className="edit-btn"
-			to={to}
+			to="./edit"
+			state={state}
 		>
 			Edit
 		</Link>

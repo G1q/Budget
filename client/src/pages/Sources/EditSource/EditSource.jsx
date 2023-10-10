@@ -1,5 +1,5 @@
 // Import dependencies
-import { useParams, useNavigate, Navigate } from 'react-router-dom'
+import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 
@@ -16,7 +16,8 @@ import './EditSource.css'
 
 const EditSource = () => {
 	const { isLoggedIn } = useAuth()
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [source, setSource] = useState([])
 	const [error, setError] = useState(null)
 
@@ -47,7 +48,7 @@ const EditSource = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Edit income</h1>
+			<h1>Edit source</h1>
 
 			{error && (
 				<StatusMessage

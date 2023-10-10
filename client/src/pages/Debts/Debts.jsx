@@ -97,7 +97,7 @@ const Debts = () => {
 								<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
 								<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
 								<td>
-									<EditButton to={`/debts/edit/${debt._id}`} />
+									<EditButton state={{ id: debt._id }} />
 								</td>
 								<td>
 									<DeleteButton onClick={() => handleDelete(debt._id)} />
