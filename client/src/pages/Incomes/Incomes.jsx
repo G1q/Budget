@@ -112,21 +112,25 @@ const Incomes = () => {
 					</Button>
 				</div>
 
-				<SelectInterval
-					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
-					label="Select date"
-				/>
+				{incomes.length > 0 && (
+					<SelectInterval
+						onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
+						label="Select date"
+					/>
+				)}
 			</div>
 
-			<div className="filter__wrapper">
-				<input
-					type="search"
-					name=""
-					id=""
-					placeholder="Search terms"
-					onChange={(e) => setQuery(e.target.value.toLowerCase())}
-				/>
-			</div>
+			{incomes.length > 0 && (
+				<div className="filter__wrapper">
+					<input
+						type="search"
+						name=""
+						id=""
+						placeholder="Search terms"
+						onChange={(e) => setQuery(e.target.value.toLowerCase())}
+					/>
+				</div>
+			)}
 
 			<Dialog
 				title="Create new source"

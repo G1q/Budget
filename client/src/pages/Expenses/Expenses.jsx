@@ -85,20 +85,24 @@ const Expenses = () => {
 					{debts.length > 0 && <ButtonLink>Pay debt (disabled)</ButtonLink>} {/* to="./paydebt" */}
 				</div>
 
-				<SelectInterval
-					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
-					label="Select date"
-				/>
+				{expenses.length > 0 && (
+					<SelectInterval
+						onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
+						label="Select date"
+					/>
+				)}
 			</div>
-			<div className="filter__wrapper">
-				<input
-					type="search"
-					name=""
-					id=""
-					placeholder="Search terms"
-					onChange={(e) => setQuery(e.target.value.toLowerCase())}
-				/>
-			</div>
+			{expenses.length > 0 && (
+				<div className="filter__wrapper">
+					<input
+						type="search"
+						name=""
+						id=""
+						placeholder="Search terms"
+						onChange={(e) => setQuery(e.target.value.toLowerCase())}
+					/>
+				</div>
+			)}
 
 			{error && (
 				<StatusMessage
