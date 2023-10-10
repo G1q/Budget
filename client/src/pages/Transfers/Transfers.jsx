@@ -46,8 +46,28 @@ const Transfers = () => {
 				const newSourceAmount = Number(sourceBudget.data.currentAmount) + Number(transfer.data.amount)
 				const newDestinationAmount = Number(destinationBudget.data.currentAmount) - Number(transfer.data.amount)
 
-				await axiosInstance.put(`budgets/${transfer.data.sourceId}`, { currentAmount: newSourceAmount })
-				await axiosInstance.put(`budgets/${transfer.data.budgetId}`, { currentAmount: newDestinationAmount })
+				// Create log deleted transfer - source budget
+				const deletedSourceLogs = sourceBudget.data.logs
+
+				deletedSourceLogs.push({
+					date: Date.now(),
+					type: 'deleted-transfer-source',
+					currentAmount: newSourceAmount,
+					modifiedAmount: Number(transfer.data.amount),
+				})
+
+				// Create log deleted transfer - destination budget
+				const deletedDestinationLogs = destinationBudget.data.logs
+
+				deletedDestinationLogs.push({
+					date: Date.now(),
+					type: 'deleted-transfer-destination',
+					currentAmount: newDestinationAmount,
+					modifiedAmount: Number(transfer.data.amount),
+				})
+
+				await axiosInstance.put(`budgets/${transfer.data.sourceId}`, { currentAmount: newSourceAmount, logs: deletedSourceLogs })
+				await axiosInstance.put(`budgets/${transfer.data.budgetId}`, { currentAmount: newDestinationAmount, logs: deletedDestinationLogs })
 
 				// Delete income
 				const response = await axiosInstance.delete(`transfers/${id}`)

@@ -51,7 +51,17 @@ const Incomes = () => {
 
 				if (newAmount < 0) throw new Error('Budget will decrease under 0. Please check again!')
 
-				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newAmount })
+				// Create budget log for deleted income
+				const logs = budget.data.logs
+
+				logs.push({
+					date: Date.now(),
+					type: 'deleted-income',
+					currentAmount: newAmount,
+					modifiedAmount: Number(amount),
+				})
+
+				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newAmount, logs: logs })
 
 				// Delete income
 				try {

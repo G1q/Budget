@@ -55,12 +55,34 @@ const EditIncome = () => {
 				// Revert amount of initial budget
 				const changedBudget = await axiosInstance.get(`budgets/view/${initialIncome.budget}`)
 				const newAmount = Number(changedBudget.data.currentAmount) - Number(initialIncome.amount)
-				await axiosInstance.put(`budgets/${initialIncome.budget}`, { currentAmount: newAmount })
+
+				// Create log for changed budget
+				const changedLogs = changedBudget.data.logs
+
+				changedLogs.push({
+					date: Date.now(),
+					type: 'changed-budget-income',
+					currentAmount: newAmount,
+					modifiedAmount: Number(initialIncome.amount),
+				})
+
+				await axiosInstance.put(`budgets/${initialIncome.budget}`, { currentAmount: newAmount, logs: changedLogs })
 
 				// Change amount of new budget
 				const newBudget = await axiosInstance.get(`budgets/view/${income.budget}`)
 				const newBudgetAmount = Number(newBudget.data.currentAmount) + Number(income.amount)
-				await axiosInstance.put(`budgets/${income.budget}`, { currentAmount: newBudgetAmount })
+
+				// Create log for new budget
+				const newLogs = newBudget.data.logs
+
+				newLogs.push({
+					date: Date.now(),
+					type: 'new-budget-income',
+					currentAmount: newBudgetAmount,
+					modifiedAmount: Number(income.amount),
+				})
+
+				await axiosInstance.put(`budgets/${income.budget}`, { currentAmount: newBudgetAmount, logs: newLogs })
 
 				await axiosInstance.put(`incomes/${id}`, income)
 
@@ -71,7 +93,18 @@ const EditIncome = () => {
 				const budget = await axiosInstance.get(`budgets/view/${initialIncome.budget}`)
 				// New amount is: revert to original amount without this income, then add new income
 				const amount = Number(budget.data.currentAmount) - Number(initialIncome.amount) + Number(income.amount)
-				await axiosInstance.put(`budgets/${initialIncome.budget}`, { currentAmount: amount })
+
+				// Create log for changed amount
+				const newAmountLog = budget.data.logs
+
+				newAmountLog.push({
+					date: Date.now(),
+					type: 'new-amount-income',
+					currentAmount: amount,
+					modifiedAmount: Number(income.amount),
+				})
+
+				await axiosInstance.put(`budgets/${initialIncome.budget}`, { currentAmount: amount, logs: newAmountLog })
 
 				await axiosInstance.put(`incomes/${id}`, income)
 				navigate('/incomes')

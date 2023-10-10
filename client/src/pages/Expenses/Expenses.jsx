@@ -48,7 +48,19 @@ const Expenses = () => {
 
 				// Change budget to initial amount
 				const budget = await axiosInstance.get(`budgets/view/${budgetId}`)
-				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: Number(budget.data.currentAmount) + Number(amount) })
+				const newBudgetAmount = Number(budget.data.currentAmount) + Number(amount)
+
+				// Create budget log for deleted expense
+				const logs = budget.data.logs
+
+				logs.push({
+					date: Date.now(),
+					type: 'deleted-expense',
+					currentAmount: newBudgetAmount,
+					modifiedAmount: Number(amount),
+				})
+
+				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newBudgetAmount, logs: logs })
 
 				// Delete expense
 				await axiosInstance.delete(`expenses/${id}`)
