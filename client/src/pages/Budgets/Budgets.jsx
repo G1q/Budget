@@ -70,7 +70,7 @@ const Budgets = () => {
 				/>
 			)}
 			{budgets.length > 0 ? (
-				<DataTable cols={['Title', 'Start amount', 'Current amount', 'Target amount', 'Logs', 'Edit budget', 'Delete budget']}>
+				<DataTable cols={['Title', 'Start amount', 'Current amount', 'Target amount', 'Logs', 'Edit', 'Delete']}>
 					{budgets.map((budget) => (
 						<tr key={budget._id}>
 							<td>{budget.title}</td>

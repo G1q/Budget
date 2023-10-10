@@ -1,4 +1,5 @@
 import React from 'react'
+import { MdDelete } from 'react-icons/md'
 
 const DeleteButton = ({ onClick }) => {
 	return (
@@ -6,7 +7,7 @@ const DeleteButton = ({ onClick }) => {
 			className="delete-btn"
 			onClick={onClick}
 		>
-			&times;
+			<MdDelete />
 		</button>
 	)
 }

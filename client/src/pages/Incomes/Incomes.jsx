@@ -162,7 +162,7 @@ const Incomes = () => {
 				/>
 			)}
 			{incomes.length > 0 ? (
-				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit income', 'Delete income']}>
+				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit', 'Delete']}>
 					{incomes
 						.filter((income) => String(income.amount).concat(income.source.title, income.budget.title).toLowerCase().includes(query))
 						.map((income) => (

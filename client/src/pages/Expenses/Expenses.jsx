@@ -107,7 +107,7 @@ const Expenses = () => {
 				/>
 			)}
 			{expenses.length > 0 ? (
-				<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit expense', 'Delete expense']}>
+				<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit', 'Delete']}>
 					{expenses
 						.filter((expense) =>
 							String(expense.amount).concat(expense.category, expense.subcategory, expense.budget.title).toLowerCase().includes(query)

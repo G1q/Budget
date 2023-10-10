@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { FaEdit } from 'react-icons/fa'
 
 const EditButton = ({ state }) => {
 	return (
@@ -7,7 +8,7 @@ const EditButton = ({ state }) => {
 			to="./edit"
 			state={state}
 		>
-			Edit
+			<FaEdit />
 		</Link>
 	)
 }
