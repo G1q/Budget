@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './UserProfile.css'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useEffect, useState } from 'react'
@@ -49,9 +49,6 @@ const UserProfile = () => {
 				</p>
 				<p>
 					Email: <strong>{profile.email}</strong>
-				</p>
-				<p>
-					Role: <strong>{profile.role}</strong>
 				</p>
 			</div>
 			<div className="profile__actions">
