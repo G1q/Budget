@@ -7,16 +7,11 @@ const CurrencySelect = ({ label = 'Currency', value, onChange }) => {
 			<select
 				name="currency"
 				id="currency"
-				value={value}
+				defaultValue={value}
 				onChange={onChange}
 			>
 				<option value="RON">RON</option>
-				<option
-					value="EUR"
-					disabled
-				>
-					EUR
-				</option>
+				<option value="EUR">EUR</option>
 				<option
 					value="USD"
 					disabled

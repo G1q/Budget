@@ -6,4 +6,11 @@ export const labels = [
 			ro: 'Selecteaza tema siteului',
 		},
 	},
+	{
+		title: 'select-language',
+		translate: {
+			en: 'Select website language',
+			ro: 'Selecteaza limba siteului',
+		},
+	},
 ]

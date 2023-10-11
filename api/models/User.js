@@ -30,13 +30,9 @@ const userSchema = new mongoose.Schema(
 				type: String,
 				default: 'en',
 			},
-			currencies: {
+			currency: {
 				type: String,
 				default: 'RON',
-			},
-			pagination: {
-				type: String,
-				default: 15,
 			},
 			theme: {
 				type: String,
