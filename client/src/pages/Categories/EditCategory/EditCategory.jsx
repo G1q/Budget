@@ -1,5 +1,5 @@
 // Import dependencies
-import { useParams, useNavigate, Navigate } from 'react-router-dom'
+import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 
@@ -16,7 +16,8 @@ import './EditCategory.css'
 
 const EditCategory = () => {
 	const { isLoggedIn } = useAuth()
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [category, setCategory] = useState('')
 	const [error, setError] = useState(null)
 

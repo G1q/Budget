@@ -3,6 +3,10 @@ const ERROR_MESSAGES = {
 		message: 'No user with this ID!',
 		statusCode: 404,
 	},
+	NO_USERS_FOUND: {
+		message: 'No users found!',
+		statusCode: 404,
+	},
 	INTERNAL_SERVER_ERROR: {
 		message: 'Internal Server Error',
 		statusCode: 500,
@@ -62,6 +66,14 @@ const ERROR_MESSAGES = {
 	NO_TRANSFER_FOUND: {
 		message: 'No transfer found!',
 		statusCode: 404,
+	},
+	EXISTING_EMAIL: {
+		message: 'Email is already registered!',
+		statusCode: 400,
+	},
+	EXISTING_USERNAME: {
+		message: 'Username is already taken!',
+		statusCode: 400,
 	},
 }
 

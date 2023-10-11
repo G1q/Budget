@@ -1,5 +1,5 @@
 // Import dependencies
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 
@@ -16,7 +16,8 @@ import './EditTransfer.css'
 
 const EditTransfer = () => {
 	const { getUserId, isLoggedIn } = useAuth()
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 	const [transfer, setTransfer] = useState('')
 	const [initialTransfer, setInitialTransfer] = useState('')
 	const [budgets, setBudgets] = useState([])
@@ -70,24 +71,68 @@ const EditTransfer = () => {
 				// Revert amount of initial budget
 				const changedBudget = await axiosInstance.get(`budgets/view/${initialTransfer.budgetId}`)
 				const newAmount = Number(changedBudget.data.currentAmount) - Number(initialTransfer.amount)
-				await axiosInstance.put(`budgets/${initialTransfer.budgetId}`, { currentAmount: newAmount })
+
+				// Create log for initial budget
+				const changedLogs = changedBudget.data.logs
+
+				changedLogs.push({
+					date: Date.now(),
+					type: 'changed-destination-budget',
+					currentAmount: newAmount,
+					modifiedAmount: Number(initialTransfer.amount),
+				})
+
+				await axiosInstance.put(`budgets/${initialTransfer.budgetId}`, { currentAmount: newAmount, logs: changedLogs })
 
 				// Change amount of new budget
 				const newBudget = await axiosInstance.get(`budgets/view/${transfer.budgetId}`)
 				const newBudgetAmount = Number(newBudget.data.currentAmount) + Number(transfer.amount)
-				await axiosInstance.put(`budgets/${transfer.budgetId}`, { currentAmount: newBudgetAmount })
+
+				// Create log for new destination budget
+				const newLogs = newBudget.data.logs
+
+				newLogs.push({
+					date: Date.now(),
+					type: 'new-destination-budget',
+					currentAmount: newBudgetAmount,
+					modifiedAmount: Number(transfer.amount),
+				})
+
+				await axiosInstance.put(`budgets/${transfer.budgetId}`, { currentAmount: newBudgetAmount, logs: newLogs })
 			}
 
 			if (transfer.sourceId !== initialTransfer.sourceId) {
 				// Revert amount of initial budget
 				const changedBudget = await axiosInstance.get(`budgets/view/${initialTransfer.sourceId}`)
 				const newAmount = Number(changedBudget.data.currentAmount) + Number(initialTransfer.amount)
-				await axiosInstance.put(`budgets/${initialTransfer.sourceId}`, { currentAmount: newAmount })
+
+				// Create log for initial budget
+				const changedLogs = changedBudget.data.logs
+
+				changedLogs.push({
+					date: Date.now(),
+					type: 'changed-source-budget',
+					currentAmount: newAmount,
+					modifiedAmount: Number(initialTransfer.amount),
+				})
+
+				await axiosInstance.put(`budgets/${initialTransfer.sourceId}`, { currentAmount: newAmount, logs: changedLogs })
 
 				// Change amount of new budget
 				const newBudget = await axiosInstance.get(`budgets/view/${transfer.sourceId}`)
 				const newBudgetAmount = Number(newBudget.data.currentAmount) - Number(transfer.amount)
-				await axiosInstance.put(`budgets/${transfer.sourceId}`, { currentAmount: newBudgetAmount })
+
+				// Create log for new source budget
+				const newLogs = newBudget.data.logs
+
+				newLogs.push({
+					date: Date.now(),
+					type: 'new-source-budget',
+					currentAmount: newBudgetAmount,
+					modifiedAmount: Number(transfer.amount),
+				})
+
+				await axiosInstance.put(`budgets/${transfer.sourceId}`, { currentAmount: newBudgetAmount, logs: newLogs })
 			}
 
 			if (transfer.amount != initialTransfer.amount) {
@@ -96,14 +141,36 @@ const EditTransfer = () => {
 					// Revert amount of initial budget
 					const changedBudget = await axiosInstance.get(`budgets/view/${initialTransfer.budgetId}`)
 					const newAmount = Number(changedBudget.data.currentAmount) - Number(initialTransfer.amount) + Number(transfer.amount)
-					await axiosInstance.put(`budgets/${initialTransfer.budgetId}`, { currentAmount: newAmount })
+
+					// Create log for new amount
+					const changedLogs = changedBudget.data.logs
+
+					changedLogs.push({
+						date: Date.now(),
+						type: 'new-transfer-destination-amount',
+						currentAmount: newAmount,
+						modifiedAmount: Number(transfer.amount),
+					})
+
+					await axiosInstance.put(`budgets/${initialTransfer.budgetId}`, { currentAmount: newAmount, logs: changedLogs })
 				}
 
 				if (transfer.sourceId === initialTransfer.sourceId) {
 					// Revert amount of initial budget
 					const changedBudget = await axiosInstance.get(`budgets/view/${initialTransfer.sourceId}`)
 					const newAmount = Number(changedBudget.data.currentAmount) + Number(initialTransfer.amount) - Number(transfer.amount)
-					await axiosInstance.put(`budgets/${initialTransfer.sourceId}`, { currentAmount: newAmount })
+
+					// Create log for new amount
+					const changedLogs = changedBudget.data.logs
+
+					changedLogs.push({
+						date: Date.now(),
+						type: 'new-transfer-source-amount',
+						currentAmount: newAmount,
+						modifiedAmount: Number(transfer.amount),
+					})
+
+					await axiosInstance.put(`budgets/${initialTransfer.sourceId}`, { currentAmount: newAmount, logs: changedLogs })
 				}
 			}
 

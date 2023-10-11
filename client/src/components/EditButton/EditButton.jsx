@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
+import { FaEdit } from 'react-icons/fa'
 
-const EditButton = ({ to }) => {
+const EditButton = ({ state }) => {
 	return (
 		<Link
 			className="edit-btn"
-			to={to}
+			to="./edit"
+			state={state}
 		>
-			Edit
+			<FaEdit />
 		</Link>
 	)
 }

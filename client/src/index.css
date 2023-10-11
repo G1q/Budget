@@ -111,3 +111,7 @@ textarea {
 .buttons-group__checkbox label {
 	margin: 0;
 }
+
+.filter__wrapper {
+	margin-block: 1rem;
+}

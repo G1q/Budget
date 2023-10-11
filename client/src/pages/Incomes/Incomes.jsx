@@ -26,6 +26,7 @@ const Incomes = () => {
 	const [incomes, setIncomes] = useState([])
 	const [inputs, setInputs] = useState('')
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+	const [query, setQuery] = useState('')
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
 
@@ -33,7 +34,7 @@ const Incomes = () => {
 		fetchIncomes(getUserId(), dateInterval)
 			.then((responseData) => setIncomes(responseData))
 			.catch((error) => setError(error.response.data.message))
-	}, [dateInterval])
+	}, [dateInterval, query])
 
 	const handleDelete = async (id) => {
 		const confirmDelete = window.confirm('Are you sure do you want delete this income? The source budget will debit with income amount.')
@@ -50,7 +51,17 @@ const Incomes = () => {
 
 				if (newAmount < 0) throw new Error('Budget will decrease under 0. Please check again!')
 
-				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newAmount })
+				// Create budget log for deleted income
+				const logs = budget.data.logs
+
+				logs.push({
+					date: Date.now(),
+					type: 'deleted-income',
+					currentAmount: newAmount,
+					modifiedAmount: Number(amount),
+				})
+
+				await axiosInstance.put(`budgets/${budgetId}`, { currentAmount: newAmount, logs: logs })
 
 				// Delete income
 				try {
@@ -107,6 +118,18 @@ const Incomes = () => {
 				/>
 			</div>
 
+			{incomes.length > 0 && (
+				<div className="filter__wrapper">
+					<input
+						type="search"
+						name=""
+						id=""
+						placeholder="Search terms"
+						onChange={(e) => setQuery(e.target.value.toLowerCase())}
+					/>
+				</div>
+			)}
+
 			<Dialog
 				title="Create new source"
 				textButton="Create source"
@@ -141,21 +164,23 @@ const Incomes = () => {
 				/>
 			)}
 			{incomes.length > 0 ? (
-				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit income', 'Delete income']}>
-					{incomes.map((income) => (
-						<tr key={income._id}>
-							<td>{formatDate(new Date(income.date))}</td>
-							<td>{income.source.title}</td>
-							<td>{income.budget.title}</td>
-							<td>{amountWithDecimals(income.amount, income.currency)}</td>
-							<td>
-								<EditButton to={`/incomes/edit/${income._id}`} />
-							</td>
-							<td>
-								<DeleteButton onClick={() => handleDelete(income._id)} />
-							</td>
-						</tr>
-					))}
+				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit', 'Delete']}>
+					{incomes
+						.filter((income) => String(income.amount).concat(income.source.title, income.budget.title).toLowerCase().includes(query))
+						.map((income) => (
+							<tr key={income._id}>
+								<td>{formatDate(new Date(income.date))}</td>
+								<td>{income.source.title}</td>
+								<td>{income.budget.title}</td>
+								<td>{amountWithDecimals(income.amount, income.currency)}</td>
+								<td>
+									<EditButton state={{ id: income._id }} />
+								</td>
+								<td>
+									<DeleteButton onClick={() => handleDelete(income._id)} />
+								</td>
+							</tr>
+						))}
 				</DataTable>
 			) : (
 				<p>You don't have any incomes!</p>

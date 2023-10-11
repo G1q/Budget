@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
 import { FaHistory } from 'react-icons/fa'
 
-const LogButton = ({ to }) => {
+const LogButton = ({ state }) => {
 	return (
 		<Link
 			className="log-btn"
-			to={to}
+			to="./log"
+			state={state}
 		>
 			<FaHistory />
 		</Link>

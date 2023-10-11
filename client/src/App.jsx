@@ -83,7 +83,7 @@ const App = () => {
 
 								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 									<Route
-										path="/user/categories/edit/:id"
+										path="/user/categories/edit/"
 										element={<EditCategory />}
 									/>
 								</Route>
@@ -98,7 +98,7 @@ const App = () => {
 
 								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 									<Route
-										path="/user/sources/edit/:id"
+										path="/user/sources/edit/"
 										element={<EditSource />}
 									/>
 								</Route>
@@ -121,7 +121,7 @@ const App = () => {
 
 								<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 									<Route
-										path="/user/transfers/edit/:id"
+										path="/user/transfers/edit/"
 										element={<EditTransfer />}
 									/>
 								</Route>
@@ -161,7 +161,7 @@ const App = () => {
 
 						<Route element={<ProtectedRoleRoute requiredRole={['admin', 'superadmin']} />}>
 							<Route
-								path="/admin/users/edit/:id"
+								path="/admin/users/edit/"
 								element={<EditUser />}
 							/>
 						</Route>
@@ -184,14 +184,14 @@ const App = () => {
 
 						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 							<Route
-								path="/budgets/edit/:id"
+								path="/budgets/edit/"
 								element={<EditBudget />}
 							/>
 						</Route>
 
 						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 							<Route
-								path="/budgets/log/:id"
+								path="/budgets/log/"
 								element={<LogBudget />}
 							/>
 						</Route>
@@ -214,7 +214,7 @@ const App = () => {
 
 						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 							<Route
-								path="/incomes/edit/:id"
+								path="/incomes/edit/"
 								element={<EditIncome />}
 							/>
 						</Route>
@@ -237,7 +237,7 @@ const App = () => {
 
 						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 							<Route
-								path="/expenses/edit/:id"
+								path="/expenses/edit/"
 								element={<EditExpense />}
 							/>
 						</Route>
@@ -267,7 +267,7 @@ const App = () => {
 
 						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
 							<Route
-								path="/debts/edit/:id"
+								path="/debts/edit/"
 								element={<EditDebt />}
 							/>
 						</Route>

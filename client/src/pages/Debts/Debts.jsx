@@ -6,6 +6,9 @@ import { useAuth } from '../../contexts/AuthContext'
 // Import custom components
 import ButtonLink from '../../components/ButtonLink/ButtonLink'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import EditButton from '../../components/EditButton/EditButton'
+import DeleteButton from '../../components/DeleteButton/DeleteButton'
+import DataTable from '../../components/DataTable/DataTable'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
@@ -14,9 +17,6 @@ import { fetchDebts } from '../../utilities/fetchData'
 
 // Import styling
 import './Debts.css'
-import EditButton from '../../components/EditButton/EditButton'
-import DeleteButton from '../../components/DeleteButton/DeleteButton'
-import DataTable from '../../components/DataTable/DataTable'
 
 const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -86,7 +86,7 @@ const Debts = () => {
 				/>
 			)}
 			{debts.length > 0 ? (
-				<DataTable cols={['Date', 'Creditor', 'Start amount', 'Current amount', 'Active', 'Edit debt', 'Delete debt']}>
+				<DataTable cols={['Date', 'Creditor', 'Start amount', 'Current amount', 'Active', 'Edit', 'Delete']}>
 					{debts
 						.filter((debt) => (activeDebts ? debt.currentAmount > 0 : debt))
 						.map((debt) => (
@@ -97,7 +97,7 @@ const Debts = () => {
 								<td>{debt.currentAmount > 0 ? `-${amountWithDecimals(debt.currentAmount, debt.currency)}` : 0}</td>
 								<td>{debt.currentAmount > 0 ? 'Yes' : 'No'}</td>
 								<td>
-									<EditButton to={`/debts/edit/${debt._id}`} />
+									<EditButton state={{ id: debt._id }} />
 								</td>
 								<td>
 									<DeleteButton onClick={() => handleDelete(debt._id)} />

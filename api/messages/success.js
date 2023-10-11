@@ -97,6 +97,20 @@ const SUCCESS_MESSAGES = {
 			statusCode: 200,
 		},
 	},
+	USER: {
+		REGISTERED: {
+			message: 'User registered successfully!',
+			statusCode: 201,
+		},
+		UPDATED: {
+			message: 'User updated successfully!',
+			statusCode: 200,
+		},
+		DELETED: {
+			message: 'User deleted successfully!',
+			statusCode: 200,
+		},
+	},
 }
 
 module.exports = { SUCCESS_MESSAGES }

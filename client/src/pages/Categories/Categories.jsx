@@ -1,5 +1,5 @@
 // Import dependencies
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -23,16 +23,15 @@ const Categories = () => {
 	const [categories, setCategories] = useState([])
 	const [categoryTitle, setCategoryTitle] = useState('')
 	const [subcategoryTitle, setSubcategoryTitle] = useState('')
+	const [query, setQuery] = useState('')
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
-
-	const navigate = useNavigate()
 
 	useEffect(() => {
 		fetchAllCategories(getUserId())
 			.then((responseData) => setCategories(responseData))
 			.catch((error) => setError(error.response.data.message))
-	}, [])
+	}, [query])
 
 	const handleDelete = async (id) => {
 		const confirmDelete = window.confirm('Are you sure do you want delete this category?')
@@ -130,20 +129,34 @@ const Categories = () => {
 				/>
 			)}
 
+			{categories.length > 0 && (
+				<div className="filter__wrapper">
+					<input
+						type="search"
+						name=""
+						id=""
+						placeholder="Search terms"
+						onChange={(e) => setQuery(e.target.value.toLowerCase())}
+					/>
+				</div>
+			)}
+
 			{categories.length > 0 ? (
 				<DataTable cols={['Category', 'Subcategory', 'Edit category', 'Delete category']}>
-					{categories.map((category) => (
-						<tr key={category._id}>
-							<td>{category.title}</td>
-							<td>{category.subcategory}</td>
-							<td>
-								<EditButton to={`/user/categories/edit/${category._id}`} />
-							</td>
-							<td>
-								<DeleteButton onClick={() => handleDelete(category._id)} />
-							</td>
-						</tr>
-					))}
+					{categories
+						.filter((category) => String(category.title).concat(category.subcategory).toLowerCase().includes(query))
+						.map((category) => (
+							<tr key={category._id}>
+								<td>{category.title}</td>
+								<td>{category.subcategory}</td>
+								<td>
+									<EditButton state={{ id: category._id }} />
+								</td>
+								<td>
+									<DeleteButton onClick={() => handleDelete(category._id)} />
+								</td>
+							</tr>
+						))}
 				</DataTable>
 			) : (
 				<p>You don't have any categories created!</p>

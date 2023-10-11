@@ -1,5 +1,5 @@
 // Import dependencies
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 
@@ -15,7 +15,8 @@ import './EditExpense.css'
 
 const EditExpense = () => {
 	const { getUserId } = useAuth()
-	const { id } = useParams()
+	const { state } = useLocation()
+	const id = state.id
 
 	const [budgets, setBudgets] = useState([])
 	const [expense, setExpense] = useState('')
@@ -60,12 +61,34 @@ const EditExpense = () => {
 				// Revert amount of initial budget
 				const changedBudget = await axiosInstance.get(`budgets/view/${initialExpense.budget}`)
 				const newAmount = Number(changedBudget.data.currentAmount) + Number(initialExpense.amount)
-				await axiosInstance.put(`budgets/${initialExpense.budget}`, { currentAmount: newAmount })
+
+				// Create log for changed budget
+				const changedLogs = changedBudget.data.logs
+
+				changedLogs.push({
+					date: Date.now(),
+					type: 'changed-budget-expense',
+					currentAmount: newAmount,
+					modifiedAmount: Number(initialExpense.amount),
+				})
+
+				await axiosInstance.put(`budgets/${initialExpense.budget}`, { currentAmount: newAmount, logs: changedLogs })
 
 				// Change amount of new budget
 				const newBudget = await axiosInstance.get(`budgets/view/${expense.budget}`)
 				const newBudgetAmount = Number(newBudget.data.currentAmount) - Number(expense.amount)
-				await axiosInstance.put(`budgets/${expense.budget}`, { currentAmount: newBudgetAmount })
+
+				// Create log for new budget
+				const newLogs = newBudget.data.logs
+
+				newLogs.push({
+					date: Date.now(),
+					type: 'new-budget-expense',
+					currentAmount: newBudgetAmount,
+					modifiedAmount: Number(expense.amount),
+				})
+
+				await axiosInstance.put(`budgets/${expense.budget}`, { currentAmount: newBudgetAmount, logs: newLogs })
 
 				await axiosInstance.put(`expenses/${id}`, expense)
 
@@ -76,7 +99,18 @@ const EditExpense = () => {
 				const budget = await axiosInstance.get(`budgets/view/${initialExpense.budget}`)
 				// New amount is: revert to original amount without this expense, then add new expense
 				const amount = Number(budget.data.currentAmount) + Number(initialExpense.amount) - Number(expense.amount)
-				await axiosInstance.put(`budgets/${initialExpense.budget}`, { currentAmount: amount })
+
+				// Create logs for changed amount
+				const newAmountLog = budget.data.logs
+
+				newAmountLog.push({
+					date: Date.now(),
+					type: 'new-amount-expense',
+					currentAmount: amount,
+					modifiedAmount: Number(expense.amount),
+				})
+
+				await axiosInstance.put(`budgets/${initialExpense.budget}`, { currentAmount: amount, logs: newAmountLog })
 
 				await axiosInstance.put(`expenses/${id}`, expense)
 				navigate('/expenses')
