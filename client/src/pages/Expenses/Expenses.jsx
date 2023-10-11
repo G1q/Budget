@@ -85,12 +85,10 @@ const Expenses = () => {
 					{debts.length > 0 && <ButtonLink>Pay debt (disabled)</ButtonLink>} {/* to="./paydebt" */}
 				</div>
 
-				{expenses.length > 0 && (
-					<SelectInterval
-						onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
-						label="Select date"
-					/>
-				)}
+				<SelectInterval
+					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
+					label="Select date"
+				/>
 			</div>
 			{expenses.length > 0 && (
 				<div className="filter__wrapper">

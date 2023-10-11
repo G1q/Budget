@@ -112,12 +112,10 @@ const Incomes = () => {
 					</Button>
 				</div>
 
-				{incomes.length > 0 && (
-					<SelectInterval
-						onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
-						label="Select date"
-					/>
-				)}
+				<SelectInterval
+					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
+					label="Select date"
+				/>
 			</div>
 
 			{incomes.length > 0 && (

@@ -10,13 +10,9 @@ const register = async (req, res) => {
 		const existingUsername = await User.findOne({ username })
 		const existingEmail = await User.findOne({ email })
 
-		if (existingUsername) {
-			return res.status(400).json({ error: 'Username is already taken' })
-		}
+		if (existingUsername) return res.status(400).json({ error: 'Username is already taken' })
 
-		if (existingEmail) {
-			return res.status(400).json({ error: 'Email is already registered' })
-		}
+		if (existingEmail) return res.status(400).json({ error: 'Email is already registered' })
 
 		// Hash the password
 		const hashedPassword = await bcrypt.hash(password, 10)
@@ -42,19 +38,14 @@ const login = async (req, res) => {
 
 		// Check if the user exists
 		const user = await User.findOne({ email })
-		if (!user) {
-			return res.status(404).json({ error: 'User not found' })
-		}
+		if (!user) return res.status(404).json({ error: 'User not found' })
 
-		if (!user.active) {
-			return res.status(403).json({ error: 'User is not active!' })
-		}
+		// Check if user is active
+		if (!user.active) return res.status(403).json({ error: 'User is not active!' })
 
 		// Compare passwords
 		const passwordMatch = await bcrypt.compare(password, user.password)
-		if (!passwordMatch) {
-			return res.status(401).json({ error: 'Invalid credentials' })
-		}
+		if (!passwordMatch) return res.status(401).json({ error: 'Invalid credentials' })
 
 		// Generate a JWT token
 		const token = jwt.sign({ userId: user._id, userRole: user.role, username: user.username, settings: user.settings }, process.env.JWT_SECRET, {
@@ -73,9 +64,7 @@ const getProfile = async (req, res) => {
 
 		// Fetch user profile
 		const user = await User.findById(userId).select('-password')
-		if (!user) {
-			return res.status(404).json({ error: 'User not found' })
-		}
+		if (!user) return res.status(404).json({ error: 'User not found' })
 
 		res.status(200).json(user)
 	} catch (error) {
@@ -103,9 +92,7 @@ const editProfile = async (req, res) => {
 
 		const updatedUser = await User.findByIdAndUpdate(userId, { username, email, password: hashedPassword }, { new: true })
 
-		if (!updatedUser) {
-			return res.status(404).json({ error: 'User not found' })
-		}
+		if (!updatedUser) return res.status(404).json({ error: 'User not found' })
 
 		res.status(200).json(updatedUser)
 	} catch (error) {
@@ -115,10 +102,7 @@ const editProfile = async (req, res) => {
 
 const deleteAccount = async (req, res) => {
 	try {
-		const userId = req.params.id
-
-		await User.findByIdAndDelete(userId)
-
+		await User.findByIdAndDelete(req.params.id)
 		res.status(200).json({ message: 'User deleted successfully!' })
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' })

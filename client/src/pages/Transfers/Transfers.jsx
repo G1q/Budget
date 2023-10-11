@@ -95,12 +95,10 @@ const Transfers = () => {
 					<ButtonLink to="./create">Create transfer</ButtonLink>
 				</div>
 
-				{transfers.length > 0 && (
-					<SelectInterval
-						onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
-						label="Select date"
-					/>
-				)}
+				<SelectInterval
+					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
+					label="Select date"
+				/>
 			</div>
 
 			{error && (
