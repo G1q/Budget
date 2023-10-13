@@ -19,22 +19,29 @@ import { fetchAllCategories } from '../../utilities/fetchData'
 import './Categories.css'
 
 const Categories = () => {
-	const { getUserId, isLoggedIn } = useAuth()
+	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const [categories, setCategories] = useState([])
 	const [categoryTitle, setCategoryTitle] = useState('')
 	const [subcategoryTitle, setSubcategoryTitle] = useState('')
 	const [query, setQuery] = useState('')
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const [translations, setTranslations] = useState(null)
+
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
 
 	useEffect(() => {
+		import(`../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		fetchAllCategories(getUserId())
 			.then((responseData) => setCategories(responseData))
 			.catch((error) => setError(error.response.data.message))
 	}, [query])
 
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this category?')
+		const confirmDelete = window.confirm(translate('Are you sure do you want delete this category?'))
 
 		if (confirmDelete) {
 			try {
@@ -75,25 +82,25 @@ const Categories = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Categories</h1>
+			<h1>{translate('Categories')}</h1>
 			<div className="header__actions">
 				<div className="buttons-group">
 					<Button
 						onClick={openDialog}
 						className="popup-btn"
 					>
-						Create new category
+						{translate('Create new category')}
 					</Button>
 				</div>
 			</div>
 
 			<Dialog
-				title="Create new category"
-				textButton="Create category"
+				title={translate('Create new category')}
+				textButton={translate('Create category')}
 				onClick={closeDialog}
 				onSubmit={handleSubmit}
 			>
-				<label htmlFor="title">Title</label>
+				<label htmlFor="title">{translate('Title')}</label>
 				<input
 					type="text"
 					name="title"
@@ -101,7 +108,7 @@ const Categories = () => {
 					onChange={(e) => setCategoryTitle(e.target.value)}
 				/>
 
-				<label htmlFor="subcategory">Subcategory title</label>
+				<label htmlFor="subcategory">{translate('Subcategory title')}</label>
 				<input
 					type="text"
 					name="subcategory"
@@ -135,14 +142,14 @@ const Categories = () => {
 						type="search"
 						name=""
 						id=""
-						placeholder="Search terms"
+						placeholder={translate('Search terms')}
 						onChange={(e) => setQuery(e.target.value.toLowerCase())}
 					/>
 				</div>
 			)}
 
 			{categories.length > 0 ? (
-				<DataTable cols={['Category', 'Subcategory', 'Edit category', 'Delete category']}>
+				<DataTable cols={[translate('Category'), translate('Subcategory'), translate('Edit'), translate('Delete')]}>
 					{categories
 						.filter((category) => String(category.title).concat(category.subcategory).toLowerCase().includes(query))
 						.map((category) => (
@@ -159,7 +166,7 @@ const Categories = () => {
 						))}
 				</DataTable>
 			) : (
-				<p>You don't have any categories created!</p>
+				<p>{translate("You don't have any categories created!")}</p>
 			)}
 		</main>
 	) : (

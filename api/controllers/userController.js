@@ -100,6 +100,27 @@ const editProfile = async (req, res) => {
 	}
 }
 
+const updateSettings = async (req, res) => {
+	try {
+		const updatedUser = await User.findByIdAndUpdate(req.params.id, { settings: req.body }, { new: true })
+
+		if (!updatedUser) return res.status(404).json({ error: 'User not found' })
+
+		// Generate a JWT token
+		const token = jwt.sign(
+			{ userId: updatedUser._id, userRole: updatedUser.role, username: updatedUser.username, settings: updatedUser.settings },
+			process.env.JWT_SECRET,
+			{
+				expiresIn: '4h',
+			}
+		)
+
+		res.status(200).json({ message: 'User settings updated successfully!', token })
+	} catch (error) {
+		res.status(500).json({ error: 'Internal Server Error' })
+	}
+}
+
 const deleteAccount = async (req, res) => {
 	try {
 		await User.findByIdAndDelete(req.params.id)
@@ -109,4 +130,4 @@ const deleteAccount = async (req, res) => {
 	}
 }
 
-module.exports = { register, login, getProfile, editProfile, deleteAccount }
+module.exports = { register, login, getProfile, editProfile, deleteAccount, updateSettings }

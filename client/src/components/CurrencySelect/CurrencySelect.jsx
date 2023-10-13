@@ -7,7 +7,7 @@ const CurrencySelect = ({ label = 'Currency', value, onChange }) => {
 			<select
 				name="currency"
 				id="currency"
-				value={value}
+				defaultValue={value}
 				onChange={onChange}
 			>
 				<option value="RON">RON</option>

@@ -15,17 +15,24 @@ import { fetchBudgets, getTransfer } from '../../../utilities/fetchData'
 import './EditTransfer.css'
 
 const EditTransfer = () => {
-	const { getUserId, isLoggedIn } = useAuth()
+	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const { state } = useLocation()
 	const id = state.id
 	const [transfer, setTransfer] = useState('')
 	const [initialTransfer, setInitialTransfer] = useState('')
 	const [budgets, setBudgets] = useState([])
 	const [error, setError] = useState(null)
+	const [translations, setTranslations] = useState(null)
 
 	const navigate = useNavigate()
 
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
+
 	useEffect(() => {
+		import(`../../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		getTransfer(id)
 			.then((responseData) => {
 				setTransfer(responseData)
@@ -63,7 +70,7 @@ const EditTransfer = () => {
 		try {
 			// Don't allow transfer to same budget
 			if (transfer.sourceId === transfer.budgetId) {
-				throw new Error("You can't transfer to same budget account!")
+				throw new Error(translate("You can't transfer to same budget account!"))
 			}
 
 			// Check if destination budget was changed
@@ -183,7 +190,7 @@ const EditTransfer = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Edit transfer</h1>
+			<h1>{translate('Edit transfer')}</h1>
 
 			{error && (
 				<StatusMessage
@@ -194,7 +201,7 @@ const EditTransfer = () => {
 
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
-					<label htmlFor="sourceId">Source</label>
+					<label htmlFor="sourceId">{translate('Source')}</label>
 					{budgets.length > 0 ? (
 						<select
 							name="sourceId"
@@ -213,12 +220,12 @@ const EditTransfer = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/budgets/create">Create your first budget!</Link>
+						<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
 					)}
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="budgetId">Budget</label>
+					<label htmlFor="budgetId">{translate('Budget')}</label>
 					{budgets.length > 0 ? (
 						<select
 							name="budgetId"
@@ -237,12 +244,12 @@ const EditTransfer = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/budgets/create">Create your first budget!</Link>
+						<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
 					)}
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="amount">Amount</label>
+					<label htmlFor="amount">{translate('Amount')}</label>
 					<input
 						type="number"
 						name="amount"
@@ -255,7 +262,7 @@ const EditTransfer = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="description">Description</label>
+					<label htmlFor="description">{translate('Description')}</label>
 					<textarea
 						name="description"
 						id="description"
@@ -265,7 +272,7 @@ const EditTransfer = () => {
 						value={transfer.description}
 					></textarea>
 				</div>
-				<Button type="submit">Edit transfer</Button>
+				<Button type="submit">{translate('Edit transfer')}</Button>
 			</form>
 		</main>
 	) : (

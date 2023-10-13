@@ -15,15 +15,22 @@ import { getCategory } from '../../../utilities/fetchData'
 import './EditCategory.css'
 
 const EditCategory = () => {
-	const { isLoggedIn } = useAuth()
+	const { isLoggedIn, getUserSettings } = useAuth()
 	const { state } = useLocation()
 	const id = state.id
 	const [category, setCategory] = useState('')
 	const [error, setError] = useState(null)
+	const [translations, setTranslations] = useState(null)
+
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
 
 	const navigate = useNavigate()
 
 	useEffect(() => {
+		import(`../../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		getCategory(id)
 			.then((responseData) => setCategory(responseData))
 			.catch((error) => setError(error.response.data.message))
@@ -48,7 +55,7 @@ const EditCategory = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Edit category</h1>
+			<h1>{translate('Edit category')}</h1>
 			{error && (
 				<StatusMessage
 					type="error"
@@ -58,7 +65,7 @@ const EditCategory = () => {
 
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
-					<label htmlFor="title">Title</label>
+					<label htmlFor="title">{translate('Title')}</label>
 					<input
 						type="text"
 						id="title"
@@ -70,7 +77,7 @@ const EditCategory = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="subcategory">Subactegory</label>
+					<label htmlFor="subcategory">{translate('Subcategory')}</label>
 					<input
 						type="text"
 						id="subcategory"
@@ -79,7 +86,7 @@ const EditCategory = () => {
 						onChange={handleChange}
 					/>
 				</div>
-				<Button type="submit">Edit category</Button>
+				<Button type="submit">{translate('Edit category')}</Button>
 			</form>
 		</main>
 	) : (

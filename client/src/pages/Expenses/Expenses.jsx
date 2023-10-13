@@ -10,6 +10,7 @@ import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
 import EditButton from '../../components/EditButton/EditButton'
 import DeleteButton from '../../components/DeleteButton/DeleteButton'
+import Pagination from '../../components/Pagination/Pagination'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
@@ -20,12 +21,16 @@ import { fetchDebts, fetchExpenses, fetchIncomes } from '../../utilities/fetchDa
 // Import styling
 import './Expenses.css'
 
+const ITEMS_PER_PAGE = 20
+
 const Expenses = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [expenses, setExpenses] = useState([])
 	const [debts, setDebts] = useState([])
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 	const [query, setQuery] = useState('')
+	const [startItem, setStartItem] = useState(0)
+	const [endItem, setEndItem] = useState(ITEMS_PER_PAGE)
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
@@ -35,6 +40,8 @@ const Expenses = () => {
 		fetchDebts(getUserId())
 			.then((responseData) => setDebts(responseData))
 			.catch((error) => setError(error.response.data.message))
+		setStartItem(0)
+		setEndItem(ITEMS_PER_PAGE)
 	}, [dateInterval, query])
 
 	const handleDelete = async (id) => {
@@ -75,6 +82,16 @@ const Expenses = () => {
 		}
 	}
 
+	const handleNextButton = () => {
+		setStartItem((prev) => prev + ITEMS_PER_PAGE)
+		setEndItem((prev) => prev + ITEMS_PER_PAGE)
+	}
+
+	const handlePrevButton = () => {
+		setStartItem((prev) => prev - ITEMS_PER_PAGE)
+		setEndItem((prev) => prev - ITEMS_PER_PAGE)
+	}
+
 	return isLoggedIn() ? (
 		<main>
 			<h1>Expenses</h1>
@@ -109,27 +126,38 @@ const Expenses = () => {
 				/>
 			)}
 			{expenses.length > 0 ? (
-				<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit', 'Delete']}>
-					{expenses
-						.filter((expense) =>
-							String(expense.amount).concat(expense.category, expense.subcategory, expense.budget.title).toLowerCase().includes(query)
-						)
-						.map((expense) => (
-							<tr key={expense._id}>
-								<td>{formatDate(new Date(expense.date))}</td>
-								<td>{expense.budget.title}</td>
-								<td>{amountWithDecimals(expense.amount, expense.currency)}</td>
-								<td>{expense.category}</td>
-								<td>{expense.subcategory}</td>
-								<td>
-									<EditButton state={{ id: expense._id }} />
-								</td>
-								<td>
-									<DeleteButton onClick={() => handleDelete(expense._id)} />
-								</td>
-							</tr>
-						))}
-				</DataTable>
+				<>
+					<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit', 'Delete']}>
+						{expenses
+							.filter((expense) =>
+								String(expense.amount).concat(expense.category, expense.subcategory, expense.budget.title).toLowerCase().includes(query)
+							)
+							.slice(startItem, endItem)
+							.map((expense) => (
+								<tr key={expense._id}>
+									<td>{formatDate(new Date(expense.date))}</td>
+									<td>{expense.budget.title}</td>
+									<td>{amountWithDecimals(expense.amount, expense.currency)}</td>
+									<td>{expense.category}</td>
+									<td>{expense.subcategory}</td>
+									<td>
+										<EditButton state={{ id: expense._id }} />
+									</td>
+									<td>
+										<DeleteButton onClick={() => handleDelete(expense._id)} />
+									</td>
+								</tr>
+							))}
+					</DataTable>
+					<Pagination
+						startIndex={startItem}
+						endIndex={endItem}
+						dataArray={expenses}
+						numberOfItemsPerPage={ITEMS_PER_PAGE}
+						onClickNext={handleNextButton}
+						onClickPrev={handlePrevButton}
+					/>
+				</>
 			) : (
 				<p>You don't have any expenses!</p>
 			)}

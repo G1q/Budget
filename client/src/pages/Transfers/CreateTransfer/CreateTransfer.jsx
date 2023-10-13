@@ -15,14 +15,21 @@ import { fetchBudgets } from '../../../utilities/fetchData'
 import './CreateTransfer.css'
 
 const CreateTransfer = () => {
-	const { getUserId, isLoggedIn } = useAuth()
+	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const [inputs, setInputs] = useState({ user: getUserId() })
 	const [budgets, setBudgets] = useState([])
 	const [error, setError] = useState(null)
+	const [translations, setTranslations] = useState(null)
 
 	const navigate = useNavigate()
 
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
+
 	useEffect(() => {
+		import(`../../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		fetchBudgets(getUserId())
 			.then((responseData) => setBudgets(responseData))
 			.catch((error) => setError(error.response.data.message))
@@ -55,7 +62,7 @@ const CreateTransfer = () => {
 		try {
 			// Check if they are different budgets
 			if (inputs.sourceId === inputs.budgetId) {
-				throw new Error("You can't transfer to same budget account!")
+				throw new Error(translate("You can't transfer to same budget account!"))
 			} else {
 				// Change new budgets
 				const sourceBudget = await axiosInstance.get(`/budgets/view/${inputs.sourceId}`)
@@ -82,7 +89,7 @@ const CreateTransfer = () => {
 				})
 
 				if (newSourceAmount < 0) {
-					throw new Error("You don't have this amount in source budget!")
+					throw new Error(translate("You don't have this amount in source budget!"))
 				} else {
 					await axiosInstance.put(`/budgets/${inputs.sourceId}`, { currentAmount: newSourceAmount, logs: logsSource })
 					await axiosInstance.put(`/budgets/${inputs.budgetId}`, { currentAmount: newDestinationAmount, logs: logsDestination })
@@ -99,7 +106,7 @@ const CreateTransfer = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Create new transfer</h1>
+			<h1>{translate('Create new transfer')}</h1>
 			{error && (
 				<StatusMessage
 					type="error"
@@ -109,7 +116,7 @@ const CreateTransfer = () => {
 
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
-					<label htmlFor="date">Date</label>
+					<label htmlFor="date">{translate('Date')}</label>
 					<input
 						type="date"
 						id="date"
@@ -120,7 +127,7 @@ const CreateTransfer = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="sourceId">Source</label>
+					<label htmlFor="sourceId">{translate('Source')}</label>
 					{budgets.length > 0 ? (
 						<select
 							name="sourceId"
@@ -132,7 +139,7 @@ const CreateTransfer = () => {
 								value=""
 								hidden
 							>
-								Select budget..
+								{translate('Select budget..')}
 							</option>
 							{budgets.map((budget) => (
 								<option
@@ -144,12 +151,12 @@ const CreateTransfer = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/budgets/create">Create your first budget!</Link>
+						<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
 					)}
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="budgetId">Budget</label>
+					<label htmlFor="budgetId">{translate('Budget')}</label>
 					{budgets.length > 0 ? (
 						<select
 							name="budgetId"
@@ -161,7 +168,7 @@ const CreateTransfer = () => {
 								value=""
 								hidden
 							>
-								Select budget..
+								{translate('Select budget..')}
 							</option>
 							{budgets.map((budget) => (
 								<option
@@ -173,12 +180,12 @@ const CreateTransfer = () => {
 							))}
 						</select>
 					) : (
-						<Link to="/budgets/create">Create your first budget!</Link>
+						<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
 					)}
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="amount">Amount</label>
+					<label htmlFor="amount">{translate('Amount')}</label>
 					<input
 						type="number"
 						name="amount"
@@ -190,7 +197,7 @@ const CreateTransfer = () => {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="description">Description</label>
+					<label htmlFor="description">{translate('Description')}</label>
 					<textarea
 						name="description"
 						id="description"
@@ -199,7 +206,7 @@ const CreateTransfer = () => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-				<Button type="submit">Create transfer</Button>
+				<Button type="submit">{translate('Create transfer')}</Button>
 			</form>
 		</main>
 	) : (

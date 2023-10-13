@@ -1,4 +1,4 @@
-import React from 'react'
+import Reac from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
@@ -302,16 +302,3 @@ const App = () => {
 }
 
 export default App
-
-{
-	// Ex: protected route
-	/* <Route
-					path="/register"
-					element={<ProtectedRoleRoute requiredRole={['user', 'admin']} />}
-				>
-					<Route
-						path="/register"
-						element={<Register />}
-					/>
-				</Route> */
-}
