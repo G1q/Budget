@@ -46,5 +46,6 @@
 	"Description": "Description",
 	"You don't have this amount in source budget!": "You don't have this amount in source budget!",
 	"Create new transfer": "Create new transfer",
-	"Select budget..": "Select budget.."
+	"Select budget..": "Select budget..",
+	"User settings updated successfully!": "User settings updated successfully!"
 }

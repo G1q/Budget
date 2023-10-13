@@ -46,5 +46,6 @@
 	"Description": "Descriere",
 	"You don't have this amount in source budget!": "Nu ai suma necesara transferului in bugetul sursa selectat!",
 	"Create new transfer": "Creaza transfer nou",
-	"Select budget..": "Selecteaza bugetul.."
+	"Select budget..": "Selecteaza bugetul..",
+	"User settings updated successfully!": "Setarile au fost modificate cu succes!"
 }

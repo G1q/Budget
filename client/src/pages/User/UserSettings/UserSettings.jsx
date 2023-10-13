@@ -49,7 +49,7 @@ const UserSettings = () => {
 			{success && (
 				<StatusMessage
 					type="success"
-					message={success}
+					message={translate(success)}
 				/>
 			)}
 			<section>
