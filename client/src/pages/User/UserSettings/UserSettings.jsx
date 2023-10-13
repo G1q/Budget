@@ -1,9 +1,8 @@
 import './UserSettings.css'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../../contexts/AuthContext'
-import { labels } from '../../../translations/labels'
 import CurrencySelect from '../../../components/CurrencySelect/CurrencySelect'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from '../../../components/Button/Button'
 import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 import axiosInstance from '../../../utilities/axiosconfig'
@@ -14,6 +13,15 @@ const UserSettings = () => {
 	const [settings, setSettings] = useState(getUserSettings())
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const [translations, setTranslations] = useState(null)
+
+	useEffect(() => {
+		import(`../../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => console.error('Translation file not found:', error))
+	}, [settings])
+
+	const translate = (key) => (translations ? translations[key] : key)
 
 	const handleSubmit = async () => {
 		try {
@@ -31,7 +39,7 @@ const UserSettings = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Settings</h1>
+			<h1>{translate('Settings')}</h1>
 			{error && (
 				<StatusMessage
 					type="error"
@@ -47,7 +55,7 @@ const UserSettings = () => {
 			<section>
 				<h2>Visual</h2>
 				<div className="settings__option settings__option--row">
-					<label htmlFor="theme">{labels[0].translate[settings.language]}</label>
+					<label htmlFor="theme">{translate('Select website theme:')}</label>
 					<select
 						name="theme"
 						id="theme"
@@ -70,14 +78,14 @@ const UserSettings = () => {
 				<div className="settings__option settings__option--row">
 					<LanguageSelect
 						value={settings.language}
-						label={labels[1].translate[settings.language]}
+						label={translate('Select website language:')}
 						onChange={(e) => setSettings((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
 					/>
 				</div>
 
 				<div className="settings__option settings__option--row">
 					<CurrencySelect
-						label="Select default currency:"
+						label={translate('Select default currency:')}
 						value={settings.currency}
 						onChange={(e) =>
 							setSettings((prev) => ({
@@ -93,7 +101,7 @@ const UserSettings = () => {
 				id="save-settings"
 				onClick={handleSubmit}
 			>
-				Save settings
+				{translate('Save settings')}
 			</Button>
 		</main>
 	) : (

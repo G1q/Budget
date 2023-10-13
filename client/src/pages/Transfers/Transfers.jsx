@@ -21,20 +21,27 @@ import { fetchTransfers } from '../../utilities/fetchData'
 import './Transfers.css'
 
 const Transfers = () => {
-	const { getUserId, isLoggedIn } = useAuth()
+	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const [transfers, setTransfers] = useState([])
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const [translations, setTranslations] = useState(null)
+
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
 
 	useEffect(() => {
+		import(`../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		fetchTransfers(getUserId(), dateInterval)
 			.then((responseData) => setTransfers(responseData))
 			.catch((error) => setError(error.response.data.message))
 	}, [dateInterval])
 
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this transfer? All amounts will be reverted to original budgets')
+		const confirmDelete = window.confirm(translate('Are you sure do you want delete this transfer? All amounts will be reverted to original budgets'))
 
 		if (confirmDelete) {
 			try {
@@ -88,16 +95,16 @@ const Transfers = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Transfers</h1>
+			<h1>{translate('Transfers')}</h1>
 
 			<div className="header__actions">
 				<div className="buttons-group">
-					<ButtonLink to="./create">Create transfer</ButtonLink>
+					<ButtonLink to="./create">{translate('Create transfer')}</ButtonLink>
 				</div>
 
 				<SelectInterval
 					onChange={(e) => setDateInterval(handleSelectIntervalChange(e))}
-					label="Select date"
+					label={translate('Select date')}
 				/>
 			</div>
 
@@ -115,7 +122,7 @@ const Transfers = () => {
 			)}
 
 			{transfers.length > 0 ? (
-				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit transfer', 'Delete transfer']}>
+				<DataTable cols={[translate('Date'), translate('Source'), translate('Budget'), translate('Amount'), translate('Edit'), translate('Delete')]}>
 					{transfers.map((transfer) => (
 						<tr key={transfer._id}>
 							<td>{formatDate(new Date(transfer.date))}</td>

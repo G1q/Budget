@@ -19,22 +19,27 @@ import { fetchSources } from '../../utilities/fetchData'
 import './Sources.css'
 
 const Sources = () => {
-	const { getUserId, isLoggedIn } = useAuth()
+	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const [sources, setSources] = useState([])
 	const [sourceTitle, setSourceTitle] = useState('')
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const [translations, setTranslations] = useState(null)
 
-	const navigate = useNavigate()
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
 
 	useEffect(() => {
+		import(`../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		fetchSources(getUserId())
 			.then((responseData) => setSources(responseData))
 			.catch((error) => setError(error.response.data.message))
 	}, [])
 
 	const handleDelete = async (id) => {
-		const confirmDelete = window.confirm('Are you sure do you want delete this source?')
+		const confirmDelete = window.confirm(translate('Are you sure do you want delete this source?'))
 
 		if (confirmDelete) {
 			try {
@@ -74,7 +79,7 @@ const Sources = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Sources</h1>
+			<h1>{translate('Sources')}</h1>
 
 			<div className="header__actions">
 				<div className="buttons-group">
@@ -82,18 +87,18 @@ const Sources = () => {
 						onClick={openDialog}
 						className="popup-btn"
 					>
-						Create new source
+						{translate('Create new source')}
 					</Button>
 				</div>
 			</div>
 
 			<Dialog
-				title="Create new source"
-				textButton="Create source"
+				title={translate('Create new source')}
+				textButton={translate('Create source')}
 				onClick={closeDialog}
 				onSubmit={handleSubmit}
 			>
-				<label htmlFor="title">Title</label>
+				<label htmlFor="title">{translate('Title')}</label>
 				<input
 					type="text"
 					name="title"
@@ -122,7 +127,7 @@ const Sources = () => {
 				/>
 			)}
 			{sources.length > 0 ? (
-				<DataTable cols={['Source', 'Edit source', 'Delete source']}>
+				<DataTable cols={[translate('Source'), translate('Edit'), translate('Delete')]}>
 					{sources.map((source) => (
 						<tr key={source._id}>
 							<td>{source.title}</td>
@@ -136,7 +141,7 @@ const Sources = () => {
 					))}
 				</DataTable>
 			) : (
-				<p>You don't have any sources!</p>
+				<p>{translate("You don't have any sources!")}</p>
 			)}
 		</main>
 	) : (

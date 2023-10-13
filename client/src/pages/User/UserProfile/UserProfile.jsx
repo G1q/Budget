@@ -7,26 +7,34 @@ import ButtonLink from '../../../components/ButtonLink/ButtonLink'
 import Button from '../../../components/Button/Button'
 
 const UserProfile = () => {
-	const { getUserId, setAuthToken } = useAuth()
+	const { getUserId, setAuthToken, getUserSettings } = useAuth()
 	const [profile, setProfile] = useState({})
+	const [translations, setTranslations] = useState(null)
+	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
-	useEffect(() => {
-		const getProfile = async () => {
-			try {
-				const response = await axiosInstance.get(`users/profile/${getUserId()}`)
-				setProfile(response.data)
-			} catch (err) {
-				console.log(err)
-			}
-		}
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
 
+	useEffect(() => {
+		import(`../../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		getProfile()
 	}, [])
 
+	const getProfile = async () => {
+		try {
+			const response = await axiosInstance.get(`users/profile/${getUserId()}`)
+			setProfile(response.data)
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	const handleDeleteProfile = async () => {
-		const confirmDelete = window.confirm('Are you sure do you want delete your account?')
+		const confirmDelete = window.confirm(translate('Are you sure do you want delete your account?'))
 
 		if (confirmDelete) {
 			try {
@@ -42,22 +50,22 @@ const UserProfile = () => {
 
 	return (
 		<section className="user__profile">
-			<h1>My profile</h1>
+			<h1>{translate('My profile')}</h1>
 			<div className="profile__info">
 				<p>
-					Username: <strong>{profile.username}</strong>
+					{translate('Username:')} <strong>{profile.username}</strong>
 				</p>
 				<p>
-					Email: <strong>{profile.email}</strong>
+					{translate('Email:')} <strong>{profile.email}</strong>
 				</p>
 			</div>
 			<div className="profile__actions">
-				<ButtonLink to="/user/edit">Edit profile</ButtonLink>
+				<ButtonLink to="/user/edit">{translate('Edit profile')}</ButtonLink>
 				<Button
 					datatype="danger"
 					onClick={handleDeleteProfile}
 				>
-					Delete profile
+					{translate('Delete profile')}
 				</Button>
 			</div>
 		</section>

@@ -15,15 +15,22 @@ import { getSource } from '../../../utilities/fetchData'
 import './EditSource.css'
 
 const EditSource = () => {
-	const { isLoggedIn } = useAuth()
+	const { isLoggedIn, getUserSettings } = useAuth()
 	const { state } = useLocation()
 	const id = state.id
 	const [source, setSource] = useState([])
 	const [error, setError] = useState(null)
+	const [translations, setTranslations] = useState(null)
 
 	const navigate = useNavigate()
 
+	const settings = getUserSettings()
+	const translate = (key) => (translations ? translations[key] : key)
+
 	useEffect(() => {
+		import(`../../../locales/languages/lang_${settings.language}.json`)
+			.then((module) => setTranslations(module.default))
+			.catch((error) => setError('Translation file not found:', error))
 		getSource(id)
 			.then((responseData) => setSource(responseData))
 			.catch((error) => setError(error.response.data.message))
@@ -48,7 +55,7 @@ const EditSource = () => {
 
 	return isLoggedIn() ? (
 		<main>
-			<h1>Edit source</h1>
+			<h1>{translate('Edit source')}</h1>
 
 			{error && (
 				<StatusMessage
@@ -59,7 +66,7 @@ const EditSource = () => {
 
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
-					<label htmlFor="title">Title</label>
+					<label htmlFor="title">{translate('Title')}</label>
 					<input
 						type="text"
 						name="title"
@@ -69,7 +76,7 @@ const EditSource = () => {
 						value={source.title}
 					/>
 				</div>
-				<Button type="submit">Edit source</Button>
+				<Button type="submit">{translate('Edit source')}</Button>
 			</form>
 		</main>
 	) : (
