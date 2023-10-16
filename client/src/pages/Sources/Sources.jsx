@@ -1,5 +1,5 @@
 // Import dependencies
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -14,9 +14,6 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton'
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
 import { fetchSources } from '../../utilities/fetchData'
-
-// Import styling
-import './Sources.css'
 
 const Sources = () => {
 	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
@@ -78,8 +75,8 @@ const Sources = () => {
 	}
 
 	return isLoggedIn() ? (
-		<main>
-			<h1>{translate('Sources')}</h1>
+		<section className="page__section">
+			<h1 className="page__title">{translate('Sources')}</h1>
 
 			<div className="header__actions">
 				<div className="buttons-group">
@@ -143,7 +140,7 @@ const Sources = () => {
 			) : (
 				<p>{translate("You don't have any sources!")}</p>
 			)}
-		</main>
+		</section>
 	) : (
 		<Navigate to="/" />
 	)

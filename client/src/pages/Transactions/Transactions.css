@@ -1,7 +1,0 @@
-tr[data-type='income'] {
-	color: hsl(120, 61%, 34%);
-}
-
-tr[data-type='expense'] {
-	color: hsl(348, 83%, 47%);
-}

@@ -15,9 +15,6 @@ import { amountWithDecimals, formatDate } from '../../utilities/format'
 import axiosInstance from '../../utilities/axiosconfig'
 import { fetchDebts } from '../../utilities/fetchData'
 
-// Import styling
-import './Debts.css'
-
 const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [debts, setDebts] = useState([])

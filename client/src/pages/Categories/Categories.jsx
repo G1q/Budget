@@ -15,9 +15,6 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import axiosInstance from '../../utilities/axiosconfig'
 import { fetchAllCategories } from '../../utilities/fetchData'
 
-// Import styling
-import './Categories.css'
-
 const Categories = () => {
 	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const [categories, setCategories] = useState([])
@@ -81,8 +78,8 @@ const Categories = () => {
 	}
 
 	return isLoggedIn() ? (
-		<main>
-			<h1>{translate('Categories')}</h1>
+		<section className="page__section">
+			<h1 className="page__title">{translate('Categories')}</h1>
 			<div className="header__actions">
 				<div className="buttons-group">
 					<Button
@@ -168,7 +165,7 @@ const Categories = () => {
 			) : (
 				<p>{translate("You don't have any categories created!")}</p>
 			)}
-		</main>
+		</section>
 	) : (
 		<Navigate to="/" />
 	)

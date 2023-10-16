@@ -18,9 +18,6 @@ import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { fetchDebts, fetchExpenses, fetchIncomes } from '../../utilities/fetchData'
 
-// Import styling
-import './Expenses.css'
-
 const ITEMS_PER_PAGE = 20
 
 const Expenses = () => {

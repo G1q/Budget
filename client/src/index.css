@@ -28,37 +28,16 @@ main {
 	flex: 1;
 }
 
-.popup-dialog::backdrop {
-	background-color: rgba(0, 0, 0, 0.8);
+label {
+	display: block;
+	margin-bottom: 5px;
 }
 
-.popup-dialog {
-	border: none;
-	padding: 1rem;
-	position: relative;
-}
-
-.popup-dialog__title {
-	text-align: center;
-	font-size: 1.25rem;
-	color: #333;
-}
-
-.popup-close-btn {
-	position: absolute;
-	right: 1rem;
-	top: 1rem;
-	background-color: transparent;
-	padding: 0;
-	margin: 0;
-	color: crimson;
-	font-weight: 700;
-	font-size: 1.5rem;
-}
-
-.popup-close-btn:is(:hover, :focus-visible) {
-	background-color: transparent;
-	color: hsl(348, 83%, 27%);
+input {
+	width: 100%;
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 }
 
 select {
@@ -71,23 +50,26 @@ textarea {
 	resize: none;
 }
 
-.error-msg {
-	color: crimson;
-	font-weight: 500;
+.form-container {
+	max-width: 600px;
+	margin: auto;
+	padding: 20px 50px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 }
 
-.error-msg.transaction__error-msg {
+.form-group {
+	margin-bottom: 15px;
+}
+
+.page__section {
+	padding: 1rem 3rem;
+}
+
+.page__title {
+	font-size: 1.75rem;
+	color: #333;
 	text-align: center;
-	border: 2px solid crimson;
-	background-color: crimson;
-	color: #fff;
-	padding: 0.25em 1em;
-	font-size: 0.875rem;
-}
-
-.input__info {
-	margin: 0;
-	font-size: 0.875rem;
 }
 
 .header__actions {

@@ -18,9 +18,6 @@ import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { fetchIncomes } from '../../utilities/fetchData'
 
-// Import styling
-import './Incomes.css'
-
 const Incomes = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [incomes, setIncomes] = useState([])

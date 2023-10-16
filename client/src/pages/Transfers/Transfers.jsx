@@ -17,9 +17,6 @@ import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { fetchTransfers } from '../../utilities/fetchData'
 
-// Import styling
-import './Transfers.css'
-
 const Transfers = () => {
 	const { getUserId, isLoggedIn, getUserSettings } = useAuth()
 	const [transfers, setTransfers] = useState([])
@@ -94,8 +91,8 @@ const Transfers = () => {
 	}
 
 	return isLoggedIn() ? (
-		<main>
-			<h1>{translate('Transfers')}</h1>
+		<section className="page__section">
+			<h1 className="page__title">{translate('Transfers')}</h1>
 
 			<div className="header__actions">
 				<div className="buttons-group">
@@ -141,7 +138,7 @@ const Transfers = () => {
 			) : (
 				<p>You don't have any transfers!</p>
 			)}
-		</main>
+		</section>
 	) : (
 		<Navigate to="/" />
 	)

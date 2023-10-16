@@ -14,7 +14,7 @@ import StatusMessage from '../../../components/StatusMessage/StatusMessage'
 import axiosInstance from '../../../utilities/axiosconfig'
 
 // Import styling
-import './Users.css'
+import '../admin-pages.css'
 
 const Users = () => {
 	const { getUserRole, isLoggedIn } = useAuth()
@@ -42,7 +42,6 @@ const Users = () => {
 				await axiosInstance.delete(`admin/users/${id}`)
 				getUsers()
 			} catch (error) {
-				console.log(error)
 				error.response ? setError(error.response.data.message) : setError(error.message)
 			}
 		}
@@ -50,7 +49,7 @@ const Users = () => {
 
 	return isLoggedIn ? (
 		<main className="admin-page">
-			<h1 className="admin-page__main-title">Users</h1>
+			<h1 className="admin-page__title">Users</h1>
 			{error && (
 				<StatusMessage
 					type="error"
