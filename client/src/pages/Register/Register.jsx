@@ -5,6 +5,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import axiosInstance from '../../utilities/axiosconfig'
 import Button from '../../components/Button/Button'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
 const Register = () => {
 	const { isLoggedIn } = useAuth()
@@ -18,21 +19,22 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axiosInstance.post('users/register', { username, email, password })
-			if (response.status === 201) {
-				navigate('/login')
-			} else {
-				setError(response.data.error || 'Registration failed')
-			}
+			await axiosInstance.post('users/register', { username, email, password })
+			navigate('/login')
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return !isLoggedIn() ? (
 		<div className="register-container">
 			<h2>Register</h2>
-			{error && <p className="error-message">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="username">Username</label>

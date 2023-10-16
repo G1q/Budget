@@ -75,6 +75,18 @@ const ERROR_MESSAGES = {
 		message: 'Username is already taken!',
 		statusCode: 400,
 	},
+	NO_ACTIVE_USER: {
+		message: 'User is not active!',
+		statusCode: 403,
+	},
+	INVALID_CREDENTIALS: {
+		message: 'Invalid credentials',
+		statusCode: 401,
+	},
+	NO_EMAIL_USER: {
+		message: 'No user found with this email!',
+		statusCode: 404,
+	},
 }
 
 module.exports = { ERROR_MESSAGES }
