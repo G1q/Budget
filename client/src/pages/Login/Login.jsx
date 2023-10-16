@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utilities/axiosconfig'
 import Button from '../../components/Button/Button'
+import StatusMessage from '../../components/StatusMessage/StatusMessage'
 
 const Login = () => {
 	const { isLoggedIn } = useAuth()
@@ -18,21 +19,22 @@ const Login = () => {
 		e.preventDefault()
 		try {
 			const response = await axiosInstance.post('users/login', { email, password })
-			if (response.status === 200) {
-				localStorage.setItem('token', response.data.token)
-				navigate(0)
-			} else {
-				setError(response.data.error || 'Login failed')
-			}
+			localStorage.setItem('token', response.data.token)
+			navigate(0)
 		} catch (error) {
-			setError(error.response.data.error)
+			error.response ? setError(error.response.data.message) : setError(error.message)
 		}
 	}
 
 	return !isLoggedIn() ? (
 		<div className="login-container">
 			<h2>Login</h2>
-			{error && <p className="error-message">{error}</p>}
+			{error && (
+				<StatusMessage
+					type="error"
+					message={error}
+				/>
+			)}
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label htmlFor="email">Email</label>
