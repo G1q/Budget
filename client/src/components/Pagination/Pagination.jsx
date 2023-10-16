@@ -4,8 +4,22 @@ import Button from '../Button/Button'
 const Pagination = ({ startIndex, endIndex, dataArray, numberOfItemsPerPage, onClickPrev, onClickNext }) => {
 	return (
 		<div className="pagination">
-			{startIndex > 0 && <Button onClick={onClickPrev}>Prev</Button>}
-			{endIndex < dataArray.length && <Button onClick={onClickNext}>Next</Button>}
+			{startIndex > 0 && (
+				<Button
+					onClick={onClickPrev}
+					size="small"
+				>
+					Prev
+				</Button>
+			)}
+			{endIndex < dataArray.length && (
+				<Button
+					onClick={onClickNext}
+					size="small"
+				>
+					Next
+				</Button>
+			)}
 			<p>
 				{Math.ceil(endIndex / numberOfItemsPerPage)} / {Math.ceil(dataArray.length / numberOfItemsPerPage)} pages
 			</p>

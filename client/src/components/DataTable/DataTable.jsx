@@ -1,8 +1,12 @@
 import './DataTable.css'
 
-const DataTable = ({ cols = [], children }) => {
+const DataTable = ({ cols = [], size, caption, children }) => {
 	return (
-		<table className="data-table">
+		<table
+			className="data-table"
+			data-size={size}
+		>
+			{caption && <caption>{caption}</caption>}
 			<thead className="data-table__header">
 				<tr>
 					{cols.map((col) => (
