@@ -1,0 +1,13 @@
+.data-table__delete-btn {
+	border: none;
+	background-color: transparent;
+	color: hsl(348, 83%, 47%);
+	font-size: 1rem;
+	font-weight: 700;
+	padding: 0;
+	cursor: pointer;
+}
+
+.data-table__delete-btn:is(:focus-visible, :hover) {
+	color: hsl(348, 83%, 37%);
+}

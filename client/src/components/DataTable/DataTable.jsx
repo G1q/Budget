@@ -2,15 +2,15 @@ import './DataTable.css'
 
 const DataTable = ({ cols = [], children }) => {
 	return (
-		<table>
-			<thead>
+		<table className="data-table">
+			<thead className="data-table__header">
 				<tr>
 					{cols.map((col) => (
 						<th key={col}>{col}</th>
 					))}
 				</tr>
 			</thead>
-			<tbody>{children}</tbody>
+			<tbody className="data-table__content">{children}</tbody>
 		</table>
 	)
 }

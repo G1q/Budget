@@ -1,5 +1,7 @@
 .btn {
 	display: inline-block;
+	font-family: system-ui, sans-serif;
+	font-size: 1rem;
 
 	margin: 0.25rem;
 	padding: 0.5em 1em;
@@ -33,4 +35,9 @@
 .btn[data-type='danger']:focus-visible {
 	outline: 2px solid hsl(348, 83%, 27%);
 	outline-offset: 1px;
+}
+
+.btn[data-size='small'] {
+	font-size: 0.875rem;
+	padding: 0.25em 1em;
 }
