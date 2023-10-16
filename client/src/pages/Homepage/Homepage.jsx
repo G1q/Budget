@@ -134,18 +134,6 @@ const Homepage = () => {
 							</div>
 
 							<div className="summaries__card">
-								{debts.length ? (
-									<h2 className="summaries__card--title">
-										Debts total: <span>{totalDebts()}</span>
-									</h2>
-								) : (
-									<p>
-										You don't have any debts! Please create your first debt: <Link to="/debts">Create debt</Link>
-									</p>
-								)}
-							</div>
-
-							<div className="summaries__card">
 								{transactions.length ? (
 									<>
 										<DataTable
@@ -200,6 +188,18 @@ const Homepage = () => {
 								>
 									Total incomes: <span>{totalIncomes()}</span>
 								</p>
+							</div>
+
+							<div className="summaries__card">
+								{debts.length ? (
+									<h2 className="summaries__card--title">
+										Debts total: <span>{totalDebts()}</span>
+									</h2>
+								) : (
+									<p>
+										You don't have any debts! Please create your first debt: <Link to="/debts">Create debt</Link>
+									</p>
+								)}
 							</div>
 						</div>
 					</section>
