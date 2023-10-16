@@ -14,9 +14,6 @@ import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { fetchTransactions } from '../../utilities/fetchData'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 
-// Import styling
-import './Transactions.css'
-
 const ITEMS_PER_PAGE = 10
 
 const Transactions = () => {

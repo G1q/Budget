@@ -5,7 +5,6 @@ import styled from 'styled-components'
 const UserMain = styled.main`
 	display: grid;
 	grid-template-columns: 200px 1fr;
-	gap: 3rem;
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
 	margin-block: 1rem;
 	padding: 0;

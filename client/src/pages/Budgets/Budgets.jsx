@@ -17,9 +17,6 @@ import { amountWithDecimals } from '../../utilities/format'
 import axiosInstance from '../../utilities/axiosconfig'
 import { fetchBudgets } from '../../utilities/fetchData'
 
-// Import styling
-import './Budgets.css'
-
 const Budgets = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [budgets, setBudgets] = useState([])

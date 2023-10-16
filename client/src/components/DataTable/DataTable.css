@@ -15,6 +15,14 @@
 	text-align: center;
 }
 
+.data-table tr[data-type='income'] {
+	color: hsl(120, 61%, 34%);
+}
+
+.data-table tr[data-type='expense'] {
+	color: hsl(348, 83%, 47%);
+}
+
 .data-table caption {
 	margin-block: 0.5rem;
 }

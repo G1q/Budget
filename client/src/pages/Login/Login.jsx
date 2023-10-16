@@ -1,5 +1,3 @@
-import './Login.css'
-
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
@@ -27,7 +25,7 @@ const Login = () => {
 	}
 
 	return !isLoggedIn() ? (
-		<div className="login-container">
+		<div className="form-container">
 			<h2>Login</h2>
 			{error && (
 				<StatusMessage
