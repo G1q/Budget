@@ -1,54 +1,28 @@
-import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+
+// Import custom components
 import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute'
+
+// Import Layouts
 import MainLayout from './layouts/MainLayout'
 import UserLayout from './layouts/UserLayout'
 
+// Import pages
+import Homepage from './pages/Homepage/Homepage'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
-import Homepage from './pages/Homepage/Homepage'
-
-import Users from './pages/Admin/Users/Users'
-import CreateUser from './pages/Admin/Users/CreateUser/'
-import EditUser from './pages/Admin/Users/EditUser/'
-import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard'
 import NotFound from './pages/NotFound/NotFound'
-
-import Budgets from './pages/Budgets/Budgets'
-import CreateBudget from './pages/Budgets/CreateBudget'
-import EditBudget from './pages/Budgets/EditBudget'
-import LogBudget from './pages/Budgets/LogBudget'
-
-import Incomes from './pages/Incomes/Incomes'
-import EditIncome from './pages/Incomes/EditIncome'
-import CreateIncome from './pages/Incomes/CreateIncome'
-
-import Categories from './pages/Categories/Categories'
-import EditCategory from './pages/Categories/EditCategory'
-
-import Expenses from './pages/Expenses/Expenses'
-import EditExpense from './pages/Expenses/EditExpense'
-import CreateExpense from './pages/Expenses/CreateExpense'
-import PayDebt from './pages/Expenses/PayDebt'
-
-import Transfers from './pages/Transfers/Transfers'
-import CreateTransfer from './pages/Transfers/CreateTransfer'
-import EditTransfer from './pages/Transfers/EditTransfer'
-
-import Sources from './pages/Sources/Sources'
-import EditSource from './pages/Sources/EditSource'
-
-import Debts from './pages/Debts/Debts'
-import EditDebt from './pages/Debts/EditDebt'
-import CreateDebt from './pages/Debts/CreateDebt'
-
-import Transactions from './pages/Transactions/Transactions'
-
-import UserDashboard from './pages/User/UserDashboard'
-import UserProfile from './pages/User/UserProfile'
-import EditProfile from './pages/User/EditProfile'
-import UserSettings from './pages/User/UserSettings'
+import { Budgets, CreateBudget, EditBudget, LogBudget } from './pages/Budgets'
+import { Categories, EditCategory } from './pages/Categories'
+import { Debts, CreateDebt, EditDebt } from './pages/Debts'
+import { Expenses, CreateExpense, EditExpense, PayDebt } from './pages/Expenses'
+import { Incomes, CreateIncome, EditIncome } from './pages/Incomes'
+import { Sources, EditSource } from './pages/Sources'
+import { Transactions } from './pages/Transactions'
+import { Transfers, CreateTransfer, EditTransfer } from './pages/Transfers'
+import { UserDashboard, UserProfile, EditProfile, UserSettings } from './pages/User'
+import { AdminDashboard, CreateUser, EditUser, Users } from './pages/Admin'
 
 const App = () => {
 	return (
