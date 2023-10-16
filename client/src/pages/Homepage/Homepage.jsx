@@ -15,6 +15,7 @@ import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 
 // Import styling
 import './Homepage.css'
+import DataTable from '../../components/DataTable/DataTable'
 
 const Homepage = () => {
 	const { getUserId, isLoggedIn, getUserName } = useAuth()
@@ -147,28 +148,22 @@ const Homepage = () => {
 							<div className="summaries__card">
 								{transactions.length ? (
 									<>
-										<table className="summaries__card-table">
-											<caption>Last 5 transactions</caption>
-											<thead>
-												<tr>
-													<th>Date</th>
-													<th>Amount</th>
-													<th>Type</th>
-												</tr>
-											</thead>
-											<tbody>
-												{transactions
-													.sort((a, b) => new Date(b.date) - new Date(a.date))
-													.slice(0, 5)
-													.map((transaction) => (
-														<tr key={transaction._id}>
-															<td>{formatDate(new Date(transaction.date))}</td>
-															<td>{amountWithDecimals(transaction.amount, transaction.currency)}</td>
-															<td>{transaction.source ? 'Income' : 'Expense'}</td>
-														</tr>
-													))}
-											</tbody>
-										</table>
+										<DataTable
+											size="small"
+											cols={['Date', 'Amount', 'Type']}
+											caption="Last 5 transactions"
+										>
+											{transactions
+												.sort((a, b) => new Date(b.date) - new Date(a.date))
+												.slice(0, 5)
+												.map((transaction) => (
+													<tr key={transaction._id}>
+														<td>{formatDate(new Date(transaction.date))}</td>
+														<td>{amountWithDecimals(transaction.amount, transaction.currency)}</td>
+														<td>{transaction.source ? 'Income' : 'Expense'}</td>
+													</tr>
+												))}
+										</DataTable>
 										<Link
 											to="/transactions"
 											className="summaries__card-link"
