@@ -2,8 +2,8 @@ header {
 	position: sticky;
 	top: 0;
 	z-index: 999999;
-	background-color: #fff;
-	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+	background-color: var(--clr-neutral-100);
+	box-shadow: 0 2px 2px var(--shadow-100);
 }
 
 .primary__navigation {
@@ -24,7 +24,7 @@ header {
 
 .logo a {
 	text-decoration: none;
-	color: royalblue;
+	color: var(--clr-blue-400);
 }
 
 .primary__navigation-list {
@@ -42,7 +42,7 @@ header {
 
 .primary__navigation-link {
 	text-decoration: none;
-	color: royalblue;
+	color: var(--clr-blue-400);
 	position: relative;
 }
 
@@ -50,7 +50,7 @@ header {
 	content: '';
 	width: 100%;
 	height: 2px;
-	background-color: hsl(225, 73%, 47%);
+	background-color: var(--clr-blue-500);
 	position: absolute;
 	bottom: -3px;
 	left: 0;
@@ -66,8 +66,8 @@ header {
 }
 
 .primary__navigation-link.login-btn {
-	background-color: royalblue;
-	color: #fff;
+	background-color: var(--clr-blue-400);
+	color: var(--clr-neutral-100);
 	padding: 0.25em 1em;
 	border-radius: 0.25em;
 	display: inline-block;
@@ -78,7 +78,7 @@ header {
 }
 
 .primary__navigation-link.login-btn:is(:hover, :focus-visible) {
-	background-color: hsl(225, 73%, 47%);
+	background-color: var(--clr-blue-500);
 }
 
 .primary__navigation-group {

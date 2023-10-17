@@ -8,9 +8,9 @@ const TdTableCellMeter = styled.td`
 const TdMeter = ({ amount, target, currency }) => {
 	const meter = (Number(amount) / Number(target)) * 100
 
-	let color = '#00ff7355' // over 70%
-	if (meter < 25) color = '#dc143c55'
-	if (meter >= 25 && meter < 70) color = '#f6f92a88'
+	let color = 'hsla(120, 61%, 34%, .5)' // over 70%
+	if (meter < 25) color = 'hsla(348, 83%, 47%, .5)'
+	if (meter >= 25 && meter < 70) color = 'hsla(60, 100%, 50%, .5)'
 
 	return (
 		<TdTableCellMeter

@@ -7,31 +7,31 @@
 	border-radius: 0.25em;
 	outline: none;
 
-	background-color: hsl(225, 73%, 57%);
-	color: #fff;
+	background-color: var(--clr-blue-400);
+	color: var(--clr-neutral-100);
 
 	text-decoration: none;
 	cursor: pointer;
 }
 
 .btn-link:is(:hover, :focus-visible) {
-	background-color: hsl(225, 73%, 47%);
+	background-color: var(--clr-blue-500);
 }
 
 .btn-link:focus-visible {
-	outline: 2px solid hsl(225, 73%, 27%);
+	outline: 2px solid var(--clr-blue-600);
 	outline-offset: 1px;
 }
 
 .btn-link[data-type='danger'] {
-	background-color: hsl(348, 83%, 47%);
+	background-color: var(--clr-red-400);
 }
 
 .btn-link[data-type='danger']:is(:hover, :focus-visible) {
-	background-color: hsl(348, 83%, 37%);
+	background-color: var(--clr-red-500);
 }
 
 .btn-link[data-type='danger']:focus-visible {
-	outline: 2px solid hsl(348, 83%, 27%);
+	outline: 2px solid var(--clr-red-600);
 	outline-offset: 1px;
 }

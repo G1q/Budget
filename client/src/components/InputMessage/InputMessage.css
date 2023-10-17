@@ -1,9 +1,10 @@
 .input__message {
 	margin: 0;
+	color: var(--clr-neutral-700);
 	font-size: 0.875rem;
 }
 
 .input__message[data-type='error'] {
-	color: crimson;
+	color: var(--clr-red-400);
 	font-weight: 500;
 }

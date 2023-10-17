@@ -11,7 +11,7 @@
 .popup-dialog__title {
 	text-align: center;
 	font-size: 1.25rem;
-	color: #333;
+	color: var(--clr-neutral-700);
 }
 
 .popup-close-btn {
@@ -19,14 +19,15 @@
 	right: 1rem;
 	top: 1rem;
 	background-color: transparent;
+	border: none;
 	padding: 0;
 	margin: 0;
-	color: crimson;
+	color: var(--clr-red-400);
 	font-weight: 700;
 	font-size: 1.5rem;
 }
 
 .popup-close-btn:is(:hover, :focus-visible) {
 	background-color: transparent;
-	color: hsl(348, 83%, 27%);
+	color: var(--clr-red-600);
 }

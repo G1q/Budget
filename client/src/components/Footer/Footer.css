@@ -1,8 +1,8 @@
 footer {
 	padding: 2rem;
-	background-color: #333;
+	background-color: var(--clr-neutral-700);
 	margin-top: 2rem;
-	color: #efefef;
+	color: var(--clr-neutral-150);
 }
 
 footer small {

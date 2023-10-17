@@ -1,3 +1,24 @@
+:root {
+	--clr-neutral-100: #fff;
+	--clr-neutral-150: #efefef;
+	--clr-neutral-300: #ccc;
+	--clr-neutral-700: #333;
+	--clr-neutral-900: #000;
+
+	--clr-blue-400: hsl(225, 73%, 57%);
+	--clr-blue-500: hsl(225, 73%, 47%);
+	--clr-blue-600: hsl(225, 73%, 27%);
+
+	--clr-red-400: hsl(348, 83%, 47%);
+	--clr-red-500: hsl(348, 83%, 37%);
+	--clr-red-600: hsl(348, 83%, 27%);
+
+	--clr-green-400: hsl(120, 61%, 34%);
+
+	--shadow-100: rgba(0, 0, 0, 0.1);
+	--shadow-800: rgba(0, 0, 0, 0.8);
+}
+
 *,
 *::before,
 *::after {
@@ -36,7 +57,7 @@ label {
 input {
 	width: 100%;
 	padding: 0.5rem;
-	border: 1px solid #ccc;
+	border: 1px solid var(--clr-neutral-300);
 	border-radius: 5px;
 }
 
@@ -55,7 +76,7 @@ textarea {
 	max-width: 600px;
 	margin: auto;
 	padding: 20px 50px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--clr-neutral-300);
 	border-radius: 5px;
 }
 
@@ -69,7 +90,7 @@ textarea {
 
 .page__title {
 	font-size: 1.75rem;
-	color: #333;
+	color: var(--clr-neutral-700);
 	text-align: center;
 }
 

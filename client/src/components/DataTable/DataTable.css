@@ -1,7 +1,7 @@
 .data-table {
 	width: 100%;
 	border-collapse: collapse;
-	border: 1px solid #ccc;
+	border: 1px solid var(--clr-neutral-300);
 }
 
 .data-table[data-size='small'] {
@@ -10,17 +10,17 @@
 
 .data-table th,
 .data-table td {
-	border: 1px solid #ccc;
+	border: 1px solid var(--clr-neutral-300);
 	padding: 0.25em 1em;
 	text-align: center;
 }
 
 .data-table tr[data-type='income'] {
-	color: hsl(120, 61%, 34%);
+	color: var(--clr-green-400);
 }
 
 .data-table tr[data-type='expense'] {
-	color: hsl(348, 83%, 47%);
+	color: var(--clr-red-400);
 }
 
 .data-table caption {
