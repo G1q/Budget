@@ -111,100 +111,102 @@ const CreateTransfer = () => {
 				/>
 			)}
 
-			<form onSubmit={handleSubmit}>
-				<div className="form-group">
-					<label htmlFor="date">{translate('Date')}</label>
-					<input
-						type="date"
-						id="date"
-						name="date"
-						onChange={handleChange}
-						required
-					/>
-				</div>
-
-				<div className="form-group">
-					<label htmlFor="sourceId">{translate('Source')}</label>
-					{budgets.length > 0 ? (
-						<select
-							name="sourceId"
-							id="sourceId"
+			<div className="form-container">
+				<form onSubmit={handleSubmit}>
+					<div className="form-group">
+						<label htmlFor="date">{translate('Date')}</label>
+						<input
+							type="date"
+							id="date"
+							name="date"
 							onChange={handleChange}
 							required
-						>
-							<option
-								value=""
-								hidden
-							>
-								{translate('Select budget..')}
-							</option>
-							{budgets.map((budget) => (
-								<option
-									key={budget._id}
-									value={budget._id}
-								>
-									{budget.title}
-								</option>
-							))}
-						</select>
-					) : (
-						<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
-					)}
-				</div>
+						/>
+					</div>
 
-				<div className="form-group">
-					<label htmlFor="budgetId">{translate('Budget')}</label>
-					{budgets.length > 0 ? (
-						<select
-							name="budgetId"
-							id="budgetId"
+					<div className="form-group">
+						<label htmlFor="sourceId">{translate('Source')}</label>
+						{budgets.length > 0 ? (
+							<select
+								name="sourceId"
+								id="sourceId"
+								onChange={handleChange}
+								required
+							>
+								<option
+									value=""
+									hidden
+								>
+									{translate('Select budget..')}
+								</option>
+								{budgets.map((budget) => (
+									<option
+										key={budget._id}
+										value={budget._id}
+									>
+										{budget.title}
+									</option>
+								))}
+							</select>
+						) : (
+							<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
+						)}
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="budgetId">{translate('Budget')}</label>
+						{budgets.length > 0 ? (
+							<select
+								name="budgetId"
+								id="budgetId"
+								onChange={handleChange}
+								required
+							>
+								<option
+									value=""
+									hidden
+								>
+									{translate('Select budget..')}
+								</option>
+								{budgets.map((budget) => (
+									<option
+										key={budget._id}
+										value={budget._id}
+									>
+										{budget.title}
+									</option>
+								))}
+							</select>
+						) : (
+							<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
+						)}
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="amount">{translate('Amount')}</label>
+						<input
+							type="number"
+							name="amount"
+							id="amount"
 							onChange={handleChange}
 							required
-						>
-							<option
-								value=""
-								hidden
-							>
-								{translate('Select budget..')}
-							</option>
-							{budgets.map((budget) => (
-								<option
-									key={budget._id}
-									value={budget._id}
-								>
-									{budget.title}
-								</option>
-							))}
-						</select>
-					) : (
-						<Link to="/budgets/create">{translate('Create your first budget!')}</Link>
-					)}
-				</div>
+							step={0.01}
+						/>
+					</div>
 
-				<div className="form-group">
-					<label htmlFor="amount">{translate('Amount')}</label>
-					<input
-						type="number"
-						name="amount"
-						id="amount"
-						onChange={handleChange}
-						required
-						step={0.01}
-					/>
-				</div>
-
-				<div className="form-group">
-					<label htmlFor="description">{translate('Description')}</label>
-					<textarea
-						name="description"
-						id="description"
-						cols="30"
-						rows="10"
-						onChange={handleChange}
-					></textarea>
-				</div>
-				<Button type="submit">{translate('Create transfer')}</Button>
-			</form>
+					<div className="form-group">
+						<label htmlFor="description">{translate('Description')}</label>
+						<textarea
+							name="description"
+							id="description"
+							cols="30"
+							rows="10"
+							onChange={handleChange}
+						></textarea>
+					</div>
+					<Button type="submit">{translate('Create transfer')}</Button>
+				</form>
+			</div>
 		</section>
 	) : (
 		<Navigate to="/" />
