@@ -17,6 +17,7 @@ import axiosInstance from '../../utilities/axiosconfig'
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { fetchDebts, fetchExpenses, fetchIncomes } from '../../utilities/fetchData'
+import { getTotal } from '../../utilities/totals'
 
 const ITEMS_PER_PAGE = 20
 
@@ -96,7 +97,7 @@ const Expenses = () => {
 				<div className="buttons-group">
 					<ButtonLink to="./create">Create expense</ButtonLink>
 					<ButtonLink to="/user/categories">Create new category</ButtonLink>
-					{debts.length > 0 && <ButtonLink>Pay debt (disabled)</ButtonLink>} {/* to="./paydebt" */}
+					{parseFloat(getTotal(debts)) > 0 && <ButtonLink>Pay debt (disabled)</ButtonLink>} {/* to="./paydebt" */}
 				</div>
 
 				<SelectInterval

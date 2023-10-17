@@ -7,18 +7,19 @@ import { useAuth } from '../../contexts/AuthContext'
 import CardMeter from '../../components/CardMeter/CardMeter'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import DataTable from '../../components/DataTable/DataTable'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { fetchBudgets, fetchDebts, fetchExpenses, fetchIncomes, fetchTransactions } from '../../utilities/fetchData'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
+import { getTotal } from '../../utilities/totals'
 
 // Import styling
 import './Homepage.css'
-import DataTable from '../../components/DataTable/DataTable'
 
 const Homepage = () => {
-	const { getUserId, isLoggedIn, getUserName } = useAuth()
+	const { getUserId, isLoggedIn } = useAuth()
 	const [budgets, setBudgets] = useState([])
 	const [transactions, setTransactions] = useState([])
 	const [expenses, setExpenses] = useState([])
@@ -54,48 +55,6 @@ const Homepage = () => {
 		}
 	}, [dateInterval])
 
-	const totalAmount = () => {
-		let total = 0
-		let currency
-		// TODO: separat pe valuta
-		for (let i = 0; i < budgets.length; i++) {
-			total += budgets[i].currentAmount
-			currency = budgets[i].currency
-		}
-		return amountWithDecimals(total, currency)
-	}
-
-	const totalDebts = () => {
-		let total = 0
-		let currency
-		// TODO: separat pe valuta
-		for (let i = 0; i < debts.length; i++) {
-			total += debts[i].currentAmount
-			currency = debts[i].currency
-		}
-		return amountWithDecimals(total, currency)
-	}
-
-	const totalExpenses = () => {
-		let total = 0
-		let currency
-		for (let i = 0; i < expenses.length; i++) {
-			total += expenses[i].amount
-			currency = expenses[i].currency
-		}
-		return amountWithDecimals(total, currency)
-	}
-
-	const totalIncomes = () => {
-		let total = 0
-		let currency
-		for (let i = 0; i < incomes.length; i++) {
-			total += incomes[i].amount
-			currency = incomes[i].currency
-		}
-		return amountWithDecimals(total, currency)
-	}
-
 	return (
 		<main>
 			<h1>Homepage</h1>
@@ -113,13 +72,13 @@ const Homepage = () => {
 								{budgets.length ? (
 									<>
 										<h2 className="summaries__card--title">
-											Budgets total: <span>{totalAmount()}</span>
+											Budgets total: <span>{getTotal(budgets)}</span>
 										</h2>
 										{budgets.map((budget) => (
 											<CardMeter
 												key={budget._id}
 												id={budget.title.toLowerCase().replaceAll(' ', '-')}
-												totalValue={parseFloat(totalAmount())}
+												totalValue={parseFloat(getTotal(budgets))}
 												name={budget.title}
 												currentAmount={budget.currentAmount}
 												currency={budget.currency}
@@ -180,24 +139,24 @@ const Homepage = () => {
 									className="summaries__card--info"
 									style={{ '--text-clr': 'crimson' }}
 								>
-									Total expenses: <span>{totalExpenses()}</span>
+									Total expenses: <span>{getTotal(expenses)}</span>
 								</p>
 								<p
 									className="summaries__card--info"
 									style={{ '--text-clr': 'forestgreen' }}
 								>
-									Total incomes: <span>{totalIncomes()}</span>
+									Total incomes: <span>{getTotal(incomes)}</span>
 								</p>
 							</div>
 
 							<div className="summaries__card">
-								{debts.length ? (
+								{parseFloat(getTotal(debts)) ? (
 									<h2 className="summaries__card--title">
-										Debts total: <span>{totalDebts()}</span>
+										Debts total: <span>{getTotal(debts)}</span>
 									</h2>
 								) : (
 									<p>
-										You don't have any debts! Please create your first debt: <Link to="/debts">Create debt</Link>
+										You don't have any active debts! Please create your first debt: <Link to="/debts">Create debt</Link>
 									</p>
 								)}
 							</div>

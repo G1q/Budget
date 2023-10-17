@@ -14,6 +14,7 @@ import DataTable from '../../components/DataTable/DataTable'
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import axiosInstance from '../../utilities/axiosconfig'
 import { fetchDebts } from '../../utilities/fetchData'
+import { getTotal } from '../../utilities/totals'
 
 const Debts = () => {
 	const { getUserId, isLoggedIn } = useAuth()
@@ -82,7 +83,7 @@ const Debts = () => {
 					message={success}
 				/>
 			)}
-			{debts.length > 0 ? (
+			{parseFloat(getTotal(debts)) > 0 || !activeDebts ? (
 				<DataTable cols={['Date', 'Creditor', 'Start amount', 'Current amount', 'Active', 'Edit', 'Delete']}>
 					{debts
 						.filter((debt) => (activeDebts ? debt.currentAmount > 0 : debt))
@@ -103,7 +104,7 @@ const Debts = () => {
 						))}
 				</DataTable>
 			) : (
-				<p>You don't have any debts!</p>
+				<p>You don't have any active debts!</p>
 			)}
 		</main>
 	) : (
