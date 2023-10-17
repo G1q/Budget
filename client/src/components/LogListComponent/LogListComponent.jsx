@@ -93,12 +93,28 @@ const LogListComponent = ({ log, currency }) => {
 			text = `Update budget info`
 			color = '#490573'
 			break
+		case 'update-title':
+			text = `Update budget title`
+			color = '#490574'
+			break
+		case 'update-currency':
+			text = `Update budget currency`
+			color = '#490574'
+			break
+		case 'update-amount':
+			text = `Update budget amount`
+			color = '#490574'
+			break
+		case 'update-description':
+			text = `Update budget description`
+			color = '#490574'
+			break
 		default:
 			color = '#333'
 	}
 
 	return (
-		<li style={{ marginBottom: '.5rem', color: color }}>{`[${formatFullDate(new Date(log.date))}]: ${text} - new amount: ${amountWithDecimals(
+		<li style={{ marginBottom: '.5rem', color: color }}>{`[${formatFullDate(new Date(log.date))}]: ${text} - current amount: ${amountWithDecimals(
 			log.currentAmount,
 			currency
 		)}`}</li>
