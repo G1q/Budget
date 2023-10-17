@@ -15,13 +15,17 @@ const EditBudget = () => {
 	const { state } = useLocation()
 	const id = state.id
 	const [budget, setBudget] = useState('')
+	const [initialBudget, setInitialBudget] = useState('')
 	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 
 	useEffect(() => {
 		getBudget(id)
-			.then((responseData) => setBudget(responseData))
+			.then((responseData) => {
+				setBudget(responseData)
+				setInitialBudget(responseData)
+			})
 			.catch((error) => setError(error.response.data.message))
 	}, [])
 
@@ -35,15 +39,46 @@ const EditBudget = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
+			// Create budget logs
 			const logs = budget.logs
 
-			logs.push({
-				date: Date.now(),
-				type: 'update',
-				currentAmount: budget.currentAmount,
-			})
+			if (
+				budget.startAmount !== initialBudget.startAmount ||
+				budget.currentAmount !== initialBudget.currentAmount ||
+				budget.targetAmount !== initialBudget.targetAmount
+			) {
+				logs.push({
+					date: Date.now(),
+					type: 'update-amount',
+					currentAmount: budget.currentAmount,
+				})
+			}
 
-			const response = await axiosInstance.put(`budgets/${id}`, budget)
+			if (budget.title !== initialBudget.title) {
+				logs.push({
+					date: Date.now(),
+					type: 'update-title',
+					currentAmount: budget.currentAmount,
+				})
+			}
+
+			if (budget.currency !== initialBudget.currency) {
+				logs.push({
+					date: Date.now(),
+					type: 'update-currency',
+					currentAmount: budget.currentAmount,
+				})
+			}
+
+			if (budget.description !== initialBudget.description) {
+				logs.push({
+					date: Date.now(),
+					type: 'update-description',
+					currentAmount: budget.currentAmount,
+				})
+			}
+
+			await axiosInstance.put(`budgets/${id}`, budget)
 			navigate('/budgets')
 		} catch (error) {
 			error.response ? setError(error.response.data.message) : setError(error.message)
