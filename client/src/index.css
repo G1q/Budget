@@ -42,7 +42,8 @@ input {
 
 select {
 	width: 100%;
-	padding: 0.25em 1em;
+	padding: 0.25em 0.5em;
+	font: inherit;
 }
 
 textarea {
