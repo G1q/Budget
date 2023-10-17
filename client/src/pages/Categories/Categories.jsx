@@ -10,6 +10,7 @@ import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
 import EditButton from '../../components/EditButton/EditButton'
 import DeleteButton from '../../components/DeleteButton/DeleteButton'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
@@ -24,6 +25,7 @@ const Categories = () => {
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
 	const [translations, setTranslations] = useState(null)
+	const [isLoading, setLoading] = useState(true)
 
 	const settings = getUserSettings()
 	const translate = (key) => (translations ? translations[key] : key)
@@ -33,7 +35,10 @@ const Categories = () => {
 			.then((module) => setTranslations(module.default))
 			.catch((error) => setError('Translation file not found:', error))
 		fetchAllCategories(getUserId())
-			.then((responseData) => setCategories(responseData))
+			.then((responseData) => {
+				setCategories(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
 	}, [query])
 
@@ -145,7 +150,9 @@ const Categories = () => {
 				</div>
 			)}
 
-			{categories.length > 0 ? (
+			{isLoading ? (
+				<Loading />
+			) : categories.length > 0 ? (
 				<DataTable cols={[translate('Category'), translate('Subcategory'), translate('Edit'), translate('Delete')]}>
 					{categories
 						.filter((category) => String(category.title).concat(category.subcategory).toLowerCase().includes(query))

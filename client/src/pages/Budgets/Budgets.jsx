@@ -11,6 +11,7 @@ import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import EditButton from '../../components/EditButton/EditButton'
 import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import LogButton from '../../components/LogButton/LogButton'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import { amountWithDecimals } from '../../utilities/format'
@@ -22,10 +23,14 @@ const Budgets = () => {
 	const [budgets, setBudgets] = useState([])
 	const [error, setError] = useState(null)
 	const [success, setSucces] = useState(null)
+	const [isLoading, setLoading] = useState(true)
 
 	useEffect(() => {
 		fetchBudgets(getUserId())
-			.then((responseData) => setBudgets(responseData))
+			.then((responseData) => {
+				setBudgets(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
 	}, [])
 
@@ -66,7 +71,9 @@ const Budgets = () => {
 					message={success}
 				/>
 			)}
-			{budgets.length > 0 ? (
+			{isLoading ? (
+				<Loading />
+			) : budgets.length > 0 ? (
 				<DataTable cols={['Title', 'Start amount', 'Current amount', 'Target amount', 'Logs', 'Edit', 'Delete']}>
 					{budgets.map((budget) => (
 						<tr key={budget._id}>

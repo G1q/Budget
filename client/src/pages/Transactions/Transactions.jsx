@@ -8,6 +8,7 @@ import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import DataTable from '../../components/DataTable/DataTable'
 import Pagination from '../../components/Pagination/Pagination'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
@@ -23,11 +24,16 @@ const Transactions = () => {
 	const [startItem, setStartItem] = useState(0)
 	const [endItem, setEndItem] = useState(ITEMS_PER_PAGE)
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
+	const [isLoading, setLoading] = useState(true)
 
 	useEffect(() => {
 		fetchTransactions(getUserId(), dateInterval)
-			.then((responseData) => setTransactions(responseData))
+			.then((responseData) => {
+				setTransactions(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
+
 		setStartItem(0)
 		setEndItem(ITEMS_PER_PAGE)
 	}, [dateInterval])
@@ -58,7 +64,9 @@ const Transactions = () => {
 					message={error}
 				/>
 			)}
-			{transactions.length > 0 ? (
+			{isLoading ? (
+				<Loading />
+			) : transactions.length > 0 ? (
 				<>
 					<DataTable cols={['Date', 'Budget', 'Amount', 'Type']}>
 						{transactions

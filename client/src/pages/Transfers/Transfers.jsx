@@ -10,6 +10,7 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import EditButton from '../../components/EditButton/EditButton'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
@@ -24,6 +25,7 @@ const Transfers = () => {
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
 	const [translations, setTranslations] = useState(null)
+	const [isLoading, setLoading] = useState(true)
 
 	const settings = getUserSettings()
 	const translate = (key) => (translations ? translations[key] : key)
@@ -33,7 +35,10 @@ const Transfers = () => {
 			.then((module) => setTranslations(module.default))
 			.catch((error) => setError('Translation file not found:', error))
 		fetchTransfers(getUserId(), dateInterval)
-			.then((responseData) => setTransfers(responseData))
+			.then((responseData) => {
+				setTransfers(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
 	}, [dateInterval])
 
@@ -118,7 +123,9 @@ const Transfers = () => {
 				/>
 			)}
 
-			{transfers.length > 0 ? (
+			{isLoading ? (
+				<Loading />
+			) : transfers.length > 0 ? (
 				<DataTable cols={[translate('Date'), translate('Source'), translate('Budget'), translate('Amount'), translate('Edit'), translate('Delete')]}>
 					{transfers.map((transfer) => (
 						<tr key={transfer._id}>
