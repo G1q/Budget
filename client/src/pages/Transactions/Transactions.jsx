@@ -49,7 +49,7 @@ const Transactions = () => {
 				className="header__actions"
 				style={{ display: 'flex', justifyContent: 'flex-end' }}
 			>
-				{transactions.length > 0 && <SelectInterval onChange={(e) => setDateInterval(handleSelectIntervalChange(e))} />}
+				<SelectInterval onChange={(e) => setDateInterval(handleSelectIntervalChange(e))} />
 			</div>
 
 			{error && (

@@ -3,6 +3,7 @@
 	--clr-neutral-150: #efefef;
 	--clr-neutral-300: #ccc;
 	--clr-neutral-700: #333;
+	--clr-neutral-800: #0c0c0c;
 	--clr-neutral-900: #000;
 
 	--clr-blue-400: hsl(225, 73%, 57%);
@@ -28,6 +29,8 @@
 body {
 	margin: 0;
 	font-family: system-ui, sans-serif;
+	color: var(--clr-neutral-800);
+	background-color: var(--clr-neutral-100);
 }
 
 #root {
