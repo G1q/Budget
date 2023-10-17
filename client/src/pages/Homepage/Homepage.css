@@ -5,7 +5,7 @@
 }
 
 .summaries__card {
-	border: 1px solid #333;
+	border: 1px solid var(--clr-neutral-300);
 	border-radius: 0.25em;
 	padding: 0.5rem 2rem;
 	text-align: center;
@@ -17,7 +17,7 @@
 
 .summaries__card--title span {
 	font-weight: 700;
-	color: royalblue;
+	color: var(--clr-blue-400);
 }
 
 .summaries__card--info {
@@ -46,18 +46,4 @@
 .summaries__card-link {
 	font-size: 0.875rem;
 	margin-top: 1rem;
-}
-
-.summaries__card--list {
-	padding: 0;
-	margin: 1rem;
-	text-align: left;
-	font-size: 0.875rem;
-	list-style-type: none;
-}
-
-.summaries__card--list-item {
-	margin-bottom: 0.5rem;
-	padding-bottom: 0.5rem;
-	border-bottom: 1px solid #333;
 }

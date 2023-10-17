@@ -6,11 +6,17 @@ const SelectInterval = ({ onChange, label, showCustom }) => {
 			className="select__interval"
 			style={{ display: 'grid', alignItems: 'center', gridTemplateColumns: 'auto 1fr', gap: '.5rem', marginBlock: '.5rem' }}
 		>
-			<label htmlFor="selectInterval">{label}</label>
+			<label
+				htmlFor="selectInterval"
+				style={{ fontSize: '0.875em', margin: 0 }}
+			>
+				{label}
+			</label>
 			<select
 				name="selectInterval"
 				id="selectInterval"
 				onChange={onChange}
+				style={{ fontSize: '0.875em', padding: '0 0.25em' }}
 			>
 				<option value="all-time">All time</option>
 				<option value="this-year">This year</option>

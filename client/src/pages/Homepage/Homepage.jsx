@@ -1,5 +1,5 @@
 // Import dependencies
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -8,6 +8,7 @@ import CardMeter from '../../components/CardMeter/CardMeter'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
@@ -28,6 +29,7 @@ const Homepage = () => {
 	const [error, setError] = useState(null)
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 	const [showCustom, setShowCustom] = useState(false)
+	const [isLoading, setLoading] = useState(true)
 
 	const transactionsParams = { startDate: '1970-01-01', endDate: new Date() }
 
@@ -42,7 +44,10 @@ const Homepage = () => {
 				.catch((error) => setError(error.response.data.message))
 
 			fetchTransactions(getUserId(), transactionsParams)
-				.then((responseData) => setTransactions(responseData))
+				.then((responseData) => {
+					setTransactions(responseData)
+					setLoading(false)
+				})
 				.catch((error) => setError(error.response.data.message))
 
 			fetchExpenses(getUserId(), dateInterval)
@@ -93,7 +98,9 @@ const Homepage = () => {
 							</div>
 
 							<div className="summaries__card">
-								{transactions.length ? (
+								{isLoading ? (
+									<Loading />
+								) : transactions.length ? (
 									<>
 										<DataTable
 											size="small"
@@ -148,7 +155,6 @@ const Homepage = () => {
 									Total incomes: <span>{getTotal(incomes)}</span>
 								</p>
 							</div>
-
 							<div className="summaries__card">
 								{parseFloat(getTotal(debts)) ? (
 									<h2 className="summaries__card--title">

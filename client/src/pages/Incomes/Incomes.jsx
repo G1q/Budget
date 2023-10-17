@@ -11,6 +11,7 @@ import EditButton from '../../components/EditButton/EditButton'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
 import Dialog, { openDialog, closeDialog } from '../../components/Dialog/Dialog'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
@@ -26,10 +27,14 @@ const Incomes = () => {
 	const [query, setQuery] = useState('')
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const [isLoading, setLoading] = useState(true)
 
 	useEffect(() => {
 		fetchIncomes(getUserId(), dateInterval)
-			.then((responseData) => setIncomes(responseData))
+			.then((responseData) => {
+				setIncomes(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
 	}, [dateInterval, query])
 
@@ -160,7 +165,9 @@ const Incomes = () => {
 					message={success}
 				/>
 			)}
-			{incomes.length > 0 ? (
+			{isLoading ? (
+				<Loading />
+			) : incomes.length > 0 ? (
 				<DataTable cols={['Date', 'Source', 'Budget', 'Amount', 'Edit', 'Delete']}>
 					{incomes
 						.filter((income) => String(income.amount).concat(income.source.title, income.budget.title).toLowerCase().includes(query))

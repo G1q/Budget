@@ -4,7 +4,7 @@
 	margin-block: 0.5rem;
 
 	background-color: var(--status-clr);
-	color: #fff;
+	color: var(--clr-neutral-100);
 
 	font-size: 0.875rem;
 	font-weight: 500;
@@ -12,9 +12,9 @@
 }
 
 .status__message[data-type='error'] {
-	--status-clr: crimson;
+	--status-clr: var(--clr-red-400);
 }
 
 .status__message[data-type='success'] {
-	--status-clr: forestgreen;
+	--status-clr: var(--clr-green-400);
 }

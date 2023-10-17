@@ -9,6 +9,7 @@ import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import EditButton from '../../components/EditButton/EditButton'
 import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import DataTable from '../../components/DataTable/DataTable'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
@@ -22,10 +23,14 @@ const Debts = () => {
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
 	const [activeDebts, setActiveDebts] = useState(true)
+	const [isLoading, setLoading] = useState(true)
 
 	useEffect(() => {
 		fetchDebts(getUserId())
-			.then((responseData) => setDebts(responseData))
+			.then((responseData) => {
+				setDebts(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
 	}, [activeDebts])
 
@@ -83,7 +88,9 @@ const Debts = () => {
 					message={success}
 				/>
 			)}
-			{parseFloat(getTotal(debts)) > 0 || !activeDebts ? (
+			{isLoading ? (
+				<Loading />
+			) : parseFloat(getTotal(debts)) > 0 || !activeDebts ? (
 				<DataTable cols={['Date', 'Creditor', 'Start amount', 'Current amount', 'Active', 'Edit', 'Delete']}>
 					{debts
 						.filter((debt) => (activeDebts ? debt.currentAmount > 0 : debt))

@@ -11,6 +11,7 @@ import DataTable from '../../components/DataTable/DataTable'
 import EditButton from '../../components/EditButton/EditButton'
 import DeleteButton from '../../components/DeleteButton/DeleteButton'
 import Pagination from '../../components/Pagination/Pagination'
+import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import axiosInstance from '../../utilities/axiosconfig'
@@ -30,10 +31,14 @@ const Expenses = () => {
 	const [startItem, setStartItem] = useState(0)
 	const [endItem, setEndItem] = useState(ITEMS_PER_PAGE)
 	const [error, setError] = useState(null)
+	const [isLoading, setLoading] = useState(true)
 
 	useEffect(() => {
 		fetchExpenses(getUserId(), dateInterval)
-			.then((responseData) => setExpenses(responseData))
+			.then((responseData) => {
+				setExpenses(responseData)
+				setLoading(false)
+			})
 			.catch((error) => setError(error.response.data.message))
 		fetchDebts(getUserId())
 			.then((responseData) => setDebts(responseData))
@@ -123,7 +128,9 @@ const Expenses = () => {
 					message={error}
 				/>
 			)}
-			{expenses.length > 0 ? (
+			{isLoading ? (
+				<Loading />
+			) : expenses.length > 0 ? (
 				<>
 					<DataTable cols={['Date', 'Budget', 'Amount', 'Category', 'Subcategory', 'Edit', 'Delete']}>
 						{expenses
