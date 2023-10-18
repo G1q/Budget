@@ -41,3 +41,8 @@
 	font-size: 0.875rem;
 	padding: 0.25em 1em;
 }
+
+.btn:disabled {
+	background-color: var(--clr-neutral-300);
+	cursor: not-allowed;
+}
