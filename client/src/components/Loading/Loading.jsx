@@ -6,9 +6,10 @@ const Rotate = keyframes`
  	100% { rotate: 1turn; }
 `
 const Grow = keyframes`
-	0%, 100% { width: .3em; }
-	33% { width: .6em;}
-	66% {width: 1em;}
+	0%, 100% { width: 0; }
+	25% {width: .3em;}
+	50% { width: .6em;}
+	75% {width: 1em;}
 `
 
 const LoadingMessage = styled.p`
@@ -30,8 +31,8 @@ const Wheel = styled.span`
 	animation: ${Rotate} 500ms infinite ease-in;
 `
 
-const Dots = styled.div`
-	width: 0.3em;
+const Dots = styled.span`
+	width: 0;
 	overflow: hidden;
 	animation: ${Grow} 1s infinite;
 `

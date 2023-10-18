@@ -3,24 +3,31 @@ import Button from '../Button/Button'
 
 const Pagination = ({ startIndex, endIndex, dataArray, numberOfItemsPerPage, onClickPrev, onClickNext }) => {
 	return (
-		<div className="pagination">
-			{startIndex > 0 && (
-				<Button
-					onClick={onClickPrev}
-					size="small"
-				>
-					Prev
-				</Button>
+		<div
+			className="pagination"
+			style={{ marginBlock: '.5rem' }}
+		>
+			{numberOfItemsPerPage < dataArray.length && (
+				<>
+					<Button
+						onClick={onClickPrev}
+						size="small"
+						disabled={startIndex <= 0}
+					>
+						Prev
+					</Button>
+
+					<Button
+						onClick={onClickNext}
+						size="small"
+						disabled={endIndex >= dataArray.length}
+					>
+						Next
+					</Button>
+				</>
 			)}
-			{endIndex < dataArray.length && (
-				<Button
-					onClick={onClickNext}
-					size="small"
-				>
-					Next
-				</Button>
-			)}
-			<p>
+
+			<p style={{ margin: 0, marginLeft: '0.25em', fontSize: '.875rem' }}>
 				{Math.ceil(endIndex / numberOfItemsPerPage)} / {Math.ceil(dataArray.length / numberOfItemsPerPage)} pages
 			</p>
 		</div>
