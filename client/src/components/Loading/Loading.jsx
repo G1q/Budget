@@ -31,7 +31,7 @@ const Wheel = styled.span`
 	animation: ${Rotate} 500ms infinite ease-in;
 `
 
-const Dots = styled.div`
+const Dots = styled.span`
 	width: 0;
 	overflow: hidden;
 	animation: ${Grow} 1s infinite;
