@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { amountWithDecimals } from '../../utilities/format'
+import { useId } from 'react'
 
 const BudgetMeterWrapper = styled.div`
 	margin: 0;
@@ -17,7 +18,8 @@ const BudgetMeter = styled.meter`
 
 const CardMeter = ({ totalValue, name, currentAmount, id, currency }) => {
 	const percent = Number(((currentAmount / totalValue) * 100).toFixed(2))
-	const labelId = `meter-label-${Math.floor(Math.random() * 1000 + 1)}`
+	const labelId = useId()
+
 	return (
 		<BudgetMeterWrapper>
 			<BudgetMeterLabel
