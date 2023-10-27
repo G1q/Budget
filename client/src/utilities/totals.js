@@ -9,3 +9,28 @@ export const getTotal = (arr) => {
 	}
 	return amountWithDecimals(total, currency)
 }
+
+export const sumPerCategory = (expenses, categories, lastMonth) => {
+	const res = []
+	for (let i = 0; i < categories.length; i++) {
+		res.push({ title: categories[i], total: 0, last: 0 })
+	}
+
+	expenses.forEach((expense) => {
+		for (let i = 0; i < res.length; i++) {
+			if (expense.category === res[i].title) {
+				res[i].total = parseFloat((res[i].total + expense.amount).toFixed(2))
+			}
+		}
+	})
+
+	lastMonth.forEach((expense) => {
+		for (let i = 0; i < res.length; i++) {
+			if (expense.category === res[i].title) {
+				res[i].last = parseFloat((res[i].last + expense.amount).toFixed(2))
+			}
+		}
+	})
+
+	return res
+}
