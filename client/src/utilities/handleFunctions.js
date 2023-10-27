@@ -17,13 +17,13 @@ Add component in page:
 				showCustom={showCustom}
 			/>
 */
-export const handleSelectIntervalChange = (e) => {
-	const getLastDayOfMonth = (date) => {
-		const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth(), 1)
-		const lastDayOfMonth = new Date(nextMonthFirstDay - 1)
-		return lastDayOfMonth
-	}
+export const getLastDayOfMonth = (date) => {
+	const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth(), 1)
+	const lastDayOfMonth = new Date(nextMonthFirstDay - 1)
+	return lastDayOfMonth
+}
 
+export const handleSelectIntervalChange = (e) => {
 	let startDate = new Date()
 	startDate.setHours(0, 0, 0, 0)
 	let endDate = new Date()
@@ -68,4 +68,23 @@ export const handleSelectIntervalChange = (e) => {
 		startDate,
 		endDate,
 	}
+}
+
+// Get object with first and last day of last month
+export const getDatesFromLastmonth = () => {
+	const today = new Date()
+
+	const startDay = new Date()
+	startDay.setDate(1)
+	startDay.setMonth(today.getMonth() === 0 ? 11 : today.getMonth() - 1)
+	startDay.setFullYear(today.getMonth() === 0 ? today.getFullYear() - 1 : today.getFullYear())
+	startDay.setHours(0, 0, 0, 0)
+
+	const endDay = new Date()
+	endDay.setDate(30)
+	endDay.setMonth(today.getMonth() === 0 ? 11 : today.getMonth() - 1)
+	endDay.setFullYear(today.getMonth() === 0 ? today.getFullYear() - 1 : today.getFullYear())
+	endDay.setHours(23, 59, 59, 0)
+
+	return { startDay, endDay }
 }

@@ -12,9 +12,9 @@ import Loading from '../../components/Loading/Loading'
 
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
-import { fetchBudgets, fetchDebts, fetchExpenses, fetchIncomes, fetchTransactions } from '../../utilities/fetchData'
-import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
-import { getTotal } from '../../utilities/totals'
+import { fetchBudgets, fetchCategories, fetchDebts, fetchExpenses, fetchIncomes, fetchTransactions } from '../../utilities/fetchData'
+import { getDatesFromLastmonth, getLastDayOfMonth, handleSelectIntervalChange } from '../../utilities/handleFunctions'
+import { getTotal, sumPerCategory } from '../../utilities/totals'
 
 // Import styling
 import './Homepage.css'
@@ -31,9 +31,16 @@ const Homepage = () => {
 	const [showCustom, setShowCustom] = useState(false)
 	const [isLoading, setLoading] = useState(true)
 
+	const [currentMonthExpenses, setCurrentMonthExpenses] = useState([])
+	const [lastMonthExpenses, setLastMonthExpenses] = useState([])
+	const [categories, setCategories] = useState([])
+
 	const transactionsParams = { startDate: '1970-01-01', endDate: new Date() }
+	const lastMonthDate = getDatesFromLastmonth()
 
 	useEffect(() => {
+		const today = new Date()
+
 		if (isLoggedIn()) {
 			fetchBudgets(getUserId())
 				.then((responseData) => setBudgets(responseData))
@@ -54,8 +61,23 @@ const Homepage = () => {
 				.then((responseData) => setExpenses(responseData))
 				.catch((error) => setError(error.response.data.message))
 
+			fetchExpenses(getUserId(), { startDate: today.setDate(0), endDate: new Date() })
+				.then((responseData) => setCurrentMonthExpenses(responseData))
+				.catch((error) => setError(error.response.data.message))
+
+			fetchExpenses(getUserId(), {
+				startDate: lastMonthDate.startDay,
+				endDate: lastMonthDate.endDay,
+			})
+				.then((responseData) => setLastMonthExpenses(responseData))
+				.catch((error) => setError(error.response.data.message))
+
 			fetchIncomes(getUserId(), dateInterval)
 				.then((responseData) => setIncomes(responseData))
+				.catch((error) => setError(error.response.data.message))
+
+			fetchCategories(getUserId())
+				.then((responseData) => setCategories(responseData))
 				.catch((error) => setError(error.response.data.message))
 		}
 	}, [dateInterval])
@@ -166,6 +188,39 @@ const Homepage = () => {
 									</p>
 								)}
 							</div>
+						</div>
+
+						<div
+							className="summaries__card"
+							style={{ marginBlock: '1rem', overflowX: 'auto' }}
+						>
+							<h2 className="summaries__card--title">Expenses per category</h2>
+							<DataTable
+								size="small"
+								cols={['Category', 'This month', 'Last month', 'Diff.']}
+							>
+								{sumPerCategory(currentMonthExpenses, categories.sort(), lastMonthExpenses).map((category) => (
+									<tr key={category.title}>
+										<td>{category.title}</td>
+										<td>
+											<p style={{ margin: 0, padding: '.25rem', fontWeight: 500 }}>
+												{category.total}
+												<span> ({((category.total * 100) / parseFloat(getTotal(currentMonthExpenses))).toFixed(2)}%)</span>
+											</p>
+										</td>
+										<td>
+											<p style={{ margin: 0, padding: '.25rem', fontWeight: 500 }}>
+												{category.last}
+												<span> ({((category.last * 100) / parseFloat(getTotal(lastMonthExpenses))).toFixed(2)}%)</span>
+											</p>
+										</td>
+										<td style={{ fontWeight: 500, color: category.total - category.last > 0 ? 'red' : 'green' }}>
+											{(category.total - category.last).toFixed(2)} ({100 - (category.total * 100) / category.last < 0 ? '+' : '-'}
+											{Math.abs((100 - (category.total * 100) / category.last).toFixed(2))}%)
+										</td>
+									</tr>
+								))}
+							</DataTable>
 						</div>
 					</section>
 				</>
