@@ -23,7 +23,6 @@ import { Transactions } from './pages/Transactions'
 import { Transfers, CreateTransfer, EditTransfer } from './pages/Transfers'
 import { UserDashboard, UserProfile, EditProfile, UserSettings } from './pages/User'
 import { AdminDashboard, CreateUser, EditUser, Users } from './pages/Admin'
-import Test from './pages/test'
 
 const App = () => {
 	return (
@@ -281,11 +280,6 @@ const App = () => {
 				<Route
 					path="/login"
 					element={<Login />}
-				/>
-
-				<Route
-					path="/test"
-					element={<Test />}
 				/>
 			</Routes>
 		</AuthProvider>

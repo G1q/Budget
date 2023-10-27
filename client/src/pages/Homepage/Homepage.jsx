@@ -192,7 +192,7 @@ const Homepage = () => {
 
 						<div
 							className="summaries__card"
-							style={{ marginBlock: '1rem', overflowX: 'scroll' }}
+							style={{ marginBlock: '1rem', overflowX: 'auto' }}
 						>
 							<h2 className="summaries__card--title">Expenses per category</h2>
 							<DataTable
@@ -211,7 +211,7 @@ const Homepage = () => {
 										<td>
 											<p style={{ margin: 0, padding: '.25rem', fontWeight: 500 }}>
 												{category.last}
-												<span> ({((category.total * 100) / parseFloat(getTotal(lastMonthExpenses))).toFixed(2)}%)</span>
+												<span> ({((category.last * 100) / parseFloat(getTotal(lastMonthExpenses))).toFixed(2)}%)</span>
 											</p>
 										</td>
 										<td style={{ fontWeight: 500, color: category.total - category.last > 0 ? 'red' : 'green' }}>
