@@ -76,7 +76,7 @@ const CreateBudget = () => {
 					</div>
 
 					<div className="form-group">
-						<CurrencySelect />
+						<CurrencySelect onChange={handleChange} />
 					</div>
 
 					<div className="form-group">
