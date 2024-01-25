@@ -211,12 +211,17 @@ const Homepage = () => {
 										<td>
 											<p style={{ margin: 0, padding: '.25rem', fontWeight: 500 }}>
 												{category.last}
-												<span> ({((category.last * 100) / parseFloat(getTotal(lastMonthExpenses))).toFixed(2)}%)</span>
+												<span>
+													{category.last > 0 && `(${((category.last * 100) / parseFloat(getTotal(lastMonthExpenses))).toFixed(2)}%)`}
+												</span>
 											</p>
 										</td>
 										<td style={{ fontWeight: 500, color: category.total - category.last > 0 ? 'red' : 'green' }}>
-											{(category.total - category.last).toFixed(2)} ({100 - (category.total * 100) / category.last < 0 ? '+' : '-'}
-											{Math.abs((100 - (category.total * 100) / category.last).toFixed(2))}%)
+											{(category.total - category.last).toFixed(2)}{' '}
+											{category.last !== 0
+												? `(${100 - (category.total * 100) / category.last < 0 ? '+' : '-'}
+											${Math.abs((100 - (category.total * 100) / category.last).toFixed(2))}%)`
+												: `(+100%)`}
 										</td>
 									</tr>
 								))}

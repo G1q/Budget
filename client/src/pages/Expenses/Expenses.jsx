@@ -17,7 +17,7 @@ import Loading from '../../components/Loading/Loading'
 import axiosInstance from '../../utilities/axiosconfig'
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { handleSelectIntervalChange } from '../../utilities/handleFunctions'
-import { fetchDebts, fetchExpenses, fetchIncomes } from '../../utilities/fetchData'
+import { fetchDebts, fetchExpenses } from '../../utilities/fetchData'
 import { getTotal } from '../../utilities/totals'
 
 const ITEMS_PER_PAGE = 20
@@ -31,6 +31,7 @@ const Expenses = () => {
 	const [startItem, setStartItem] = useState(0)
 	const [endItem, setEndItem] = useState(ITEMS_PER_PAGE)
 	const [error, setError] = useState(null)
+	const [success, setSuccess] = useState(null)
 	const [isLoading, setLoading] = useState(true)
 
 	useEffect(() => {
@@ -74,6 +75,8 @@ const Expenses = () => {
 
 				// Delete expense
 				await axiosInstance.delete(`expenses/${id}`)
+
+				setSuccess('Expense deleted successfully!')
 
 				// Refresh expenses list
 				fetchExpenses(getUserId(), dateInterval)
@@ -126,6 +129,12 @@ const Expenses = () => {
 				<StatusMessage
 					type="error"
 					message={error}
+				/>
+			)}
+			{success && (
+				<StatusMessage
+					type="success"
+					message={success}
 				/>
 			)}
 			{isLoading ? (
