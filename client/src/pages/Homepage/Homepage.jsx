@@ -1,5 +1,5 @@
 // Import dependencies
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -13,7 +13,7 @@ import Loading from '../../components/Loading/Loading'
 // Import utilities
 import { amountWithDecimals, formatDate } from '../../utilities/format'
 import { fetchBudgets, fetchCategories, fetchDebts, fetchExpenses, fetchIncomes, fetchTransactions } from '../../utilities/fetchData'
-import { getDatesFromLastmonth, getLastDayOfMonth, handleSelectIntervalChange } from '../../utilities/handleFunctions'
+import { getDatesFromLastmonth, handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { getTotal, sumPerCategory } from '../../utilities/totals'
 
 // Import styling
@@ -40,6 +40,7 @@ const Homepage = () => {
 
 	useEffect(() => {
 		const today = new Date()
+		console.log(lastMonthDate)
 
 		if (isLoggedIn()) {
 			fetchBudgets(getUserId())
@@ -114,7 +115,7 @@ const Homepage = () => {
 									</>
 								) : (
 									<p>
-										You don't have any budgets created! Please create your first budget: <Link to="/budgets">Create budget</Link>
+										You do not have any budgets created! Please create your first budget: <Link to="/budgets">Create budget</Link>
 									</p>
 								)}
 							</div>
@@ -149,7 +150,7 @@ const Homepage = () => {
 									</>
 								) : (
 									<p>
-										You don't have any transactions! If you have budgets created, please create your first{' '}
+										You do not have any transactions! If you have budgets created, please create your first{' '}
 										<Link to="/expenses/create">expense</Link> or <Link to="/incomes/create">income</Link>
 									</p>
 								)}
@@ -184,7 +185,7 @@ const Homepage = () => {
 									</h2>
 								) : (
 									<p>
-										You don't have any active debts! Please create your first debt: <Link to="/debts">Create debt</Link>
+										You do not have any active debts! Please create your first debt: <Link to="/debts">Create debt</Link>
 									</p>
 								)}
 							</div>
