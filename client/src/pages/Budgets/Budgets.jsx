@@ -1,5 +1,5 @@
 // Import dependencies
-import { Navigate, Link } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 
