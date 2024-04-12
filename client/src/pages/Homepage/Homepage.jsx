@@ -206,7 +206,7 @@ const Homepage = () => {
 										<td>
 											<p style={{ margin: 0, padding: '.25rem', fontWeight: 500 }}>
 												{category.total}
-												<span> ({((category.total * 100) / parseFloat(getTotal(currentMonthExpenses))).toFixed(2)}%)</span>
+												<span> {category.total > 0 && `(${((category.total * 100) / parseFloat(getTotal(currentMonthExpenses))).toFixed(2)}%)`}</span>
 											</p>
 										</td>
 										<td>
