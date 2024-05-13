@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // Import dependencies
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -8,11 +9,9 @@ import CardMeter from '../../components/CardMeter/CardMeter'
 import SelectInterval from '../../components/SelectInterval/SelectInterval'
 import StatusMessage from '../../components/StatusMessage/StatusMessage'
 import DataTable from '../../components/DataTable/DataTable'
-import Loading from '../../components/Loading/Loading'
 
 // Import utilities
-import { amountWithDecimals, formatDate } from '../../utilities/format'
-import { fetchBudgets, fetchCategories, fetchDebts, fetchExpenses, fetchIncomes, fetchTransactions } from '../../utilities/fetchData'
+import { fetchBudgets, fetchCategories, fetchDebts, fetchExpenses, fetchIncomes } from '../../utilities/fetchData'
 import { getDatesFromLastmonth, handleSelectIntervalChange } from '../../utilities/handleFunctions'
 import { getTotal, sumPerCategory } from '../../utilities/totals'
 
@@ -22,20 +21,17 @@ import './Homepage.css'
 const Homepage = () => {
 	const { getUserId, isLoggedIn } = useAuth()
 	const [budgets, setBudgets] = useState([])
-	const [transactions, setTransactions] = useState([])
 	const [expenses, setExpenses] = useState([])
 	const [incomes, setIncomes] = useState([])
 	const [debts, setDebts] = useState([])
 	const [error, setError] = useState(null)
 	const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })
 	const [showCustom, setShowCustom] = useState(false)
-	const [isLoading, setLoading] = useState(true)
 
 	const [currentMonthExpenses, setCurrentMonthExpenses] = useState([])
 	const [lastMonthExpenses, setLastMonthExpenses] = useState([])
 	const [categories, setCategories] = useState([])
 
-	const transactionsParams = { startDate: '1970-01-01', endDate: new Date() }
 	const lastMonthDate = getDatesFromLastmonth()
 
 	useEffect(() => {
@@ -49,13 +45,6 @@ const Homepage = () => {
 
 			fetchDebts(getUserId())
 				.then((responseData) => setDebts(responseData))
-				.catch((error) => setError(error.response.data.message))
-
-			fetchTransactions(getUserId(), transactionsParams)
-				.then((responseData) => {
-					setTransactions(responseData)
-					setLoading(false)
-				})
 				.catch((error) => setError(error.response.data.message))
 
 			fetchExpenses(getUserId(), dateInterval)
@@ -116,42 +105,6 @@ const Homepage = () => {
 								) : (
 									<p>
 										You do not have any budgets created! Please create your first budget: <Link to="/budgets">Create budget</Link>
-									</p>
-								)}
-							</div>
-
-							<div className="summaries__card">
-								{isLoading ? (
-									<Loading />
-								) : transactions.length ? (
-									<>
-										<DataTable
-											size="small"
-											cols={['Date', 'Amount', 'Type']}
-											caption="Last 5 transactions"
-										>
-											{transactions
-												.sort((a, b) => new Date(b.date) - new Date(a.date))
-												.slice(0, 5)
-												.map((transaction) => (
-													<tr key={transaction._id}>
-														<td>{formatDate(new Date(transaction.date))}</td>
-														<td>{amountWithDecimals(transaction.amount, transaction.currency)}</td>
-														<td>{transaction.source ? 'Income' : 'Expense'}</td>
-													</tr>
-												))}
-										</DataTable>
-										<Link
-											to="/transactions"
-											className="summaries__card-link"
-										>
-											View all transactions
-										</Link>
-									</>
-								) : (
-									<p>
-										You do not have any transactions! If you have budgets created, please create your first{' '}
-										<Link to="/expenses/create">expense</Link> or <Link to="/incomes/create">income</Link>
 									</p>
 								)}
 							</div>
