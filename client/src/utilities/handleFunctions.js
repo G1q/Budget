@@ -1,7 +1,7 @@
 // Select date interval for fetching data
 
 /*
-Ussage:
+Usage:
 Import this function
 Add useState for default: 
 	a. const [dateInterval, setDateInterval] = useState({ startDate: '1970-01-01', endDate: new Date() })

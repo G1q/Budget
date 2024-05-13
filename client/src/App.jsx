@@ -19,7 +19,6 @@ import { Debts, CreateDebt, EditDebt } from './pages/Debts'
 import { Expenses, CreateExpense, EditExpense, PayDebt } from './pages/Expenses'
 import { Incomes, CreateIncome, EditIncome } from './pages/Incomes'
 import { Sources, EditSource } from './pages/Sources'
-import { Transactions } from './pages/Transactions'
 import { Transfers, CreateTransfer, EditTransfer } from './pages/Transfers'
 import { UserDashboard, UserProfile, EditProfile, UserSettings } from './pages/User'
 import { AdminDashboard, CreateUser, EditUser, Users } from './pages/Admin'
@@ -254,15 +253,6 @@ const App = () => {
 							<Route
 								path="/debts/edit/"
 								element={<EditDebt />}
-							/>
-						</Route>
-					</Route>
-
-					<Route path="/transactions">
-						<Route element={<ProtectedRoleRoute requiredRole={['user', 'admin', 'superadmin']} />}>
-							<Route
-								index
-								element={<Transactions />}
 							/>
 						</Route>
 					</Route>
